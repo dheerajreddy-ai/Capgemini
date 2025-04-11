@@ -1,0 +1,17 @@
+# Ignore Visual Studio temporary files, build results, and user-specific files
+.vs/
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.vsidx
+*.v2
+*.dbmdl
+*.log
+*.tlog
+*.pdb
+*.tmp
+*.csproj.user
+*.local.json.user
+capgemini/Properties/ServiceDependencies/

@@ -13,6 +13,11 @@ namespace capgemini.Controllers
             _logger = logger;
         }
 
+        public IActionResult add()
+        {
+            throw new Exception("Manual Exception");
+        }
+
         public IActionResult Index()
         {
             return View();
