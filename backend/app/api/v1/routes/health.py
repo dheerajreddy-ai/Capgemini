@@ -25,7 +25,7 @@ def health() -> dict:
         "status": "ok",
         "service": settings.APP_NAME,
         "version": __version__,
-        "environment": settings.ENVIRONMENT,
+        "environment": settings.ENV,
     }
 
 

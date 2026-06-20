@@ -1,9 +1,8 @@
 /**
- * Global auth state (Zustand).
+ * Global auth state (Zustand) — aligned with SuperFit's sync pattern.
  *
- * Owns the lifecycle: listen to Firebase, exchange the token with our backend
- * (`POST /auth/login`) to provision/fetch the app user, and expose status to
- * the router so it can gate screens.
+ * After Firebase sign-in, calls POST /auth/sync (not /login) to provision
+ * the user row on first call. All other endpoints depend on that row.
  */
 
 import { create } from "zustand";
@@ -11,6 +10,7 @@ import { create } from "zustand";
 import { api, setTokenProvider } from "@/services/api";
 import {
   getIdToken,
+  isMockAuthMode,
   signInWithGoogle,
   signOut as firebaseSignOut,
   subscribeToAuth,
@@ -25,7 +25,7 @@ export type AppUser = {
   credits: number;
 };
 
-type LoginResponse = { user: AppUser; is_new_user: boolean };
+type SyncResponse = { user: AppUser; is_new_user: boolean };
 
 type AuthState = {
   status: "loading" | "authenticated" | "unauthenticated";
@@ -36,34 +36,42 @@ type AuthState = {
   signOut: () => Promise<void>;
 };
 
-export const useAuthStore = create<AuthState>((set, get) => ({
+export const useAuthStore = create<AuthState>((set) => ({
   status: "loading",
   user: null,
   error: null,
 
-  /** Call once at app root; returns an unsubscribe fn. */
   init: () => {
     setTokenProvider(getIdToken);
+
     const unsub = subscribeToAuth(async (firebaseUser) => {
       if (!firebaseUser) {
         set({ status: "unauthenticated", user: null });
         return;
       }
       try {
-        const { user } = await api.post<LoginResponse>("/auth/login");
+        // /auth/sync creates the DB row on first call — must run before anything else.
+        const { user } = await api.post<SyncResponse>("/auth/sync");
         set({ status: "authenticated", user, error: null });
       } catch (e: any) {
         set({ status: "unauthenticated", user: null, error: e.message });
       }
     });
+
     return unsub;
   },
 
   signIn: async () => {
     set({ error: null });
     try {
+      if (isMockAuthMode) {
+        // Mock: subscribeToAuth already emits a mock user; just sync it.
+        const { user } = await api.post<SyncResponse>("/auth/sync");
+        set({ status: "authenticated", user, error: null });
+        return;
+      }
       await signInWithGoogle();
-      // subscribeToAuth handles the backend exchange + state transition.
+      // subscribeToAuth handles the /auth/sync exchange + state update.
     } catch (e: any) {
       set({ error: e.message ?? "Sign-in failed. Please try again." });
     }

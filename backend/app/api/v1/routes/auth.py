@@ -1,12 +1,11 @@
-"""Authentication routes.
+"""Authentication routes — aligned with SuperFit's /auth/sync convention.
 
 Flow:
-  1. Mobile app signs the user in with Google/Apple via Firebase and obtains
-     an ID token.
-  2. App calls POST /auth/login with `Authorization: Bearer <id_token>`.
-  3. We verify the token, provision the user on first login, and return their
-     profile. Subsequent calls to any protected route reuse the same Bearer
-     token — there is no separate server-issued session to manage.
+  1. Mobile signs the user in with Google via Firebase and gets an ID token.
+  2. App calls POST /auth/sync with `Authorization: Bearer <id_token>`.
+  3. We verify the token, provision the user on first call, return profile.
+  4. MUST be called right after every sign-in before hitting any other
+     endpoint — all other routes depend on the users row existing in the DB.
 """
 
 from __future__ import annotations
@@ -26,17 +25,16 @@ from app.schemas.user import LoginResponse, UserPublic
 from app.services import firebase_service
 
 router = APIRouter(prefix="/auth", tags=["auth"])
-settings = get_settings()
 
 
 @router.post(
-    "/login",
+    "/sync",
     response_model=Success[LoginResponse],
     status_code=status.HTTP_200_OK,
-    summary="Verify a Firebase ID token and provision the user",
+    summary="Verify Firebase token, provision user on first call",
 )
 @limiter.limit("20/minute")
-def login(
+def sync(
     request: Request,
     db: Session = Depends(get_db),
 ) -> Success[LoginResponse]:

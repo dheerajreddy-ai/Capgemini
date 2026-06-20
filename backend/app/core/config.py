@@ -1,4 +1,4 @@
-"""Application configuration.
+"""Application configuration — aligned with SuperFit conventions.
 
 All settings are loaded from environment variables (never hardcoded).
 On Railway these are injected via the service's Variables tab; locally they
@@ -11,7 +11,7 @@ from __future__ import annotations
 from functools import lru_cache
 from typing import Literal
 
-from pydantic import Field, PostgresDsn, field_validator
+from pydantic import PostgresDsn, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -25,7 +25,7 @@ class Settings(BaseSettings):
 
     # ── App ───────────────────────────────────────────────────
     APP_NAME: str = "FRAME API"
-    ENVIRONMENT: Literal["development", "staging", "production"] = "development"
+    ENV: Literal["dev", "staging", "production"] = "dev"
     DEBUG: bool = False
     API_V1_PREFIX: str = "/api/v1"
 
@@ -37,28 +37,45 @@ class Settings(BaseSettings):
     DB_POOL_RECYCLE_SECONDS: int = 1800
 
     # ── Auth (Firebase) ───────────────────────────────────────
-    # Paste the full service-account JSON as a single-line env var.
-    FIREBASE_CREDENTIALS_JSON: str = ""
-    FIREBASE_PROJECT_ID: str = ""
+    # Same Firebase project as SuperFit (saifit-25ac6).
+    # Paste the full service-account JSON as a single env var value —
+    # Railway handles the escaping. The service handles \n in private_key.
+    FIREBASE_SERVICE_ACCOUNT: str = ""
+    FIREBASE_PROJECT_ID: str = "saifit-25ac6"
+
+    # When true, the backend accepts mock_token_* tokens (dev/test only).
+    # Hardcoded false in production regardless of this flag.
+    ALLOW_MOCK_AUTH: bool = False
 
     # ── CORS ──────────────────────────────────────────────────
-    # Comma-separated list of allowed origins (the mobile app's API host,
-    # web dashboard, etc.). Never use "*" in production.
-    CORS_ORIGINS: str = ""
+    CORS_ORIGINS: str = "http://localhost:8081,http://localhost:8082,http://localhost:19006"
 
     # ── Rate limiting ─────────────────────────────────────────
-    RATE_LIMIT_PER_MINUTE: int = 60
+    ENABLE_RATE_LIMIT: bool = True
+    RATE_LIMIT_REQUESTS_PER_MINUTE: int = 120
+    RATE_LIMIT_BURST: int = 30
+
+    # ── Observability ─────────────────────────────────────────
+    SENTRY_DSN: str = ""
+
+    # ── Storage (Cloudflare R2) — Phase 3 ────────────────────
+    R2_ACCOUNT_ID: str = ""
+    R2_ACCESS_KEY_ID: str = ""
+    R2_SECRET_ACCESS_KEY: str = ""
+    R2_BUCKET_NAME: str = ""
+    ASSET_CDN_BASE: str = ""
+    ASSET_SIGNED_URL_TTL_SECONDS: int = 3600
 
     @field_validator("DATABASE_URL", mode="before")
     @classmethod
     def _normalize_db_scheme(cls, v: str) -> str:
-        # Railway/Heroku hand out `postgres://` but SQLAlchemy + psycopg3
-        # expect the explicit `postgresql+psycopg://` driver scheme.
+        # Railway hands out `postgres://` but SQLAlchemy + psycopg2 needs
+        # `postgresql+psycopg2://`. Same fix SuperFit uses.
         if isinstance(v, str):
             if v.startswith("postgres://"):
-                v = v.replace("postgres://", "postgresql+psycopg://", 1)
+                v = v.replace("postgres://", "postgresql+psycopg2://", 1)
             elif v.startswith("postgresql://"):
-                v = v.replace("postgresql://", "postgresql+psycopg://", 1)
+                v = v.replace("postgresql://", "postgresql+psycopg2://", 1)
         return v
 
     @property
@@ -67,7 +84,12 @@ class Settings(BaseSettings):
 
     @property
     def is_production(self) -> bool:
-        return self.ENVIRONMENT == "production"
+        return self.ENV == "production"
+
+    @property
+    def allow_mock(self) -> bool:
+        """Mock auth is ONLY permitted outside of production."""
+        return self.ALLOW_MOCK_AUTH and not self.is_production
 
 
 @lru_cache
