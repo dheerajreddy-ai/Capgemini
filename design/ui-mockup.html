@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FRAME — Cinematography App UI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#08080A;
+    --surface:#101013;
+    --surface-2:#17171C;
+    --surface-3:#1F1F26;
+    --line:rgba(255,255,255,.07);
+    --line-2:rgba(255,255,255,.12);
+    --text:#F4F3F1;
+    --muted:#9A988F;
+    --faint:#6A685F;
+    --gold:#E8B65A;
+    --gold-soft:#F0CE8E;
+    --gold-deep:#B7843A;
+    --accent-grad:linear-gradient(135deg,#F0CE8E 0%,#E8B65A 40%,#B7843A 100%);
+    --shadow:0 30px 80px -20px rgba(0,0,0,.8);
+    --sans:'Inter',system-ui,sans-serif;
+    --display:'Space Grotesk',sans-serif;
+    --serif:'Instrument Serif',Georgia,serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased}
+  body{
+    background:
+      radial-gradient(1200px 700px at 15% -5%, rgba(232,182,90,.10), transparent 55%),
+      radial-gradient(1000px 600px at 95% 10%, rgba(120,90,180,.08), transparent 50%),
+      var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    min-height:100vh;
+    padding:54px 24px 80px;
+  }
+  /* film grain overlay */
+  body::after{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.04;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .page-head{max-width:1320px;margin:0 auto 46px;text-align:center}
+  .kicker{
+    font-family:var(--sans);font-size:12px;letter-spacing:.32em;text-transform:uppercase;
+    color:var(--gold);font-weight:600;margin-bottom:16px;
+  }
+  .page-title{font-family:var(--serif);font-size:46px;line-height:1.05;font-style:italic;letter-spacing:-.01em}
+  .page-title b{font-style:normal;font-weight:400}
+  .page-sub{color:var(--muted);font-size:15px;margin-top:14px;max-width:560px;margin-inline:auto;line-height:1.6}
+
+  .rail{
+    display:flex;gap:34px;justify-content:flex-start;align-items:flex-start;
+    max-width:1320px;margin:0 auto;overflow-x:auto;padding:10px 4px 30px;scroll-snap-type:x mandatory;
+  }
+  .rail::-webkit-scrollbar{height:8px}
+  .rail::-webkit-scrollbar-thumb{background:var(--surface-3);border-radius:20px}
+
+  .screen-wrap{scroll-snap-align:center;flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:16px}
+  .screen-label{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);font-weight:600}
+
+  /* PHONE FRAME */
+  .phone{
+    width:330px;height:715px;border-radius:46px;
+    background:linear-gradient(160deg,#26262c,#0e0e11);
+    padding:11px;box-shadow:var(--shadow),0 0 0 1px rgba(255,255,255,.05);
+    position:relative;
+  }
+  .phone::before{ /* side button */
+    content:"";position:absolute;right:-3px;top:150px;width:3px;height:64px;border-radius:3px;background:#2a2a30;
+  }
+  .screen{
+    width:100%;height:100%;border-radius:36px;overflow:hidden;position:relative;
+    background:var(--bg);display:flex;flex-direction:column;
+  }
+  .notch{
+    position:absolute;top:14px;left:50%;transform:translateX(-50%);
+    width:104px;height:26px;background:#000;border-radius:16px;z-index:40;
+  }
+  .statusbar{
+    position:absolute;top:0;left:0;right:0;height:50px;z-index:30;
+    display:flex;align-items:center;justify-content:space-between;padding:18px 26px 0;
+    font-size:13px;font-weight:600;color:var(--text);
+  }
+  .statusbar .dots{display:flex;gap:5px;align-items:center}
+  .statusbar svg{display:block}
+
+  .body{flex:1;overflow:hidden;position:relative}
+
+  /* shared */
+  .pad{padding:0 22px}
+  .h-serif{font-family:var(--serif);font-style:italic}
+  .chip{
+    display:inline-flex;align-items:center;gap:7px;padding:9px 15px;border-radius:100px;
+    font-size:12.5px;font-weight:500;border:1px solid var(--line-2);color:var(--muted);
+    background:rgba(255,255,255,.02);white-space:nowrap;
+  }
+  .chip.on{background:var(--accent-grad);color:#1a1407;border-color:transparent;font-weight:600;box-shadow:0 8px 22px -8px rgba(232,182,90,.6)}
+  .btn-primary{
+    width:100%;padding:17px;border-radius:18px;border:none;cursor:pointer;
+    background:var(--accent-grad);color:#1a1407;font-weight:700;font-size:15.5px;font-family:var(--sans);
+    letter-spacing:.01em;box-shadow:0 16px 34px -12px rgba(232,182,90,.55);
+    display:flex;align-items:center;justify-content:center;gap:9px;
+  }
+
+  /* ============ SCREEN 1 — SPLASH / LOGIN ============ */
+  .s1{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end}
+  .s1 .hero-img{
+    position:absolute;inset:0;
+    background:
+      linear-gradient(180deg,rgba(8,8,10,0) 30%,rgba(8,8,10,.65) 62%,var(--bg) 96%),
+      linear-gradient(115deg,#3a2f4d 0%,#7a4b54 38%,#c98a4e 70%,#e8b65a 100%);
+  }
+  .s1 .grain-frame{position:absolute;inset:0;mix-blend-mode:overlay;opacity:.5;
+    background:repeating-linear-gradient(90deg,rgba(0,0,0,.15) 0 1px,transparent 1px 3px);}
+  .letterbar{position:absolute;left:0;right:0;height:46px;background:#000;z-index:5}
+  .letterbar.top{top:50px}.letterbar.bot{bottom:0;height:0}
+  .s1 .content{position:relative;z-index:8;padding:0 30px 46px;text-align:center}
+  .s1 .mark{font-size:11px;letter-spacing:.4em;text-transform:uppercase;color:var(--gold-soft);font-weight:600;margin-bottom:18px}
+  .s1 h1{font-family:var(--serif);font-size:54px;line-height:.98;letter-spacing:-.02em;margin-bottom:8px}
+  .s1 h1 .it{font-style:italic;display:block;color:var(--gold-soft)}
+  .s1 p{color:rgba(244,243,241,.72);font-size:14.5px;line-height:1.6;margin:16px auto 30px;max-width:270px}
+  .gbtn{
+    width:100%;padding:16px;border-radius:16px;border:1px solid var(--line-2);cursor:pointer;
+    background:rgba(255,255,255,.06);backdrop-filter:blur(12px);color:var(--text);font-weight:600;font-size:15px;
+    display:flex;align-items:center;justify-content:center;gap:11px;font-family:var(--sans);margin-bottom:12px;
+  }
+  .gbtn .g{width:19px;height:19px;border-radius:50%;background:#fff;display:grid;place-items:center;font-weight:800;color:#4285F4;font-size:12px;font-family:var(--display)}
+  .s1 .terms{font-size:11px;color:var(--faint);margin-top:8px}
+
+  /* ============ SCREEN 2 — DESCRIBE SCENE ============ */
+  .topbar{display:flex;align-items:center;justify-content:space-between;padding:60px 22px 14px}
+  .topbar .back{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);display:grid;place-items:center;background:var(--surface)}
+  .topbar .step{font-size:12px;color:var(--faint);letter-spacing:.15em;text-transform:uppercase;font-weight:600}
+  .scroll{height:100%;overflow-y:auto;padding-bottom:120px}
+  .scroll::-webkit-scrollbar{display:none}
+  .sect-title{font-family:var(--serif);font-style:italic;font-size:30px;line-height:1.1;margin:6px 0 6px}
+  .sect-sub{color:var(--muted);font-size:13.5px;line-height:1.55;margin-bottom:22px}
+  .label{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:600;margin:24px 0 11px;display:flex;align-items:center;gap:8px}
+  .label .num{color:var(--gold)}
+  .textarea{
+    width:100%;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;
+    color:var(--text);font-family:var(--sans);font-size:14px;line-height:1.6;min-height:120px;resize:none;
+  }
+  .textarea .typed{color:var(--text)}
+  .textarea .cursor{color:var(--gold)}
+  .row{display:flex;gap:9px;flex-wrap:wrap}
+  .upload-row{display:flex;gap:12px}
+  .upload{
+    flex:1;aspect-ratio:1;border-radius:16px;border:1.5px dashed var(--line-2);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;color:var(--faint);
+    background:var(--surface);font-size:11.5px;text-align:center;position:relative;overflow:hidden;
+  }
+  .upload.filled{border-style:solid;border-color:transparent}
+  .upload.loc{background:linear-gradient(135deg,#2b3a4a,#46627a);}
+  .upload.char{background:linear-gradient(135deg,#4a2b3a,#7a4660);}
+  .upload .tag{position:absolute;bottom:8px;left:8px;font-size:10px;font-weight:600;color:#fff;background:rgba(0,0,0,.5);padding:3px 8px;border-radius:7px;backdrop-filter:blur(6px)}
+  .dock{
+    position:absolute;bottom:0;left:0;right:0;padding:16px 22px 26px;
+    background:linear-gradient(180deg,transparent,var(--bg) 32%);
+  }
+
+  /* ============ SCREEN 3 — PROCESSING ============ */
+  .s3{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center}
+  .s3 .reel{position:relative;width:148px;height:148px;margin-bottom:38px}
+  .s3 .reel .ring{position:absolute;inset:0;border-radius:50%;border:1.5px solid var(--line);}
+  .s3 .reel .ring.spin{border-top-color:var(--gold);border-right-color:var(--gold-deep);animation:spin 1.4s linear infinite}
+  .s3 .reel .ring.spin2{inset:18px;border-top-color:transparent;border-bottom-color:var(--gold-soft);animation:spin 2.1s linear infinite reverse}
+  .s3 .reel .core{position:absolute;inset:46px;border-radius:50%;background:var(--accent-grad);display:grid;place-items:center;box-shadow:0 0 40px -6px rgba(232,182,90,.6)}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .s3 h2{font-family:var(--serif);font-style:italic;font-size:30px;margin-bottom:10px}
+  .s3 p{color:var(--muted);font-size:14px;margin-bottom:34px;max-width:240px;line-height:1.6}
+  .steps{width:100%;max-width:250px;display:flex;flex-direction:column;gap:14px;text-align:left}
+  .pstep{display:flex;align-items:center;gap:13px;font-size:13.5px}
+  .pstep .ic{width:26px;height:26px;border-radius:9px;display:grid;place-items:center;flex:0 0 auto;font-size:13px;font-weight:700}
+  .pstep.done .ic{background:rgba(232,182,90,.16);color:var(--gold)}
+  .pstep.done{color:var(--text)}
+  .pstep.active .ic{background:var(--accent-grad);color:#1a1407}
+  .pstep.active{color:var(--text);font-weight:600}
+  .pstep.wait .ic{background:var(--surface-2);color:var(--faint)}
+  .pstep.wait{color:var(--faint)}
+
+  /* ============ SCREEN 4 — STORYBOARD RESULT ============ */
+  .res-head{padding:58px 22px 6px}
+  .res-head .crumbs{font-size:11.5px;color:var(--faint);letter-spacing:.12em;text-transform:uppercase;font-weight:600;margin-bottom:10px}
+  .res-head h2{font-family:var(--serif);font-style:italic;font-size:27px;line-height:1.12}
+  .res-meta{display:flex;gap:8px;margin:14px 0 6px;flex-wrap:wrap}
+  .pill{font-size:11px;padding:6px 11px;border-radius:8px;background:var(--surface-2);color:var(--muted);font-weight:500;border:1px solid var(--line)}
+  .pill.gold{color:var(--gold);border-color:rgba(232,182,90,.25);background:rgba(232,182,90,.07)}
+  .shot{margin:0 22px 18px;border-radius:20px;overflow:hidden;background:var(--surface);border:1px solid var(--line)}
+  .frame{position:relative;aspect-ratio:2.39/1;overflow:hidden}
+  .frame .img{position:absolute;inset:0}
+  .frame .bars{position:absolute;left:0;right:0;height:11%;background:#000;z-index:2}
+  .frame .bars.t{top:0}.frame .bars.b{bottom:0}
+  .frame .num{position:absolute;top:12px;left:12px;z-index:3;font-family:var(--display);font-weight:700;font-size:12px;color:#fff;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);padding:5px 10px;border-radius:8px;letter-spacing:.05em}
+  .frame .typ{position:absolute;bottom:12px;right:12px;z-index:3;font-size:10.5px;font-weight:600;color:var(--gold-soft);background:rgba(0,0,0,.55);backdrop-filter:blur(6px);padding:5px 10px;border-radius:8px;letter-spacing:.08em;text-transform:uppercase}
+  .img.a{background:linear-gradient(120deg,#1c2535 0%,#36506b 55%,#6f93b0 100%)}
+  .img.b{background:linear-gradient(120deg,#2a1c22 0%,#5e3a3f 50%,#c08a5e 100%)}
+  .img.c{background:linear-gradient(120deg,#16201c 0%,#2f4a3c 55%,#7aa07e 100%)}
+  .shot .meta{padding:14px 16px 16px}
+  .shot .meta h3{font-size:15px;font-weight:600;margin-bottom:4px}
+  .shot .meta .desc{font-size:12.5px;color:var(--muted);line-height:1.55;margin-bottom:12px}
+  .specs{display:flex;gap:6px;flex-wrap:wrap}
+  .spec{font-size:10.5px;color:var(--muted);background:var(--surface-2);padding:5px 9px;border-radius:7px;display:flex;gap:5px;align-items:center;border:1px solid var(--line)}
+  .spec b{color:var(--text);font-weight:600}
+  .learn{margin:10px 16px 0;padding:11px 13px;border-radius:12px;background:rgba(232,182,90,.06);border:1px solid rgba(232,182,90,.16);font-size:11.5px;color:var(--gold-soft);line-height:1.5;display:flex;gap:9px}
+  .learn .bulb{flex:0 0 auto}
+  .tabbar{
+    position:absolute;bottom:0;left:0;right:0;height:74px;z-index:20;
+    background:rgba(16,16,19,.82);backdrop-filter:blur(20px);border-top:1px solid var(--line);
+    display:flex;align-items:center;justify-content:space-around;padding-bottom:10px;
+  }
+  .tab{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;color:var(--faint);font-weight:500}
+  .tab.on{color:var(--gold)}
+  .fab{position:absolute;bottom:90px;right:20px;z-index:25;width:54px;height:54px;border-radius:18px;background:var(--accent-grad);display:grid;place-items:center;box-shadow:0 14px 30px -8px rgba(232,182,90,.6)}
+
+  /* ============ SCREEN 5 — SHOT DETAIL ============ */
+  .d-hero{position:relative;aspect-ratio:2.39/1}
+  .d-hero .img{position:absolute;inset:0;background:linear-gradient(120deg,#2a1c22 0%,#5e3a3f 50%,#c08a5e 100%)}
+  .d-hero .bars{position:absolute;left:0;right:0;height:13%;background:#000}
+  .d-hero .bars.t{top:0}.d-hero .bars.b{bottom:0}
+  .d-hero .back{position:absolute;top:56px;left:18px;z-index:5;width:38px;height:38px;border-radius:12px;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);display:grid;place-items:center}
+  .d-body{padding:20px 22px 40px}
+  .d-body .tagline{color:var(--gold);font-size:11.5px;letter-spacing:.15em;text-transform:uppercase;font-weight:600;margin-bottom:8px}
+  .d-body h2{font-family:var(--serif);font-style:italic;font-size:28px;line-height:1.1;margin-bottom:14px}
+  .d-body .para{font-size:13.5px;color:var(--muted);line-height:1.65;margin-bottom:22px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:13px}
+  .card .k{font-size:10.5px;color:var(--faint);letter-spacing:.1em;text-transform:uppercase;font-weight:600;margin-bottom:6px}
+  .card .v{font-size:14px;font-weight:600;color:var(--text)}
+  .promptbox{background:#0c0c0f;border:1px solid var(--line);border-radius:16px;padding:15px;margin-bottom:14px}
+  .promptbox .ph{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}
+  .promptbox .ph span{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);font-weight:600}
+  .promptbox .copy{font-size:11px;color:var(--gold);font-weight:600;display:flex;gap:5px;align-items:center}
+  .promptbox code{font-family:'SF Mono',ui-monospace,monospace;font-size:11.5px;color:#c9c6bd;line-height:1.65;display:block}
+  .why{padding:15px;border-radius:16px;background:rgba(232,182,90,.06);border:1px solid rgba(232,182,90,.16)}
+  .why .wh{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:8px;display:flex;gap:7px;align-items:center}
+  .why p{font-size:12.5px;color:var(--gold-soft);line-height:1.6}
+
+  svg{flex:none}
+  .ico{stroke:currentColor;stroke-width:1.7;fill:none;stroke-linecap:round;stroke-linejoin:round}
+
+  .footer-note{max-width:760px;margin:50px auto 0;text-align:center;color:var(--faint);font-size:13px;line-height:1.7}
+  .footer-note b{color:var(--gold)}
+  @media(max-width:680px){.page-title{font-size:32px}.rail{gap:24px}}
+</style>
+</head>
+<body>
+
+  <div class="page-head">
+    <div class="kicker">Working Name · FRAME</div>
+    <h1 class="page-title"><b>Cinematography, for people who</b><br>have never held a camera</h1>
+    <p class="page-sub">Describe your scene in plain words. FRAME translates it into real cinematographic language and generates a director-grade storyboard — then teaches you why each shot works.</p>
+  </div>
+
+  <div class="rail">
+
+    <!-- ===================== SCREEN 1 ===================== -->
+    <div class="screen-wrap">
+      <div class="phone"><div class="screen">
+        <div class="notch"></div>
+        <div class="s1">
+          <div class="hero-img"></div>
+          <div class="grain-frame"></div>
+          <div class="letterbar top"></div>
+          <div class="statusbar"><span>9:41</span><div class="dots">
+            <svg width="17" height="11" viewBox="0 0 17 11"><rect x="0" y="6" width="3" height="5" rx="1" fill="#F4F3F1"/><rect x="4.5" y="3.5" width="3" height="7.5" rx="1" fill="#F4F3F1"/><rect x="9" y="1.5" width="3" height="9.5" rx="1" fill="#F4F3F1"/><rect x="13.5" y="0" width="3" height="11" rx="1" fill="#F4F3F1"/></svg>
+            <svg width="22" height="11" viewBox="0 0 22 11"><rect x="1" y="1" width="17" height="9" rx="2.5" stroke="#F4F3F1" fill="none"/><rect x="2.5" y="2.5" width="12" height="6" rx="1.2" fill="#F4F3F1"/><rect x="19" y="3.5" width="1.6" height="4" rx="1" fill="#F4F3F1"/></svg>
+          </div></div>
+          <div class="content">
+            <div class="mark">◢ ◣  F R A M E  ◢ ◣</div>
+            <h1>Direct your<span class="it">first scene</span></h1>
+            <p>No film school. No jargon. Just your imagination — shot like a professional.</p>
+            <button class="gbtn"><span class="g">G</span> Continue with Google</button>
+            <button class="gbtn" style="background:rgba(255,255,255,.04)">
+              <svg width="17" height="17" class="ico" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              Continue with Apple</button>
+            <div class="terms">By continuing you agree to our Terms &amp; Privacy Policy</div>
+          </div>
+        </div>
+      </div></div>
+      <div class="screen-label">01 · Sign In</div>
+    </div>
+
+    <!-- ===================== SCREEN 2 ===================== -->
+    <div class="screen-wrap">
+      <div class="phone"><div class="screen">
+        <div class="notch"></div>
+        <div class="statusbar"><span>9:41</span><div class="dots">
+          <svg width="17" height="11" viewBox="0 0 17 11"><rect x="0" y="6" width="3" height="5" rx="1" fill="#F4F3F1"/><rect x="4.5" y="3.5" width="3" height="7.5" rx="1" fill="#F4F3F1"/><rect x="9" y="1.5" width="3" height="9.5" rx="1" fill="#F4F3F1"/><rect x="13.5" y="0" width="3" height="11" rx="1" fill="#F4F3F1"/></svg>
+          <svg width="22" height="11" viewBox="0 0 22 11"><rect x="1" y="1" width="17" height="9" rx="2.5" stroke="#F4F3F1" fill="none"/><rect x="2.5" y="2.5" width="12" height="6" rx="1.2" fill="#F4F3F1"/></svg>
+        </div></div>
+        <div class="body">
+          <div class="topbar">
+            <div class="back"><svg width="17" height="17" class="ico" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></div>
+            <div class="step">New Scene · 1 of 2</div>
+            <div style="width:38px"></div>
+          </div>
+          <div class="scroll pad">
+            <div class="sect-title">Tell me your scene</div>
+            <div class="sect-sub">Write it like you'd tell a friend. I'll handle the camera talk.</div>
+
+            <div class="label"><span class="num">A.</span> Describe the moment</div>
+            <div class="textarea"><span class="typed">A girl walks alone into an old train station at sunset. She's nervous, looking for someone. The place is almost empty and golden light comes through the big windows.</span><span class="cursor">▌</span></div>
+
+            <div class="label"><span class="num">B.</span> Pick a visual mood</div>
+            <div class="row">
+              <span class="chip on">🎞 Cinematic</span>
+              <span class="chip">🌙 Moody</span>
+              <span class="chip">☀️ Warm</span>
+              <span class="chip">🎭 Dramatic</span>
+              <span class="chip">📼 Vintage</span>
+              <span class="chip">❄️ Cold</span>
+            </div>
+
+            <div class="label"><span class="num">C.</span> Add references <span style="color:var(--faint);font-weight:500;text-transform:none;letter-spacing:0">— optional</span></div>
+            <div class="upload-row">
+              <div class="upload filled loc"><span class="tag">📍 Location</span></div>
+              <div class="upload filled char"><span class="tag">🎭 Character</span></div>
+              <div class="upload"><svg width="20" height="20" class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span>Add image</span></div>
+            </div>
+          </div>
+          <div class="dock">
+            <button class="btn-primary">Generate storyboard
+              <svg width="18" height="18" class="ico" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+        </div>
+      </div></div>
+      <div class="screen-label">02 · Describe</div>
+    </div>
+
+    <!-- ===================== SCREEN 3 ===================== -->
+    <div class="screen-wrap">
+      <div class="phone"><div class="screen">
+        <div class="notch"></div>
+        <div class="statusbar"><span>9:41</span><div class="dots">
+          <svg width="17" height="11" viewBox="0 0 17 11"><rect x="0" y="6" width="3" height="5" rx="1" fill="#F4F3F1"/><rect x="4.5" y="3.5" width="3" height="7.5" rx="1" fill="#F4F3F1"/><rect x="9" y="1.5" width="3" height="9.5" rx="1" fill="#F4F3F1"/><rect x="13.5" y="0" width="3" height="11" rx="1" fill="#F4F3F1"/></svg>
+          <svg width="22" height="11" viewBox="0 0 22 11"><rect x="1" y="1" width="17" height="9" rx="2.5" stroke="#F4F3F1" fill="none"/><rect x="2.5" y="2.5" width="12" height="6" rx="1.2" fill="#F4F3F1"/></svg>
+        </div></div>
+        <div class="s3">
+          <div class="reel">
+            <div class="ring"></div>
+            <div class="ring spin"></div>
+            <div class="ring spin2"></div>
+            <div class="core">
+              <svg width="26" height="26" class="ico" viewBox="0 0 24 24" style="stroke:#1a1407;stroke-width:1.9"><rect x="2" y="2" width="20" height="20" rx="3"/><path d="M2 8h20M2 16h20M8 2v20M16 2v20"/></svg>
+            </div>
+          </div>
+          <h2>Framing your scene…</h2>
+          <p>Breaking your story into shots a cinematographer would actually use.</p>
+          <div class="steps">
+            <div class="pstep done"><span class="ic">✓</span> Story understood</div>
+            <div class="pstep done"><span class="ic">✓</span> Shot list written · 6 shots</div>
+            <div class="pstep active"><span class="ic">
+              <svg width="13" height="13" class="ico" viewBox="0 0 24 24" style="stroke:#1a1407"><path d="M21 12a9 9 0 1 1-6.2-8.5"/></svg>
+            </span> Rendering frames · 4 of 6</div>
+            <div class="pstep wait"><span class="ic">○</span> Writing director notes</div>
+          </div>
+        </div>
+      </div></div>
+      <div class="screen-label">03 · Generating</div>
+    </div>
+
+    <!-- ===================== SCREEN 4 ===================== -->
+    <div class="screen-wrap">
+      <div class="phone"><div class="screen">
+        <div class="notch"></div>
+        <div class="statusbar"><span>9:41</span><div class="dots">
+          <svg width="17" height="11" viewBox="0 0 17 11"><rect x="0" y="6" width="3" height="5" rx="1" fill="#F4F3F1"/><rect x="4.5" y="3.5" width="3" height="7.5" rx="1" fill="#F4F3F1"/><rect x="9" y="1.5" width="3" height="9.5" rx="1" fill="#F4F3F1"/><rect x="13.5" y="0" width="3" height="11" rx="1" fill="#F4F3F1"/></svg>
+          <svg width="22" height="11" viewBox="0 0 22 11"><rect x="1" y="1" width="17" height="9" rx="2.5" stroke="#F4F3F1" fill="none"/><rect x="2.5" y="2.5" width="12" height="6" rx="1.2" fill="#F4F3F1"/></svg>
+        </div></div>
+        <div class="body">
+          <div class="scroll">
+            <div class="res-head">
+              <div class="crumbs">Your Storyboard</div>
+              <h2>The Station at Sunset</h2>
+              <div class="res-meta">
+                <span class="pill gold">🎞 Cinematic</span>
+                <span class="pill">6 shots</span>
+                <span class="pill">~5 min</span>
+                <span class="pill">2.39:1</span>
+              </div>
+            </div>
+
+            <!-- shot 1 -->
+            <div class="shot">
+              <div class="frame">
+                <div class="img a"></div><div class="bars t"></div><div class="bars b"></div>
+                <span class="num">SHOT 01</span><span class="typ">Wide · Establishing</span>
+              </div>
+              <div class="meta">
+                <h3>The empty station</h3>
+                <div class="desc">We meet the world before the person. Vast, golden, lonely.</div>
+                <div class="specs">
+                  <span class="spec">Angle <b>Eye-level</b></span>
+                  <span class="spec">Move <b>Slow push-in</b></span>
+                  <span class="spec">Lens <b>24mm</b></span>
+                </div>
+              </div>
+              <div class="learn"><span class="bulb">💡</span><span><b>Why wide first?</b> An establishing shot tells the audience <i>where</i> they are and how small your character feels in it — before you ever show her face.</span></div>
+              <div style="height:16px"></div>
+            </div>
+
+            <!-- shot 2 -->
+            <div class="shot">
+              <div class="frame">
+                <div class="img b"></div><div class="bars t"></div><div class="bars b"></div>
+                <span class="num">SHOT 02</span><span class="typ">Medium · Tracking</span>
+              </div>
+              <div class="meta">
+                <h3>She enters</h3>
+                <div class="desc">Camera travels with her — we're walking in beside her, nervous too.</div>
+                <div class="specs">
+                  <span class="spec">Angle <b>3/4 back</b></span>
+                  <span class="spec">Move <b>Tracking</b></span>
+                  <span class="spec">Lens <b>35mm</b></span>
+                </div>
+              </div>
+              <div style="height:16px"></div>
+            </div>
+
+            <!-- shot 3 -->
+            <div class="shot">
+              <div class="frame">
+                <div class="img c"></div><div class="bars t"></div><div class="bars b"></div>
+                <span class="num">SHOT 03</span><span class="typ">Close-up · Static</span>
+              </div>
+              <div class="meta">
+                <h3>Searching eyes</h3>
+                <div class="desc">Tight on her face, backlit by the windows. Pure emotion.</div>
+                <div class="specs">
+                  <span class="spec">Angle <b>Eye-level</b></span>
+                  <span class="spec">Light <b>Backlit / golden</b></span>
+                  <span class="spec">Lens <b>85mm</b></span>
+                </div>
+              </div>
+              <div style="height:16px"></div>
+            </div>
+            <div style="height:60px"></div>
+          </div>
+
+          <div class="fab">
+            <svg width="22" height="22" class="ico" viewBox="0 0 24 24" style="stroke:#1a1407;stroke-width:1.9"><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M12 3v13M7 11l5 5 5-5"/></svg>
+          </div>
+          <div class="tabbar">
+            <div class="tab on"><svg width="21" height="21" class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>Boards</div>
+            <div class="tab"><svg width="21" height="21" class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Create</div>
+            <div class="tab"><svg width="21" height="21" class="ico" viewBox="0 0 24 24"><path d="M3 3v18h18M7 14l4-4 3 3 5-6"/></svg>Learn</div>
+            <div class="tab"><svg width="21" height="21" class="ico" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>You</div>
+          </div>
+        </div>
+      </div></div>
+      <div class="screen-label">04 · Storyboard</div>
+    </div>
+
+    <!-- ===================== SCREEN 5 ===================== -->
+    <div class="screen-wrap">
+      <div class="phone"><div class="screen">
+        <div class="notch"></div>
+        <div class="statusbar"><span>9:41</span><div class="dots">
+          <svg width="17" height="11" viewBox="0 0 17 11"><rect x="0" y="6" width="3" height="5" rx="1" fill="#F4F3F1"/><rect x="4.5" y="3.5" width="3" height="7.5" rx="1" fill="#F4F3F1"/><rect x="9" y="1.5" width="3" height="9.5" rx="1" fill="#F4F3F1"/><rect x="13.5" y="0" width="3" height="11" rx="1" fill="#F4F3F1"/></svg>
+          <svg width="22" height="11" viewBox="0 0 22 11"><rect x="1" y="1" width="17" height="9" rx="2.5" stroke="#F4F3F1" fill="none"/><rect x="2.5" y="2.5" width="12" height="6" rx="1.2" fill="#F4F3F1"/></svg>
+        </div></div>
+        <div class="body">
+          <div class="scroll" style="padding-bottom:30px">
+            <div class="d-hero">
+              <div class="img"></div><div class="bars t"></div><div class="bars b"></div>
+              <div class="back"><svg width="17" height="17" class="ico" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></div>
+            </div>
+            <div class="d-body">
+              <div class="tagline">Shot 03 · Close-Up</div>
+              <h2>Searching eyes</h2>
+              <div class="para">Tight on her face as she scans the platform. The low sun behind her wraps her in a golden rim of light, separating her from the shadowy depth of the station.</div>
+
+              <div class="grid2">
+                <div class="card"><div class="k">Shot Type</div><div class="v">Close-Up</div></div>
+                <div class="card"><div class="k">Camera Angle</div><div class="v">Eye-level</div></div>
+                <div class="card"><div class="k">Lens</div><div class="v">85mm f/1.8</div></div>
+                <div class="card"><div class="k">Lighting</div><div class="v">Golden backlight</div></div>
+              </div>
+
+              <div class="promptbox">
+                <div class="ph"><span>Generated Prompt</span><span class="copy"><svg width="13" height="13" class="ico" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>Copy</span></div>
+                <code>Cinematic close-up, 85mm, shallow depth of field, young woman's face, searching expression, golden hour backlight through large station windows, warm rim light, soft bokeh, 2.39:1, film grain, Kodak Vision3 tones</code>
+              </div>
+
+              <div class="why">
+                <div class="wh">💡 Why this shot works</div>
+                <p>After a wide and a tracking shot, the audience is <i>ready</i> to be close. A long lens (85mm) compresses the background into soft bokeh so nothing competes with her emotion — and backlight turns ordinary sunlight into a halo. This is how directors build intimacy.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div></div>
+      <div class="screen-label">05 · Shot Detail</div>
+    </div>
+
+  </div>
+
+  <div class="footer-note">
+    <b>Design language:</b> dark-first cinema aesthetic · single warm-gold accent · glassmorphism · 2.39:1 letterboxed frames · editorial serif headlines.<br>
+    Built to feel like a <b>film tool</b>, not a generic AI app. Scroll the row sideways to walk through the full flow →
+  </div>
+
+</body>
+</html>
