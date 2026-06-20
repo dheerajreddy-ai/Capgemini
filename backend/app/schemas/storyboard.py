@@ -7,7 +7,7 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from app.models.storyboard import StoryboardStatus
+from app.models.storyboard import ImagesStatus, StoryboardStatus
 
 
 # ── Request ───────────────────────────────────────────────────
@@ -65,6 +65,7 @@ class StoryboardOut(BaseModel):
     scene_style: str | None
     director_note: str | None
     status: StoryboardStatus
+    images_status: ImagesStatus
     shots: list[ShotOut]
     created_at: datetime
 

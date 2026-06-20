@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import uuid
 
-from fastapi import APIRouter, Depends, Query, Request, status
+from fastapi import APIRouter, BackgroundTasks, Depends, Query, Request, status
 from sqlalchemy.orm import Session
 
 from app.api.v1.dependencies import get_current_user
@@ -21,7 +21,7 @@ from app.rate_limit import limiter
 from app.repositories.storyboard_repo import StoryboardRepository
 from app.schemas.response import Success
 from app.schemas.storyboard import GenerateRequest, StoryboardOut, StoryboardSummary
-from app.services import storyboard_service
+from app.services import image_pipeline, storyboard_service
 
 router = APIRouter(prefix="/storyboard", tags=["storyboard"])
 
@@ -36,10 +36,17 @@ router = APIRouter(prefix="/storyboard", tags=["storyboard"])
 def generate(
     request: Request,
     body: GenerateRequest,
+    background_tasks: BackgroundTasks,
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> Success[StoryboardOut]:
     result = storyboard_service.generate_storyboard(body, user, db)
+    # Kick off image generation after the response is sent.
+    background_tasks.add_task(
+        image_pipeline.generate_images_for_storyboard,
+        result.id,
+        user.id,
+    )
     return Success(data=result)
 
 

@@ -4,7 +4,7 @@
  */
 
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -20,6 +20,13 @@ import { ShotCard } from "../../../src/components/ShotCard";
 import { StoryboardOut, storyboardApi } from "../../../src/services/storyboard";
 import { colors, radius, spacing } from "../../../src/theme";
 
+const POLL_INTERVAL_MS = 5000;
+const POLL_TIMEOUT_MS = 3 * 60 * 1000; // stop polling after 3 minutes
+
+function imagesGenerating(board: StoryboardOut): boolean {
+  return board.images_status === "pending" || board.images_status === "generating";
+}
+
 export default function StoryboardScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
@@ -29,6 +36,9 @@ export default function StoryboardScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const pollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pollStart = useRef<number>(0);
+
   const load = useCallback(
     async (silent = false) => {
       if (!id) return;
@@ -37,8 +47,10 @@ export default function StoryboardScreen() {
       try {
         const data = await storyboardApi.getOne(id);
         setBoard(data);
+        return data;
       } catch (err: any) {
         setError(err?.message ?? "Failed to load storyboard.");
+        return null;
       } finally {
         setLoading(false);
         setRefreshing(false);
@@ -47,9 +59,30 @@ export default function StoryboardScreen() {
     [id],
   );
 
-  useEffect(() => {
-    load();
+  // Auto-poll while background image generation is in progress.
+  const schedulePoll = useCallback(() => {
+    if (pollTimer.current) clearTimeout(pollTimer.current);
+    if (Date.now() - pollStart.current > POLL_TIMEOUT_MS) return;
+
+    pollTimer.current = setTimeout(async () => {
+      const data = await load(true);
+      if (data && imagesGenerating(data)) {
+        schedulePoll();
+      }
+    }, POLL_INTERVAL_MS);
   }, [load]);
+
+  useEffect(() => {
+    pollStart.current = Date.now();
+    load().then((data) => {
+      if (data && imagesGenerating(data)) {
+        schedulePoll();
+      }
+    });
+    return () => {
+      if (pollTimer.current) clearTimeout(pollTimer.current);
+    };
+  }, [load, schedulePoll]);
 
   function onRefresh() {
     setRefreshing(true);
@@ -127,6 +160,16 @@ export default function StoryboardScreen() {
         />
       }
     >
+      {/* Image generation progress banner */}
+      {imagesGenerating(board) && (
+        <View style={styles.generatingBanner}>
+          <ActivityIndicator size="small" color={colors.gold} />
+          <Text style={styles.generatingText}>
+            Generating storyboard images… updating automatically
+          </Text>
+        </View>
+      )}
+
       {/* Board header */}
       <View style={styles.header}>
         <Text style={styles.title}>{board.title ?? "Untitled Scene"}</Text>
@@ -179,7 +222,12 @@ export default function StoryboardScreen() {
         .slice()
         .sort((a, b) => a.shot_number - b.shot_number)
         .map((shot, i) => (
-          <ShotCard key={shot.id} shot={shot} index={i} />
+          <ShotCard
+            key={shot.id}
+            shot={shot}
+            index={i}
+            imagesGenerating={imagesGenerating(board)}
+          />
         ))}
 
       <View style={{ height: 40 }} />
@@ -225,6 +273,23 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: "600",
     color: colors.gold,
+  },
+  generatingBanner: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+    backgroundColor: "rgba(232,182,90,0.08)",
+    borderWidth: 1,
+    borderColor: colors.goldDeep,
+    borderRadius: radius.md,
+    padding: spacing.md,
+    marginBottom: spacing.md,
+  },
+  generatingText: {
+    flex: 1,
+    fontSize: 13,
+    color: colors.gold,
+    lineHeight: 18,
   },
   header: {
     marginBottom: spacing.lg,

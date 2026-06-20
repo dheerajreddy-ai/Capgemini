@@ -1,5 +1,5 @@
 import * as Clipboard from "expo-clipboard";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Animated,
   Image,
@@ -14,6 +14,7 @@ import { colors, radius, spacing } from "../theme";
 interface ShotCardProps {
   shot: ShotOut;
   index: number;
+  imagesGenerating?: boolean;
 }
 
 function MetaRow({ label, value }: { label: string; value: string | null }) {
@@ -26,7 +27,26 @@ function MetaRow({ label, value }: { label: string; value: string | null }) {
   );
 }
 
-export function ShotCard({ shot, index }: ShotCardProps) {
+function ImageSkeleton() {
+  const opacity = useRef(new Animated.Value(0.3)).current;
+
+  useEffect(() => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(opacity, { toValue: 0.7, duration: 900, useNativeDriver: true }),
+        Animated.timing(opacity, { toValue: 0.3, duration: 900, useNativeDriver: true }),
+      ]),
+    ).start();
+  }, [opacity]);
+
+  return (
+    <Animated.View style={[styles.imagePlaceholder, { opacity }]}>
+      <Text style={styles.placeholderLabel}>Generating image…</Text>
+    </Animated.View>
+  );
+}
+
+export function ShotCard({ shot, index, imagesGenerating = false }: ShotCardProps) {
   const [expanded, setExpanded] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -42,9 +62,11 @@ export function ShotCard({ shot, index }: ShotCardProps) {
       {/* Letterbox top bar */}
       <View style={styles.letterboxTop} />
 
-      {/* Storyboard image or placeholder */}
+      {/* Storyboard image, skeleton, or static placeholder */}
       {shot.image_url ? (
         <Image source={{ uri: shot.image_url }} style={styles.image} />
+      ) : imagesGenerating ? (
+        <ImageSkeleton />
       ) : (
         <View style={styles.imagePlaceholder}>
           <Text style={styles.placeholderNumber}>

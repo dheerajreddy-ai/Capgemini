@@ -19,6 +19,13 @@ class StoryboardStatus(str, enum.Enum):
     failed = "failed"
 
 
+class ImagesStatus(str, enum.Enum):
+    pending = "pending"        # shots created, images not yet queued
+    generating = "generating"  # background task running
+    done = "done"              # all shots have image_url
+    failed = "failed"          # pipeline errored
+
+
 class Storyboard(UUIDMixin, TimestampMixin, SoftDeleteMixin, Base):
     __tablename__ = "storyboards"
 
@@ -40,6 +47,12 @@ class Storyboard(UUIDMixin, TimestampMixin, SoftDeleteMixin, Base):
         Enum(StoryboardStatus, name="storyboard_status"),
         default=StoryboardStatus.pending,
         index=True,
+        nullable=False,
+    )
+
+    images_status: Mapped[ImagesStatus] = mapped_column(
+        Enum(ImagesStatus, name="images_status"),
+        default=ImagesStatus.pending,
         nullable=False,
     )
 

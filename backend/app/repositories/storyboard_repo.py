@@ -12,7 +12,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session, selectinload
 
 from app.models.shot import Shot
-from app.models.storyboard import Storyboard, StoryboardStatus
+from app.models.storyboard import ImagesStatus, Storyboard, StoryboardStatus
 
 
 class StoryboardRepository:
@@ -85,6 +85,24 @@ class StoryboardRepository:
 
     def soft_delete(self, storyboard: Storyboard) -> None:
         storyboard.deleted_at = datetime.now(timezone.utc)
+        self.db.flush()
+
+    # ── Image pipeline status ─────────────────────────────────
+
+    def mark_images_generating(self, storyboard: Storyboard) -> None:
+        storyboard.images_status = ImagesStatus.generating
+        self.db.flush()
+
+    def mark_images_done(self, storyboard: Storyboard) -> None:
+        storyboard.images_status = ImagesStatus.done
+        self.db.flush()
+
+    def mark_images_failed(self, storyboard: Storyboard) -> None:
+        storyboard.images_status = ImagesStatus.failed
+        self.db.flush()
+
+    def update_shot_image_url(self, shot: Shot, url: str) -> None:
+        shot.image_url = url
         self.db.flush()
 
     # ── Shot bulk insert ──────────────────────────────────────

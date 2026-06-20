@@ -27,6 +27,7 @@ export interface StoryboardOut {
   scene_style: string | null;
   director_note: string | null;
   status: "pending" | "processing" | "completed" | "failed";
+  images_status: "pending" | "generating" | "done" | "failed";
   shots: ShotOut[];
   created_at: string;
 }

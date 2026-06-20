@@ -61,6 +61,14 @@ class Settings(BaseSettings):
     GEMINI_API_KEY: str = ""
     GEMINI_MODEL: str = "gemini-2.5-flash"
 
+    # ── AI — Nano Banana Pro image generation (Phase 3) ──────
+    # Leave empty to skip image generation (shots keep placeholder UI).
+    NANO_BANANA_API_KEY: str = ""
+    NANO_BANANA_API_URL: str = "https://api.nanobananapro.com"
+    NANO_BANANA_MODEL: str = "stable-diffusion-xl-base"
+    NANO_BANANA_IMAGE_WIDTH: int = 1432   # 2.39:1 cinematic ratio
+    NANO_BANANA_IMAGE_HEIGHT: int = 600
+
     # ── Observability ─────────────────────────────────────────
     SENTRY_DSN: str = ""
 
