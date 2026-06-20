@@ -1,0 +1,12 @@
+# Railway service configuration for the FRAME API.
+# Attach a PostgreSQL plugin in the Railway project; it injects DATABASE_URL.
+
+[build]
+builder = "dockerfile"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+healthcheckPath = "/api/v1/health"
+healthcheckTimeout = 100
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 5

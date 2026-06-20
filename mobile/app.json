@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "FRAME",
+    "slug": "frame",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "scheme": "frame",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "splash": {
+      "resizeMode": "cover",
+      "backgroundColor": "#08080A"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "ai.frame.app"
+    },
+    "android": {
+      "package": "ai.frame.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#08080A"
+      }
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      "@react-native-google-signin/google-signin"
+    ],
+    "extra": {
+      "apiBaseUrl": "http://localhost:8000/api/v1",
+      "router": {
+        "origin": false
+      }
+    }
+  }
+}
