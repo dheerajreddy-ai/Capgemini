@@ -10,9 +10,9 @@ from __future__ import annotations
 import os
 
 os.environ.setdefault(
-    "DATABASE_URL", "postgresql+psycopg://test:test@localhost:5432/test"
+    "DATABASE_URL", "postgresql+psycopg2://test:test@localhost:5432/test"
 )
-os.environ.setdefault("ENVIRONMENT", "development")
+os.environ.setdefault("ENV", "dev")
 
 import pytest
 from fastapi.testclient import TestClient

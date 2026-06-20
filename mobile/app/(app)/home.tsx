@@ -4,6 +4,7 @@
  * provisioned app user shown here. The "Create" flow lands in Phase 2.
  */
 
+import { useRouter } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -11,6 +12,7 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { colors, radius, spacing } from "@/theme";
 
 export default function HomeScreen() {
+  const router = useRouter();
   const user = useAuthStore((s) => s.user);
   const signOut = useAuthStore((s) => s.signOut);
 
@@ -35,8 +37,8 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        <Pressable style={styles.cta} disabled>
-          <Text style={styles.ctaText}>New scene  ·  coming in Phase 2</Text>
+        <Pressable style={styles.cta} onPress={() => router.push("/(app)/describe")}>
+          <Text style={styles.ctaText}>＋  New Scene</Text>
         </Pressable>
       </View>
 
@@ -73,14 +75,12 @@ const styles = StyleSheet.create({
   v: { color: colors.text, fontSize: 15, fontWeight: "600", textTransform: "capitalize" },
   cta: {
     marginTop: spacing.xl,
-    backgroundColor: colors.surface2,
-    borderColor: colors.line,
-    borderWidth: 1,
+    backgroundColor: colors.gold,
     borderRadius: radius.md,
     paddingVertical: 17,
     alignItems: "center",
   },
-  ctaText: { color: colors.faint, fontSize: 15, fontWeight: "600" },
+  ctaText: { color: colors.onGold, fontSize: 15, fontWeight: "700" },
   signout: { padding: spacing.lg, alignItems: "center" },
   signoutText: { color: colors.faint, fontSize: 14 },
 });

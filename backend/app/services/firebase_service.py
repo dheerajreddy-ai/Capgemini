@@ -17,10 +17,6 @@ import json
 import threading
 import urllib.parse
 
-import firebase_admin
-from firebase_admin import auth as firebase_auth
-from firebase_admin import credentials
-
 from app.core.config import get_settings
 from app.core.exceptions import AuthError
 from app.core.logging import get_logger
@@ -39,6 +35,11 @@ def _ensure_initialized() -> None:
     with _init_lock:
         if _initialized:
             return
+        # Lazy import — avoids loading heavy native cryptography libs at startup
+        # (mirrors SuperFit's require() pattern for Firebase on mobile).
+        import firebase_admin  # noqa: PLC0415
+        from firebase_admin import credentials  # noqa: PLC0415
+
         settings = get_settings()
         if not settings.FIREBASE_SERVICE_ACCOUNT:
             raise AuthError(
@@ -99,6 +100,8 @@ def verify_id_token(id_token: str) -> FirebaseUser:
         return _decode_mock_token(id_token)
 
     _ensure_initialized()
+    from firebase_admin import auth as firebase_auth  # noqa: PLC0415
+
     try:
         claims = firebase_auth.verify_id_token(id_token, check_revoked=False)
     except firebase_auth.ExpiredIdTokenError as exc:

@@ -25,7 +25,9 @@ sentry-sdk==2.19.2
 # ── Storage (Cloudflare R2 via S3-compat) — Phase 3 ──────────
 boto3>=1.35,<2
 
+# ── HTTP client (Gemini API calls) ───────────────────────────
+httpx==0.28.1
+
 # ── Testing ───────────────────────────────────────────────────
 pytest==8.3.4
 pytest-asyncio==0.24.0
-httpx==0.28.1

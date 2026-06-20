@@ -55,6 +55,12 @@ class Settings(BaseSettings):
     RATE_LIMIT_REQUESTS_PER_MINUTE: int = 120
     RATE_LIMIT_BURST: int = 30
 
+    # ── AI — Gemini 2.5 Flash (Phase 2) ──────────────────────
+    # Get key from Google AI Studio: https://aistudio.google.com/app/apikey
+    # Leave empty to run in demo mode (returns sample shot list).
+    GEMINI_API_KEY: str = ""
+    GEMINI_MODEL: str = "gemini-2.5-flash"
+
     # ── Observability ─────────────────────────────────────────
     SENTRY_DSN: str = ""
 
@@ -74,6 +80,9 @@ class Settings(BaseSettings):
         if isinstance(v, str):
             if v.startswith("postgres://"):
                 v = v.replace("postgres://", "postgresql+psycopg2://", 1)
+            elif v.startswith("postgresql+psycopg://"):
+                # Normalize psycopg3 scheme to psycopg2 (our driver).
+                v = v.replace("postgresql+psycopg://", "postgresql+psycopg2://", 1)
             elif v.startswith("postgresql://"):
                 v = v.replace("postgresql://", "postgresql+psycopg2://", 1)
         return v
