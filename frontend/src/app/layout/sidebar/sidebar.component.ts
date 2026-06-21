@@ -96,5 +96,6 @@ export class SidebarComponent {
     { label: 'Analytics', icon: 'bi-graph-up-arrow', route: '/analytics' },
     { label: 'Exam Schedule', icon: 'bi-calendar-check', route: '/exam-schedule' },
     { label: 'Homework', icon: 'bi-journal-text', route: '/homework' },
+    { label: 'Dropout Risk', icon: 'bi-exclamation-triangle', route: '/dropout-risk' },
   ];
 }

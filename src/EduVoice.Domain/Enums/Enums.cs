@@ -18,3 +18,4 @@ public enum CarrierHealth { Healthy, Degraded, Flagged }
 public enum BroadcastStatus { Draft, Sending, Sent, Failed }
 public enum BroadcastMediaType { None, Image, Document, Video }
 public enum ExamType { UnitTest, Midterm, Final, Quarterly, HalfYearly, Annual }
+public enum DropoutRiskLevel { Low, Medium, High, Critical }

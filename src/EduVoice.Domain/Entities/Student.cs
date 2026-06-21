@@ -58,6 +58,12 @@ public class Student
     // Phase 10/11 — alerts
     public DateTime? LowMarksAlertSentAt { get; set; }
 
+    // Phase 13 — dropout risk
+    public int DropoutRiskScore { get; set; }
+    public DropoutRiskLevel DropoutRiskLevel { get; set; }
+    public DateTime? DropoutRiskCalculatedAt { get; set; }
+    public string? DropoutRiskReasons { get; set; }
+
     // Phase 5 — parent portal
     public string? PortalOtpHash { get; set; }
     public DateTime? PortalOtpExpiresAt { get; set; }

@@ -89,6 +89,11 @@ export const routes: Routes = [
         title: 'Homework · EduVoice',
       },
       {
+        path: 'dropout-risk',
+        loadComponent: () => import('./features/dropout-risk/dropout-risk.component').then((m) => m.DropoutRiskComponent),
+        title: 'Dropout Risk · EduVoice',
+      },
+      {
         path: 'settings',
         loadComponent: () => import('./features/settings/settings.component').then((m) => m.SettingsComponent),
         title: 'Settings · EduVoice',

@@ -36,6 +36,7 @@ export type CarrierHealth = 'Healthy' | 'Degraded' | 'Flagged';
 export type BroadcastStatus = 'Draft' | 'Sending' | 'Sent' | 'Failed';
 export type BroadcastMediaType = 'None' | 'Image' | 'Document' | 'Video';
 export type ExamType = 'UnitTest' | 'Midterm' | 'Final' | 'Quarterly' | 'HalfYearly' | 'Annual';
+export type DropoutRiskLevel = 'Low' | 'Medium' | 'High' | 'Critical';
 
 export interface Broadcast {
   id: string;
@@ -51,6 +52,32 @@ export interface Broadcast {
   failedCount: number;
   sentAt?: string;
   createdAt: string;
+}
+
+export interface DropoutRiskStudent {
+  studentId: string;
+  studentName: string;
+  class?: string;
+  section?: string;
+  parentPhone: string;
+  riskScore: number;
+  riskLevel: DropoutRiskLevel;
+  riskReasons: string[];
+  attendancePercentage?: number;
+  academicPercentage?: number;
+  feesStatus: FeesStatus;
+  pendingFees: number;
+  noAnswerCallsLast30Days: number;
+  calculatedAt?: string;
+}
+
+export interface DropoutRiskSummary {
+  totalStudents: number;
+  criticalCount: number;
+  highCount: number;
+  mediumCount: number;
+  lowCount: number;
+  atRiskStudents: DropoutRiskStudent[];
 }
 
 export interface ExamSchedule {
