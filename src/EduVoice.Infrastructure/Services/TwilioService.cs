@@ -24,7 +24,7 @@ public class TwilioService : ITwilioService
             TwilioClient.Init(accountSid, authToken);
     }
 
-    public async Task SendWhatsAppMessageAsync(string toPhone, string message)
+    public async Task SendWhatsAppAsync(string toPhone, string message)
     {
         try
         {

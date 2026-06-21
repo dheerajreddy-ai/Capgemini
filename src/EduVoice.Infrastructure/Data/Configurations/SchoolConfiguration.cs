@@ -56,6 +56,27 @@ public class SchoolConfiguration : IEntityTypeConfiguration<School>
         builder.Property(s => s.PlanType)
             .HasConversion<string>();
 
+        builder.Property(s => s.TeluguDialect)
+            .HasConversion<string>();
+
+        builder.Property(s => s.CarrierHealth)
+            .HasConversion<string>();
+
+        builder.Property(s => s.DefaultCallLanguage)
+            .HasConversion<string>();
+
+        builder.Property(s => s.ElevenLabsVoiceIdAndhra)
+            .HasMaxLength(200);
+
+        builder.Property(s => s.UpiId)
+            .HasMaxLength(100);
+
+        builder.Property(s => s.UrduVoiceId)
+            .HasMaxLength(200);
+
+        builder.Property(s => s.AttendanceAlertThreshold)
+            .HasPrecision(5, 2);
+
         builder.HasMany(s => s.Users)
             .WithOne(u => u.School)
             .HasForeignKey(u => u.SchoolId)

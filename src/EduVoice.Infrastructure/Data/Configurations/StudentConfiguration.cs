@@ -76,6 +76,15 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
         builder.Property(s => s.FeesStatus)
             .HasConversion<string>();
 
+        builder.Property(s => s.PaymentLink)
+            .HasMaxLength(500);
+
+        builder.Property(s => s.FeeDisputeNote)
+            .HasMaxLength(1000);
+
+        builder.Property(s => s.PortalOtpHash)
+            .HasMaxLength(200);
+
         builder.HasIndex(s => s.SchoolId);
         builder.HasIndex(s => new { s.SchoolId, s.Class, s.Section });
         builder.HasIndex(s => new { s.SchoolId, s.FeesStatus });

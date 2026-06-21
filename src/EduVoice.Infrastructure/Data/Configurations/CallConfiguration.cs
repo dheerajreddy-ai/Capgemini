@@ -46,6 +46,18 @@ public class CallConfiguration : IEntityTypeConfiguration<Call>
         builder.Property(c => c.Sentiment)
             .HasConversion<string>();
 
+        builder.Property(c => c.Language)
+            .HasConversion<string>();
+
+        builder.Property(c => c.EscalationReason)
+            .HasMaxLength(500);
+
+        builder.Property(c => c.DialectUsed)
+            .HasMaxLength(50);
+
+        builder.Property(c => c.NetworkQuality)
+            .HasMaxLength(20);
+
         builder.HasIndex(c => c.SchoolId);
         builder.HasIndex(c => c.StudentId);
         builder.HasIndex(c => c.CampaignId);
