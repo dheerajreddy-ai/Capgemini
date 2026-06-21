@@ -14,6 +14,7 @@ public interface IUnitOfWork : IDisposable
     IRepository<Broadcast> Broadcasts { get; }
     IRepository<ExamSchedule> ExamSchedules { get; }
     IRepository<Homework> Homeworks { get; }
+    IRepository<FeeInstalment> FeeInstalments { get; }
     Task<int> SaveChangesAsync();
     Task BeginTransactionAsync();
     Task CommitAsync();

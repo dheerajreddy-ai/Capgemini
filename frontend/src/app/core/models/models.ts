@@ -39,6 +39,27 @@ export type ExamType = 'UnitTest' | 'Midterm' | 'Final' | 'Quarterly' | 'HalfYea
 export type DropoutRiskLevel = 'Low' | 'Medium' | 'High' | 'Critical';
 export type DefaulterEscalationLevel = 'None' | 'Day30' | 'Day60' | 'Day90';
 
+export interface FeeInstalment {
+  id: string;
+  instalmentNumber: number;
+  amount: number;
+  dueDate: string;
+  isPaid: boolean;
+  paidAt?: string;
+  isOverdue: boolean;
+  daysOverdue: number;
+}
+
+export interface InstalmentPlan {
+  studentId: string;
+  studentName: string;
+  totalPending: number;
+  totalInstalments: number;
+  paidInstalments: number;
+  overdueInstalments: number;
+  instalments: FeeInstalment[];
+}
+
 export interface Broadcast {
   id: string;
   title: string;

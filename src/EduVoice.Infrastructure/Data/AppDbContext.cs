@@ -15,6 +15,7 @@ public class AppDbContext : DbContext
     public DbSet<Broadcast> Broadcasts => Set<Broadcast>();
     public DbSet<ExamSchedule> ExamSchedules => Set<ExamSchedule>();
     public DbSet<Homework> Homeworks => Set<Homework>();
+    public DbSet<FeeInstalment> FeeInstalments => Set<FeeInstalment>();
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
