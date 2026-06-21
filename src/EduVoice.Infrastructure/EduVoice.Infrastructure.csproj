@@ -5,19 +5,19 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.17" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.17">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="SendGrid" Version="9.29.3" />
-    <PackageReference Include="Twilio" Version="7.8.1" />
-    <PackageReference Include="AWSSDK.S3" Version="3.7.413.2" />
+    <PackageReference Include="Twilio" Version="7.14.9" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.511.8" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.9.0" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.9.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.19.1" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.19.1" />
     <ProjectReference Include="..\EduVoice.Domain\EduVoice.Domain.csproj" />
     <ProjectReference Include="..\EduVoice.Application\EduVoice.Application.csproj" />
   </ItemGroup>
