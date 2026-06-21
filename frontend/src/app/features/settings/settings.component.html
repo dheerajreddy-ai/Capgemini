@@ -1,0 +1,218 @@
+<div class="ev-page-head">
+  <div>
+    <h1 class="ev-page-title">Settings</h1>
+    <p class="ev-page-sub">Manage your school, team, and preferences</p>
+  </div>
+</div>
+
+<div class="row g-3">
+  <!-- Tab rail -->
+  <div class="col-12 col-lg-3">
+    <div class="ev-card ev-card-pad ev-settings-rail">
+      @for (t of tabs; track t.id) {
+        <button class="ev-rail-item" [class.is-active]="tab() === t.id" (click)="tab.set(t.id)">
+          <i class="bi {{ t.icon }}"></i><span>{{ t.label }}</span>
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Tab content -->
+  <div class="col-12 col-lg-9">
+    @if (tab() === 'complaint-sla') {
+      <div class="ev-card">
+        <div class="ev-card-head">
+          <h5 class="mb-0">Complaint SLA Configuration</h5>
+          <span class="ev-badge ev-badge--neutral">Auto-escalates by email on breach</span>
+        </div>
+        <div class="ev-table-wrap">
+          <table class="ev-table">
+            <thead><tr><th>Category</th><th style="width:140px">SLA (hours)</th><th>Escalation contact</th><th style="width:110px"></th></tr></thead>
+            <tbody>
+              @for (cfg of slaConfigs(); track cfg.category) {
+                <tr>
+                  <td>
+                    <span class="ev-cell-strong">{{ cfg.category }}</span>
+                    @if (!cfg.isCustomised) { <span class="ev-badge ev-badge--neutral ms-2" style="font-size:10px">default</span> }
+                  </td>
+                  <td>
+                    <input type="number" class="form-control form-control-sm" style="width:90px"
+                      [(ngModel)]="cfg.slaHours" min="1" max="8760" />
+                  </td>
+                  <td>
+                    @if (cfg.escalationContactName) {
+                      <span class="ev-cell-sub">{{ cfg.escalationContactName }}<br />{{ cfg.escalationContactEmail }}</span>
+                    } @else {
+                      <select class="form-select form-select-sm" style="max-width:200px"
+                        [(ngModel)]="cfg.escalationContactUserId">
+                        <option [value]="undefined">— none —</option>
+                        @for (u of users(); track u.id) {
+                          <option [value]="u.id">{{ fullName(u) }}</option>
+                        }
+                      </select>
+                    }
+                  </td>
+                  <td class="text-end">
+                    <button class="btn btn-primary btn-sm" [disabled]="slaSaving()" (click)="saveSlaConfig(cfg)">Save</button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        <div class="ev-hint ev-card-pad pt-0">
+          <i class="bi bi-info-circle me-2"></i>
+          The background service checks every 30 min and emails the escalation contact when a complaint is past its deadline.
+        </div>
+      </div>
+    } @else if (school(); as s) {
+      @switch (tab()) {
+        @case ('profile') {
+          <div class="ev-card ev-card-pad">
+            <h5 class="mb-3">School Profile</h5>
+            <div class="d-flex align-items-center gap-3 mb-4">
+              @if (s.logoUrl) { <img [src]="s.logoUrl" class="ev-logo-preview" alt="logo" /> }
+              @else { <div class="ev-logo-preview ev-logo-preview--fallback">{{ s.name | evInitials }}</div> }
+              <div><button class="btn btn-soft btn-sm"><i class="bi bi-upload me-2"></i>Upload logo</button><div class="small text-muted-ev mt-1">PNG/SVG, square, max 1MB</div></div>
+            </div>
+            <div class="row g-3">
+              <div class="col-md-6"><label class="form-label">School name</label><input class="form-control" [(ngModel)]="s.name" /></div>
+              <div class="col-md-6"><label class="form-label">Subdomain</label><div class="input-group"><input class="form-control" [value]="s.subDomain" disabled /><span class="input-group-text">.eduvoice.in</span></div></div>
+              <div class="col-md-6"><label class="form-label">Contact email</label><input class="form-control" [(ngModel)]="s.contactEmail" /></div>
+              <div class="col-md-6"><label class="form-label">Contact phone</label><input class="form-control" [(ngModel)]="s.contactPhone" /></div>
+              <div class="col-md-4"><label class="form-label">City</label><input class="form-control" [(ngModel)]="s.city" /></div>
+              <div class="col-md-4"><label class="form-label">State</label><input class="form-control" [(ngModel)]="s.state" /></div>
+              <div class="col-md-4">
+                <label class="form-label">Brand color</label>
+                <div class="d-flex align-items-center gap-2">
+                  <input type="color" class="ev-color" [value]="s.primaryColor ?? '#1E40AF'" (input)="onColorChange($any($event.target).value)" />
+                  <code class="small">{{ s.primaryColor ?? '#1E40AF' }}</code>
+                </div>
+              </div>
+              <div class="col-12"><label class="form-label">Address</label><textarea class="form-control" rows="2" [(ngModel)]="s.address"></textarea></div>
+            </div>
+            <div class="text-end mt-3">
+              <button class="btn btn-primary" [disabled]="saving()" (click)="saveProfile()">
+                @if (saving()) { <span class="spinner-border spinner-border-sm me-2"></span> } Save changes
+              </button>
+            </div>
+          </div>
+        }
+
+        @case ('users') {
+          <div class="ev-card">
+            <div class="ev-card-head">
+              <h5 class="mb-0">Team Members</h5>
+              <button class="btn btn-primary btn-sm"><i class="bi bi-plus-lg me-1"></i>Invite user</button>
+            </div>
+            <div class="ev-table-wrap">
+              <table class="ev-table">
+                <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th></tr></thead>
+                <tbody>
+                  @for (u of users(); track u.id) {
+                    <tr>
+                      <td><div class="d-flex align-items-center gap-2"><div class="ev-avatar ev-avatar--sm">{{ fullName(u) | evInitials }}</div><span class="ev-cell-strong">{{ fullName(u) }}</span></div></td>
+                      <td class="ev-cell-sub">{{ u.email }}</td>
+                      <td><span class="ev-badge ev-badge--primary">{{ u.role }}</span></td>
+                      <td>@if (u.isActive) { <ev-status-badge value="Resolved" /> } @else { <span class="ev-badge ev-badge--neutral">Inactive</span> }</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        }
+
+        @case ('voice') {
+          <div class="ev-card ev-card-pad">
+            <h5 class="mb-3">Voice Configuration</h5>
+            <div class="row g-3">
+              <div class="col-md-6"><label class="form-label">Vapi Assistant ID</label><input class="form-control" [value]="s.vapiAssistantId ?? ''" placeholder="asst_..." /></div>
+              <div class="col-md-6"><label class="form-label">Twilio number</label><input class="form-control" [value]="s.twilioPhoneNumber ?? ''" disabled /></div>
+              <div class="col-md-6">
+                <label class="form-label">Telugu voice</label>
+                <select class="form-select"><option>Priya — Warm (Female)</option><option>Anjali — Friendly (Female)</option><option>Ravi — Professional (Male)</option></select>
+              </div>
+              <div class="col-md-6 d-flex align-items-end"><button class="btn btn-soft w-100"><i class="bi bi-play-circle me-2"></i>Test voice</button></div>
+            </div>
+            <div class="ev-hint mt-3"><i class="bi bi-info-circle me-2"></i>Voice changes apply to all future calls. Existing recordings are unaffected.</div>
+          </div>
+        }
+
+        @case ('notifications') {
+          <div class="ev-card ev-card-pad">
+            <h5 class="mb-3">Notifications</h5>
+            <div class="ev-toggle-row"><div><b>WhatsApp summaries</b><div class="small text-secondary-ev">Send parents a summary after each call</div></div><label class="ev-switch"><input type="checkbox" [(ngModel)]="notif.whatsapp" /><span></span></label></div>
+            <div class="ev-toggle-row"><div><b>Email notifications</b><div class="small text-secondary-ev">Receive important alerts by email</div></div><label class="ev-switch"><input type="checkbox" [(ngModel)]="notif.email" /><span></span></label></div>
+            <div class="ev-toggle-row"><div><b>Complaint alerts</b><div class="small text-secondary-ev">Notify admins instantly on new complaints</div></div><label class="ev-switch"><input type="checkbox" [(ngModel)]="notif.complaintAlert" /><span></span></label></div>
+            <div class="ev-toggle-row"><div><b>Daily summary email</b><div class="small text-secondary-ev">Sent every day at the chosen time</div></div><input type="time" class="form-control" style="width:130px" [(ngModel)]="notif.dailySummary" /></div>
+            <div class="text-end mt-3"><button class="btn btn-primary" (click)="saveNotifications()">Save preferences</button></div>
+          </div>
+        }
+
+        @case ('security') {
+          <div class="ev-card ev-card-pad">
+            <h5 class="mb-3">Change Password</h5>
+            <div class="row g-3" style="max-width:480px">
+              <div class="col-12"><label class="form-label">Current password</label><input type="password" class="form-control" [(ngModel)]="pwd.current" /></div>
+              <div class="col-12"><label class="form-label">New password</label><input type="password" class="form-control" [(ngModel)]="pwd.next" /></div>
+              <div class="col-12"><label class="form-label">Confirm new password</label><input type="password" class="form-control" [(ngModel)]="pwd.confirm" /></div>
+            </div>
+            <div class="mt-3"><button class="btn btn-primary" [disabled]="saving()" (click)="changePassword()">Update password</button></div>
+          </div>
+        }
+
+        @case ('daily-digest') {
+          <div class="ev-card ev-card-pad">
+            <h5 class="mb-3">Daily School Digest</h5>
+            <p class="text-secondary-ev mb-4">
+              Send the principal a WhatsApp message + email every morning at <strong>8 AM IST</strong> with
+              today's call schedule, pending fees, open complaints, and active campaigns.
+            </p>
+
+            <div class="ev-toggle-row mb-4">
+              <div>
+                <b>Enable daily digest</b>
+                <div class="small text-secondary-ev">Turns on the 8 AM summary for this school</div>
+              </div>
+              <label class="ev-switch">
+                <input type="checkbox" [(ngModel)]="s.dailySummaryEnabled" />
+                <span></span>
+              </label>
+            </div>
+
+            <div class="row g-3" style="max-width:520px">
+              <div class="col-12">
+                <label class="form-label">Principal email</label>
+                <input class="form-control" type="email" [(ngModel)]="s.principalEmail"
+                  placeholder="principal@school.edu.in" />
+                <div class="form-text">Leave blank to skip email.</div>
+              </div>
+              <div class="col-12">
+                <label class="form-label">Principal WhatsApp number</label>
+                <div class="input-group">
+                  <span class="input-group-text">+91</span>
+                  <input class="form-control" type="tel" [(ngModel)]="s.principalWhatsApp"
+                    placeholder="9876543210" />
+                </div>
+                <div class="form-text">Include country code if outside India. Leave blank to skip WhatsApp.</div>
+              </div>
+            </div>
+
+            <div class="ev-hint mt-4">
+              <i class="bi bi-info-circle me-2"></i>
+              At least one contact (email or WhatsApp) must be set for the digest to be sent.
+              The background service runs every 5 minutes and fires within the 8:00–8:05 AM IST window.
+            </div>
+
+            <div class="text-end mt-4">
+              <button class="btn btn-primary" [disabled]="saving()" (click)="saveDigestSettings()">
+                @if (saving()) { <span class="spinner-border spinner-border-sm me-2"></span> } Save digest settings
+              </button>
+            </div>
+          </div>
+        }
+      }
+    }
+  </div>
+</div>

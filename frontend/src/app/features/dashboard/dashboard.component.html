@@ -1,0 +1,124 @@
+<!-- Greeting header -->
+<div class="ev-page-head">
+  <div>
+    <h1 class="ev-page-title">{{ greeting() }} 👋</h1>
+    <p class="ev-page-sub">Here's what's happening with your parent calls today.</p>
+  </div>
+  <div class="d-flex gap-2">
+    <a routerLink="/campaigns" class="btn btn-soft"><i class="bi bi-megaphone me-2"></i>New Campaign</a>
+    <a routerLink="/students" class="btn btn-primary"><i class="bi bi-upload me-2"></i>Import Students</a>
+  </div>
+</div>
+
+<!-- Stat cards -->
+<div class="row g-3 mb-3">
+  @if (loading()) {
+    @for (i of [1,2,3,4]; track i) {
+      <div class="col-sm-6 col-xl-3"><div class="ev-card ev-card-pad h-100"><ev-skeleton [rows]="3" [height]="20" /></div></div>
+    }
+  } @else if (stats(); as s) {
+    <div class="col-sm-6 col-xl-3">
+      <ev-stat-card icon="bi-telephone-fill" tone="primary" [value]="s.todaysCalls"
+                    label="Today's Calls" [trend]="s.todaysCallsTrend" hint="vs yesterday" />
+    </div>
+    <div class="col-sm-6 col-xl-3">
+      <ev-stat-card icon="bi-cash-coin" tone="success" [value]="s.feesConfirmedToday"
+                    label="Fees Confirmed Today" [hint]="feesAmount()" />
+    </div>
+    <div class="col-sm-6 col-xl-3">
+      <ev-stat-card icon="bi-exclamation-triangle-fill" tone="danger" [value]="s.complaintsNew"
+                    label="New Complaints" hint="Awaiting review" />
+    </div>
+    <div class="col-sm-6 col-xl-3">
+      <ev-stat-card icon="bi-clock-history" tone="warning" [value]="s.pendingFollowups"
+                    label="Pending Follow-ups" hint="Callback requested" />
+    </div>
+  }
+</div>
+
+<!-- Charts -->
+<div class="row g-3 mb-3">
+  <div class="col-12 col-lg-7">
+    <div class="ev-card h-100">
+      <div class="ev-card-head">
+        <div>
+          <h3 class="ev-card-title">Calls This Week</h3>
+          <small class="text-secondary-ev">Completed vs no-answer, last 7 days</small>
+        </div>
+        <span class="ev-badge ev-badge--primary">{{ stats()?.weeksCalls ?? 0 }} total</span>
+      </div>
+      <div class="ev-card-pad">
+        @if (loading()) { <ev-skeleton [rows]="6" [height]="28" /> }
+        @else { <apx-chart [series]="areaOptions().series!" [chart]="areaOptions().chart!"
+                  [colors]="areaOptions().colors!" [dataLabels]="areaOptions().dataLabels!"
+                  [stroke]="areaOptions().stroke!" [fill]="areaOptions().fill!"
+                  [grid]="areaOptions().grid!" [xaxis]="areaOptions().xaxis!"
+                  [yaxis]="areaOptions().yaxis!" [legend]="areaOptions().legend!"
+                  [tooltip]="areaOptions().tooltip!" /> }
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-lg-5">
+    <div class="ev-card h-100">
+      <div class="ev-card-head"><h3 class="ev-card-title">Call Outcomes</h3></div>
+      <div class="ev-card-pad">
+        @if (loading()) { <ev-skeleton [rows]="6" [height]="28" /> }
+        @else { <apx-chart [series]="donutOptions().series!" [chart]="donutOptions().chart!"
+                  [labels]="donutOptions().labels!" [colors]="donutOptions().colors!"
+                  [stroke]="donutOptions().stroke!" [dataLabels]="donutOptions().dataLabels!"
+                  [legend]="donutOptions().legend!" [plotOptions]="donutOptions().plotOptions!" /> }
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Recent calls -->
+<div class="ev-card">
+  <div class="ev-card-head">
+    <h3 class="ev-card-title">Recent Calls</h3>
+    <a routerLink="/calls" class="ev-link small fw-semibold">View all <i class="bi bi-arrow-right ms-1"></i></a>
+  </div>
+
+  @if (loading()) {
+    <div class="ev-card-pad"><ev-skeleton [rows]="6" [height]="24" /></div>
+  } @else if ((stats()?.recentCalls?.length ?? 0) === 0) {
+    <ev-empty-state icon="bi-telephone-x" title="No calls yet"
+      message="Start a campaign to begin reaching parents." />
+  } @else {
+    <div class="ev-table-wrap">
+      <table class="ev-table">
+        <thead>
+          <tr>
+            <th>Time</th><th>Student</th><th>Parent</th><th>Type</th>
+            <th>Duration</th><th>Sentiment</th><th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (call of stats()!.recentCalls; track call.id) {
+            <tr>
+              <td class="ev-cell-sub">{{ call.createdAt | evRelativeTime }}</td>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <div class="ev-avatar ev-avatar--sm">{{ call.studentName | evInitials }}</div>
+                  <div>
+                    <div class="ev-cell-strong">{{ call.studentName }}</div>
+                    <div class="ev-cell-sub">{{ call.studentClass }}</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="ev-cell-strong">{{ call.parentName }}</div>
+                <div class="ev-cell-sub">{{ call.parentPhone }}</div>
+              </td>
+              <td><ev-status-badge [value]="call.type" /></td>
+              <td class="ev-cell-sub">{{ call.durationSeconds | evDuration }}</td>
+              <td><ev-sentiment-badge [value]="call.sentiment" /></td>
+              <td><ev-status-badge [value]="call.status" /></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

@@ -1,0 +1,125 @@
+<div class="ev-page-head">
+  <div>
+    <h1 class="ev-page-title">Students</h1>
+    <p class="ev-page-sub">{{ result()?.totalCount ?? 0 }} students enrolled</p>
+  </div>
+  <div class="d-flex gap-2 flex-wrap">
+    <button class="btn btn-soft" (click)="exportExcel()"><i class="bi bi-download me-2"></i>Export</button>
+    <button class="btn btn-soft" (click)="showImport.set(true)"><i class="bi bi-file-earmark-spreadsheet me-2"></i>Import Excel</button>
+    <button class="btn btn-primary" (click)="openCreate()"><i class="bi bi-plus-lg me-2"></i>Add Student</button>
+  </div>
+</div>
+
+<!-- Toolbar -->
+<div class="ev-card ev-card-pad mb-3">
+  <div class="row g-2 align-items-center">
+    <div class="col-12 col-lg-5">
+      <div class="ev-search">
+        <i class="bi bi-search"></i>
+        <input class="form-control" type="search" placeholder="Search by name, phone, or code…"
+               (input)="onSearch($any($event.target).value)" />
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <select class="form-select" (change)="setFilter('feesStatus', $any($event.target).value)">
+        <option value="">All fees status</option>
+        @for (f of feesOptions.slice(1); track f) { <option [value]="f">{{ f }}</option> }
+      </select>
+    </div>
+    <div class="col-6 col-lg-2">
+      <input class="form-control" placeholder="Class" (change)="setFilter('class', $any($event.target).value)" />
+    </div>
+    <div class="col-12 col-lg-2">
+      <select class="form-select" (change)="query().sortBy = $any($event.target).value; load()">
+        <option value="fullName">Sort: Name</option>
+        <option value="feesDue">Sort: Fees Due</option>
+        <option value="attendance">Sort: Attendance</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- Table -->
+<div class="ev-card">
+  @if (loading()) {
+    <div class="ev-card-pad"><ev-skeleton [rows]="8" [height]="26" /></div>
+  } @else if ((result()?.items?.length ?? 0) === 0) {
+    <ev-empty-state icon="bi-mortarboard" title="No students found"
+      message="Try adjusting filters or import your student list to get started." />
+  } @else {
+    <div class="ev-table-wrap">
+      <table class="ev-table">
+        <thead>
+          <tr><th>Student</th><th>Parent</th><th>Fees Due</th><th>Attendance</th><th>Last Called</th><th class="text-end">Actions</th></tr>
+        </thead>
+        <tbody>
+          @for (s of result()!.items; track s.id) {
+            <tr>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <div class="ev-avatar">{{ s.fullName | evInitials }}</div>
+                  <div>
+                    <a [routerLink]="['/students', s.id]" class="ev-cell-strong text-decoration-none">{{ s.fullName }}</a>
+                    <div class="ev-cell-sub">{{ s.class }} · {{ s.section }} · {{ s.studentCode }}</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="ev-cell-strong">{{ s.parentName }}</div>
+                <div class="ev-cell-sub">{{ s.parentPhone }}</div>
+              </td>
+              <td>
+                <div class="fw-bold" [class]="feesTone(s.feesStatus)">₹{{ s.feesDue.toLocaleString('en-IN') }}</div>
+                <ev-status-badge [value]="s.feesStatus" />
+              </td>
+              <td>
+                @if (s.attendance != null) {
+                  <div class="d-flex align-items-center gap-2">
+                    <div class="ev-progress" style="width:70px"><div class="ev-progress__bar" [style.width.%]="s.attendance"></div></div>
+                    <span class="ev-cell-sub">{{ s.attendance }}%</span>
+                  </div>
+                } @else { <span class="ev-cell-sub">—</span> }
+              </td>
+              <td class="ev-cell-sub">{{ s.lastCalledAt | evRelativeTime }}</td>
+              <td class="text-end">
+                <div class="d-inline-flex gap-1">
+                  <a [routerLink]="['/students', s.id]" class="btn btn-ghost btn-icon btn-sm" title="View"><i class="bi bi-eye"></i></a>
+                  <button class="btn btn-ghost btn-icon btn-sm" (click)="openEdit(s)" title="Edit"><i class="bi bi-pencil"></i></button>
+                  <button class="btn btn-ghost btn-icon btn-sm text-primary" (click)="openInstalments(s)" title="Instalment Plan"><i class="bi bi-calendar2-range"></i></button>
+                  <button class="btn btn-ghost btn-icon btn-sm text-success" (click)="openReportCard(s)" title="Report Card"><i class="bi bi-file-earmark-text"></i></button>
+                  <button class="btn btn-ghost btn-icon btn-sm text-danger" (click)="remove(s)" title="Remove"><i class="bi bi-trash"></i></button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <div class="ev-card-pad pt-0">
+      <ev-pagination [page]="query().page!" [pageSize]="query().pageSize!" [total]="result()!.totalCount" (pageChange)="setPage($event)" />
+    </div>
+  }
+</div>
+
+<!-- Add/Edit drawer -->
+<ev-student-form [open]="showForm()" [student]="editing()" (close)="showForm.set(false)" (saved)="onSaved()" />
+
+<!-- Import drawer -->
+<ev-import-students [open]="showImport()" (close)="showImport.set(false)" (imported)="onImported()" />
+
+<!-- Report Card modal -->
+@if (reportStudent()) {
+  <ev-report-card
+    [studentId]="reportStudent()!.id"
+    (closed)="reportStudent.set(null)" />
+}
+
+<!-- Instalment Plan modal -->
+@if (instalmentStudent()) {
+  <ev-instalment-plan
+    [studentId]="instalmentStudent()!.id"
+    [studentName]="instalmentStudent()!.fullName"
+    [pendingFees]="instalmentStudent()!.feesDue"
+    (closed)="instalmentStudent.set(null)"
+    (updated)="load()" />
+}

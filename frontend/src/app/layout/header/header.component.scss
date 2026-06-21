@@ -1,0 +1,45 @@
+.ev-header {
+  position: sticky; top: 0; z-index: 1020;
+  height: var(--ev-header-h);
+  display: flex; align-items: center; gap: 1rem;
+  padding: 0 1.5rem;
+  border-bottom: 1px solid var(--ev-border);
+}
+
+.ev-header__search { flex: 1; max-width: 460px; position: relative; }
+.ev-header__search input { background: rgba(255, 255, 255, 0.7); border-color: transparent; }
+.ev-header__search input:focus { background: #fff; }
+.ev-kbd {
+  position: absolute; right: .6rem; top: 50%; transform: translateY(-50%);
+  font-size: .7rem; color: var(--ev-text-muted);
+  background: #fff; border: 1px solid var(--ev-border-strong);
+  border-radius: 6px; padding: .1rem .35rem; font-family: inherit;
+}
+
+.ev-header__actions { display: flex; align-items: center; gap: .5rem; margin-left: auto; }
+.ev-header__divider { width: 1px; height: 28px; background: var(--ev-border); margin: 0 .25rem; }
+
+.ev-notif-dot {
+  position: absolute; top: 8px; right: 9px;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--ev-danger); border: 2px solid #fff;
+}
+
+.ev-usermenu {
+  display: flex; align-items: center; gap: .6rem;
+  background: transparent; border: none; padding: .35rem .5rem; border-radius: 12px;
+  transition: background .15s ease;
+}
+.ev-usermenu:hover { background: var(--ev-primary-soft); }
+.ev-usermenu__meta { text-align: left; line-height: 1.2; }
+.ev-usermenu__name { font-weight: 600; font-size: .85rem; }
+.ev-usermenu__role { font-size: .72rem; color: var(--ev-text-secondary); }
+.ev-usermenu__caret { font-size: .75rem; color: var(--ev-text-muted); }
+
+.ev-dropdown {
+  border: 1px solid var(--ev-border); border-radius: 16px;
+  box-shadow: var(--ev-shadow-lg); padding: .4rem; min-width: 240px; margin-top: .5rem;
+}
+.ev-dropdown .dropdown-item { border-radius: 10px; padding: .55rem .75rem; font-size: .88rem; font-weight: 500; }
+.ev-dropdown .dropdown-item:hover { background: var(--ev-primary-soft); color: var(--ev-primary); }
+.ev-dropdown .dropdown-item.text-danger:hover { background: var(--ev-danger-soft); color: var(--ev-danger) !important; }

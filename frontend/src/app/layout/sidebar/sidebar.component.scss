@@ -1,0 +1,107 @@
+.ev-sidebar {
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  width: var(--ev-sidebar-w);
+  background: var(--ev-grad-sidebar);
+  display: flex;
+  flex-direction: column;
+  z-index: 1050;
+  color: #cdd5e6;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* subtle aurora glow at the top */
+.ev-sidebar::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: radial-gradient(600px 240px at 30% -5%, rgba(99, 102, 241, 0.22), transparent 60%);
+  pointer-events: none;
+}
+
+/* ---- Brand ---- */
+.ev-sidebar__brand {
+  position: relative;
+  display: flex; align-items: center; gap: .75rem;
+  padding: 1.25rem 1.25rem 1.1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+.ev-sidebar__logo {
+  width: 44px; height: 44px; border-radius: 13px; object-fit: cover;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+}
+.ev-sidebar__logo--fallback {
+  display: grid; place-items: center;
+  background: linear-gradient(135deg, #fff, #dbeafe);
+  color: var(--ev-primary); font-weight: 800; font-family: "Sora", sans-serif;
+}
+.ev-sidebar__brandtext { flex: 1; min-width: 0; }
+.ev-sidebar__name {
+  font-family: "Sora", sans-serif; font-weight: 700; color: #fff; font-size: 1rem;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ev-sidebar__tag { font-size: .72rem; color: #93a0bd; display: flex; align-items: center; gap: .4rem; margin-top: .15rem; }
+.ev-sidebar__close { background: none; border: none; color: #93a0bd; font-size: 1.1rem; }
+
+/* ---- Nav ---- */
+.ev-sidebar__nav { flex: 1; overflow-y: auto; padding: 1rem .85rem; }
+.ev-sidebar__section {
+  font-size: .68rem; text-transform: uppercase; letter-spacing: .12em;
+  color: #6b779a; font-weight: 700; padding: .5rem .75rem .35rem;
+}
+.ev-nav-link {
+  position: relative;
+  display: flex; align-items: center; gap: .8rem;
+  padding: .7rem .8rem; border-radius: 12px;
+  color: #c2cae0; font-weight: 500; font-size: .92rem;
+  transition: all .18s ease; margin-bottom: .15rem;
+}
+.ev-nav-link i { font-size: 1.15rem; width: 22px; text-align: center; transition: transform .18s ease; }
+.ev-nav-link:hover { background: rgba(255, 255, 255, 0.06); color: #fff; }
+.ev-nav-link:hover i { transform: scale(1.08); }
+.ev-nav-link.is-active {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.28), rgba(99, 102, 241, 0.18));
+  color: #fff; box-shadow: inset 0 0 0 1px rgba(147, 197, 253, 0.25);
+}
+.ev-nav-link.is-active::before {
+  content: ""; position: absolute; left: -0.85rem; top: 50%; transform: translateY(-50%);
+  width: 4px; height: 22px; border-radius: 0 4px 4px 0; background: #60a5fa;
+  box-shadow: 0 0 12px #60a5fa;
+}
+.ev-nav-badge {
+  margin-left: auto; background: var(--ev-danger); color: #fff;
+  font-size: .68rem; font-weight: 700; min-width: 20px; height: 20px;
+  border-radius: 999px; display: grid; place-items: center; padding: 0 .35rem;
+}
+
+/* ---- Foot / plan card ---- */
+.ev-sidebar__foot { padding: .85rem; }
+.ev-plan-card {
+  position: relative; overflow: hidden;
+  background: linear-gradient(135deg, #2563eb, #1e3a8a);
+  border-radius: 18px; padding: 1.1rem; color: #fff;
+  box-shadow: 0 14px 30px rgba(30, 58, 138, 0.5);
+}
+.ev-plan-card__shine {
+  position: absolute; top: -50%; right: -30%;
+  width: 160px; height: 160px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.25), transparent 70%);
+}
+.ev-plan-card__badge {
+  display: inline-block; font-size: .68rem; font-weight: 700; letter-spacing: .04em;
+  text-transform: uppercase; background: rgba(255, 255, 255, 0.2);
+  padding: .2rem .55rem; border-radius: 999px; margin-bottom: .6rem;
+}
+.ev-plan-card__title { font-family: "Sora", sans-serif; font-weight: 700; font-size: 1rem; }
+.ev-plan-card__sub { font-size: .76rem; opacity: .85; margin: .25rem 0 .8rem; line-height: 1.4; }
+.ev-plan-card .btn-light { color: var(--ev-primary); border-radius: 10px; }
+
+/* ---- Mobile ---- */
+@media (max-width: 991.98px) {
+  .ev-sidebar {
+    width: 264px;
+    transform: translateX(-100%);
+    transition: transform .3s cubic-bezier(.2, .8, .2, 1);
+    box-shadow: var(--ev-shadow-xl);
+  }
+  .ev-sidebar.is-open { transform: translateX(0); }
+}

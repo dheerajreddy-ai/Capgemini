@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+<meta charset="utf-8">
+<style>
+  @page {
+    size: A4;
+    margin: 18mm 16mm 18mm 16mm;
+    @bottom-left { content: "VCD AI Labs · గోప్యం"; font-family: "Noto Sans"; font-size: 8pt; color: #64748B; }
+    @bottom-right { content: "పేజీ " counter(page); font-family: "Noto Sans Telugu"; font-size: 8pt; color: #64748B; }
+  }
+  @page :first {
+    margin: 0;
+    @bottom-left { content: none; }
+    @bottom-right { content: none; }
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Noto Sans Telugu", "Noto Sans", sans-serif;
+    color: #1E293B; font-size: 10.5pt; line-height: 1.7; margin: 0;
+  }
+  .te { font-family: "Noto Sans Telugu", sans-serif; }
+
+  /* ---------- cover ---------- */
+  .cover {
+    height: 297mm; background: linear-gradient(135deg,#1E40AF 0%, #4338CA 60%, #6D28D9 100%);
+    color: #fff; padding: 60mm 22mm; position: relative; page-break-after: always;
+  }
+  .cover h1 { font-size: 40pt; margin: 0; font-weight: 800; letter-spacing: -1px; }
+  .cover .sub { font-size: 15pt; color: #DBEAFE; margin-top: 8px; font-weight: 500; }
+  .cover .tags { font-size: 10.5pt; color: #BFDBFE; margin-top: 22px; }
+  .cover .foot { position: absolute; bottom: 38mm; left: 22mm; color: #DBEAFE; font-size: 12pt; }
+  .cover .circle { position: absolute; right: -40mm; bottom: -40mm; width: 130mm; height: 130mm;
+    background: rgba(124,58,237,.35); border-radius: 50%; }
+
+  /* ---------- headings ---------- */
+  h2 { color: #1E40AF; font-size: 17pt; margin: 22px 0 8px; font-weight: 700; }
+  h3 { color: #0F172A; font-size: 12.5pt; margin: 14px 0 4px; font-weight: 700; }
+  p  { margin: 0 0 9px; text-align: justify; }
+  .lead { font-size: 11.5pt; color: #334155; }
+  .muted { color: #64748B; }
+
+  /* ---------- feature grid ---------- */
+  .grid { display: table; width: 100%; border-spacing: 9px; margin: 6px 0; }
+  .grow { display: table-row; }
+  .cell { display: table-cell; width: 50%; background: #fff; border: 1px solid #E2E8F0;
+    border-radius: 10px; overflow: hidden; vertical-align: top; }
+  .cell .bar { color: #fff; font-weight: 700; padding: 6px 12px; font-size: 10.5pt; }
+  .cell .bd { padding: 8px 12px; font-size: 9.5pt; color: #475569; }
+
+  /* ---------- stat strip ---------- */
+  .stats { display: table; width: 100%; border: 1px solid #E2E8F0; border-radius: 10px;
+    background: #F8FAFC; margin: 10px 0; }
+  .stat { display: table-cell; text-align: center; padding: 12px 6px; border-right: 1px solid #E2E8F0; }
+  .stat:last-child { border-right: none; }
+  .stat b { display: block; color: #1E40AF; font-size: 15pt; font-weight: 800; }
+  .stat span { font-size: 8.5pt; color: #64748B; }
+
+  /* ---------- numbered flow steps ---------- */
+  .step { display: table; width: 100%; margin: 8px 0; border: 1px solid #E2E8F0;
+    border-radius: 12px; overflow: hidden; page-break-inside: avoid; }
+  .step .n { display: table-cell; width: 46px; background: linear-gradient(160deg,#1E40AF,#6D28D9);
+    color: #fff; font-size: 18pt; font-weight: 800; text-align: center; vertical-align: middle;
+    font-family: "Noto Sans"; }
+  .step .c { display: table-cell; padding: 9px 14px; vertical-align: middle; }
+  .step .c b { color: #0F172A; font-size: 11pt; }
+  .step .c .d { color: #475569; font-size: 9.5pt; }
+
+  /* ---------- pipeline boxes ---------- */
+  .pipe { display: table; width: 100%; border-spacing: 6px; margin: 8px 0; }
+  .pr { display: table-row; }
+  .pb { display: table-cell; border-radius: 8px; color: #fff; padding: 8px 9px;
+    font-size: 8.6pt; vertical-align: middle; width: 33%; }
+  .pb b { display: block; font-size: 9.6pt; margin-bottom: 1px; }
+  .arrowcol { text-align:center; color:#94A3B8; font-size: 14pt; font-family:"Noto Sans"; }
+
+  .note { background: #EFF6FF; border-left: 4px solid #1E40AF; border-radius: 6px;
+    padding: 10px 14px; margin: 12px 0; font-size: 10pt; color: #1E3A5F; }
+  ul { margin: 4px 0 10px; padding-left: 20px; }
+  li { margin-bottom: 5px; font-size: 10pt; }
+  .pagebreak { page-break-before: always; }
+</style>
+</head>
+<body>
+
+<!-- ============ COVER ============ -->
+<div class="cover">
+  <h1 class="te">EduVoice</h1>
+  <div class="sub te">తల్లిదండ్రులకు తెలుగులో ఆటోమేటిక్‌గా ఫోన్ చేసే AI వాయిస్ ఏజెంట్</div>
+  <div class="tags te">ఫీజు రిమైండర్లు &nbsp;·&nbsp; పురోగతి అప్‌డేట్లు &nbsp;·&nbsp; ఫిర్యాదుల సేకరణ</div>
+  <div class="foot">
+    <div class="te">యాప్ ఫంక్షనాలిటీ &amp; ఫ్లో — తెలుగు వివరణ</div>
+    <div style="font-size:10pt; color:#BFDBFE;" class="te">తయారు చేసినది: VCD AI Labs</div>
+  </div>
+  <div class="circle"></div>
+</div>
+
+<!-- ============ PAGE 1: WHAT ============ -->
+<h2 class="te">EduVoice అంటే ఏమిటి?</h2>
+<p class="lead te">
+  EduVoice అనేది ఒక క్లౌడ్ సాఫ్ట్‌వేర్ ప్లాట్‌ఫామ్. ఇది ప్రైవేట్ స్కూళ్లకు <b>ప్రతి తల్లిదండ్రికి తెలుగులో ఆటోమేటిక్‌గా
+  ఫోన్ చేసే</b> సదుపాయం ఇస్తుంది — ఒక్క నంబర్‌ని కూడా మనిషి డయల్ చేయాల్సిన అవసరం లేకుండా.
+</p>
+<p class="te">
+  స్కూల్ అడ్మిన్ Excel నుండి విద్యార్థుల వివరాలను అప్‌లోడ్ చేసి, <i>ప్రచారం ప్రారంభించండి</i> అని క్లిక్ చేస్తే చాలు —
+  సిస్టమ్ వందలాది తల్లిదండ్రులకు ఒక్కొక్కరికీ ఫోన్ చేస్తుంది. AI తెలుగులో సహజంగా మాట్లాడుతుంది, తల్లిదండ్రి
+  జవాబును వింటుంది, అర్థం చేసుకుంటుంది, ఆ ఫలితాన్ని లైవ్ డాష్‌బోర్డ్‌లో నమోదు చేస్తుంది.
+</p>
+<p class="te">
+  ఇది <b>ఆంధ్రప్రదేశ్ మరియు తెలంగాణ</b> రాష్ట్రాల్లోని ప్రైవేట్ స్కూళ్ల కోసం రూపొందించబడింది. ప్రతి స్కూల్‌కి
+  దాని స్వంత వెబ్‌సైట్ చిరునామా, లోగో, రంగులు, ఫోన్ నంబర్ మరియు డేటా ఉంటాయి — ఇతర స్కూళ్ల డేటాతో ఎప్పటికీ కలవవు.
+</p>
+
+<div class="stats">
+  <div class="stat"><b class="te">3</b><span class="te">కాల్ రకాలు</span></div>
+  <div class="stat"><b>11AM–6PM</b><span class="te">చట్టబద్ధ కాల్ సమయం</span></div>
+  <div class="stat"><b class="te">తెలుగు+ఉర్దూ</b><span class="te">భాషలు</span></div>
+  <div class="stat"><b class="te">బహుళ-స్కూల్</b><span class="te">నిర్మాణం</span></div>
+</div>
+
+<h2 class="te">యాప్ చేసే ముఖ్యమైన పనులు</h2>
+<div class="grid">
+  <div class="grow">
+    <div class="cell">
+      <div class="bar te" style="background:#1E40AF;">01 · ఫీజు రిమైండర్లు</div>
+      <div class="bd te">పెండింగ్ ఫీజు గురించి తల్లిదండ్రులకు కాల్ చేసి, వెంటనే WhatsApp లో UPI చెల్లింపు లింక్ పంపుతుంది —
+        తల్లిదండ్రి అక్కడే చెల్లించవచ్చు.</div>
+    </div>
+    <div class="cell">
+      <div class="bar te" style="background:#6D28D9;">02 · పురోగతి అప్‌డేట్లు</div>
+      <div class="bd te">విద్యార్థి మార్కులు, గ్రేడ్, హాజరును స్నేహపూర్వక తెలుగులో తల్లిదండ్రికి చదివి వినిపిస్తుంది.</div>
+    </div>
+  </div>
+  <div class="grow">
+    <div class="cell">
+      <div class="bar te" style="background:#059669;">03 · ఫిర్యాదుల సేకరణ</div>
+      <div class="bd te">కాల్ సమయంలో తల్లిదండ్రి ఫిర్యాదులను వింటుంది, వర్గీకరిస్తుంది, కాన్‌బన్ బోర్డులో నమోదు చేస్తుంది.</div>
+    </div>
+    <div class="cell">
+      <div class="bar te" style="background:#D97706;">04 · హాజరు అలర్ట్లు</div>
+      <div class="bd te">హాజరు స్కూల్ నిర్ణయించిన పరిమితి కంటే తగ్గిన విద్యార్థుల తల్లిదండ్రులకు ఆటోమేటిక్‌గా కాల్ చేస్తుంది.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ PAGE 2: FEATURES ============ -->
+<div class="pagebreak"></div>
+<h2 class="te">ముఖ్య ఫీచర్లు</h2>
+<p class="te">వేలాది తల్లిదండ్రులకు భారతీయ మొబైల్ నెట్‌వర్క్‌లపై కాల్ చేయడంలో వచ్చే అన్ని వాస్తవ సమస్యలను EduVoice నిర్వహిస్తుంది:</p>
+
+<h3 class="te">🏫 బహుళ-స్కూల్ (Multi-tenant)</h3>
+<ul>
+  <li class="te">ఒకే సాఫ్ట్‌వేర్ ప్రతి స్కూల్‌కి సేవ చేస్తుంది, కానీ ప్రతి స్కూల్ తన సొంత డేటాను మాత్రమే చూస్తుంది.</li>
+  <li class="te">ప్రతి స్కూల్‌కి సొంత సబ్‌డొమైన్ (ఉదా: <b>srvk.eduvoice.in</b>), సొంత లోగో, రంగు, ఫోన్ నంబర్.</li>
+</ul>
+
+<h3 class="te">🗣️ తెలుగు వాయిస్ నాణ్యత</h3>
+<ul>
+  <li class="te"><b>తెలంగాణ</b> మరియు <b>ఆంధ్ర</b> యాసలకు వేర్వేరు వాయిస్‌లు — స్కూల్ సెటప్‌లో ఎంచుకోవచ్చు.</li>
+  <li class="te">ఫీజు, మార్కులు, తరగతుల పేర్లు సరిగ్గా గుర్తించడానికి 40+ తెలుగు పదాలకు ప్రత్యేక శిక్షణ.</li>
+  <li class="te">వాక్యం మధ్యలో తెలుగు+ఇంగ్లీష్ కలిపి మాట్లాడినా (code-switching) అర్థం చేసుకుంటుంది.</li>
+  <li class="te">తల్లిదండ్రి కోపంగా ఉన్నా లేదా అర్థం కాకపోయినా — స్కూల్ సిబ్బందికి బదిలీ చేస్తుంది (escalation).</li>
+</ul>
+
+<h3 class="te">💳 చెల్లింపు తెలివితేటలు</h3>
+<ul>
+  <li class="te">ఫీజు కాల్ తర్వాత WhatsApp లో UPI చెల్లింపు లింక్ ఆటోమేటిక్‌గా పంపుతుంది.</li>
+  <li class="te">తల్లిదండ్రి "ఇంకొంత సమయం కావాలి" అంటే — గడువు పొడిగింపు (extension) ఇచ్చి, మళ్ళీ కాల్ ఆపేస్తుంది.</li>
+  <li class="te">ఫీజు మొత్తంపై వివాదం ఉంటే — రిమైండర్లు నిలిపివేసి, మనిషి సమీక్షకు పంపుతుంది.</li>
+</ul>
+
+<h3 class="te">📱 పేరెంట్ పోర్టల్ (స్వీయ సేవ)</h3>
+<ul>
+  <li class="te">తల్లిదండ్రి ఫోన్ నంబర్ + OTP తో లాగిన్ అయ్యి ఫీజు, మార్కులు, హాజరు, ఇటీవలి కాల్స్ చూడవచ్చు.</li>
+  <li class="te">పోర్టల్ నుండే UPI తో నేరుగా చెల్లించవచ్చు.</li>
+</ul>
+
+<h3 class="te">⚖️ చట్టబద్ధత (TRAI నిబంధనలు)</h3>
+<ul>
+  <li class="te"><b>కాల్ సమయం:</b> కాల్స్ ఉదయం 11 — సాయంత్రం 6 మధ్య మాత్రమే. ఆ సమయం దాటితే ఆటోమేటిక్‌గా ఆగిపోతాయి.</li>
+  <li class="te"><b>AI వెల్లడి:</b> ప్రతి కాల్ ప్రారంభంలోనే "ఇది ఆటోమేటిక్ AI కాల్, రికార్డ్ అవుతుంది" అని చెబుతుంది.</li>
+  <li class="te"><b>ఆప్ట్-అవుట్:</b> తల్లిదండ్రి <b>9</b> నొక్కితే (లేదా "కాల్స్ వద్దు" అంటే) భవిష్యత్ కాల్స్ ఆగిపోతాయి.</li>
+  <li class="te"><b>DND చెక్:</b> ప్రతి బ్యాచ్‌కి ముందు నంబర్లను జాతీయ DND రిజిస్ట్రీతో సరిచూస్తుంది.</li>
+</ul>
+
+<h3 class="te">🛡️ విశ్వసనీయత &amp; నిర్వహణ</h3>
+<ul>
+  <li class="te">కాల్ ఎత్తకపోతే — 2 గంటల తర్వాత ఆటోమేటిక్‌గా మళ్ళీ ప్రయత్నం (గరిష్ఠం 2 సార్లు).</li>
+  <li class="te">వాయిస్‌మెయిల్‌కి వెళ్తే గుర్తించి, చిన్న సందేశం వదిలి వెళ్తుంది.</li>
+  <li class="te">కారియర్ బ్లాక్ కాకుండా — 30 కాల్స్ చొప్పున బ్యాచ్‌లుగా (waves) చేస్తుంది.</li>
+  <li class="te">ఒకే తల్లిదండ్రికి ఒక రోజులో రెండుసార్లు కాల్ చేయకుండా కాపలా (duplicate guard).</li>
+</ul>
+
+<!-- ============ PAGE 3: APP FLOW ============ -->
+<div class="pagebreak"></div>
+<h2 class="te">యాప్ ఫ్లో — దశల వారీగా</h2>
+<p class="te">స్కూల్ అడ్మిన్ లాగిన్ అయినప్పటి నుండి తల్లిదండ్రికి WhatsApp సందేశం వెళ్ళే వరకు యాప్ ఇలా పనిచేస్తుంది:</p>
+
+<div class="step"><div class="n">1</div><div class="c">
+  <b class="te">లాగిన్ &amp; విద్యార్థులను అప్‌లోడ్</b>
+  <div class="d te">స్కూల్ అడ్మిన్ లాగిన్ అయ్యి, Excel ఫైల్ నుండి విద్యార్థులు, తల్లిదండ్రుల ఫోన్ నంబర్లు, ఫీజు వివరాలను అప్‌లోడ్ చేస్తారు.</div>
+</div></div>
+
+<div class="step"><div class="n">2</div><div class="c">
+  <b class="te">ప్రచారం సృష్టించండి</b>
+  <div class="d te">ఏ రకం కాల్ (ఫీజు / పురోగతి / హాజరు), ఏ తరగతి, ఏ సెక్షన్ — ఎంచుకుని ప్రచారాన్ని (campaign) ప్రారంభిస్తారు.</div>
+</div></div>
+
+<div class="step"><div class="n">3</div><div class="c">
+  <b class="te">సిస్టమ్ చట్టబద్ధత తనిఖీ</b>
+  <div class="d te">కాల్ చేసే ముందు — సరైన సమయమా (11AM–6PM)? తల్లిదండ్రి DNDలో ఉన్నారా? ఈ రోజు ఇప్పటికే కాల్ చేశామా? — అన్నీ చెక్ చేస్తుంది.</div>
+</div></div>
+
+<div class="step"><div class="n">4</div><div class="c">
+  <b class="te">AI తెలుగులో కాల్ చేస్తుంది</b>
+  <div class="d te">Vapi.ai ఫోన్ చేస్తుంది, ElevenLabs తెలుగు వాయిస్ ఇస్తుంది. AI తనను తాను పరిచయం చేసుకుని, కాల్ ఉద్దేశాన్ని చెబుతుంది.</div>
+</div></div>
+
+<div class="step"><div class="n">5</div><div class="c">
+  <b class="te">తల్లిదండ్రి మాట్లాడతారు, AI అర్థం చేసుకుంటుంది</b>
+  <div class="d te">తల్లిదండ్రి జవాబును Deepgram టెక్స్ట్‌గా మారుస్తుంది. Claude AI ఆ సంభాషణను చదివి — చెల్లిస్తానన్నారా, ఫిర్యాదు చేశారా, కోపంగా ఉన్నారా — నిర్ణయిస్తుంది.</div>
+</div></div>
+
+<div class="step"><div class="n">6</div><div class="c">
+  <b class="te">ఫలితం సేవ్ + WhatsApp సందేశం</b>
+  <div class="d te">కాల్ వివరాలు, ట్రాన్‌స్క్రిప్ట్, రికార్డింగ్ డాష్‌బోర్డ్‌లో సేవ్ అవుతాయి. తల్లిదండ్రికి WhatsApp లో UPI చెల్లింపు లింక్ + కాల్ సారాంశం వెళ్తుంది.</div>
+</div></div>
+
+<div class="note te">
+  <b>సరళంగా చెప్పాలంటే:</b> డాష్‌బోర్డ్ ఎవరికి కాల్ చేయాలో బ్యాకెండ్‌కి చెబుతుంది. బ్యాకెండ్ చట్టబద్ధతను చెక్ చేసి
+  Vapi ద్వారా కాల్ చేయిస్తుంది. AI తెలుగులో మాట్లాడి, తల్లిదండ్రి జవాబును అర్థం చేసుకుని, తగిన చర్య తీసుకుంటుంది —
+  చెల్లింపు లింక్ పంపడం, ఫిర్యాదు నమోదు చేయడం, లేదా మళ్ళీ ప్రయత్నం షెడ్యూల్ చేయడం.
+</div>
+
+<!-- ============ PAGE 4: PIPELINE DIAGRAM ============ -->
+<div class="pagebreak"></div>
+<h2 class="te">కాల్ పైప్‌లైన్ — సాంకేతిక ప్రవాహం</h2>
+<p class="te">ప్రతి కాల్ ఈ క్రింది సేవల ద్వారా ప్రవహిస్తుంది. EduVoice వీటన్నింటినీ సమన్వయం చేసి, ఫలితాన్ని సేవ్ చేస్తుంది:</p>
+
+<div class="pipe">
+  <div class="pr">
+    <div class="pb" style="background:#1E40AF;"><b class="te">డాష్‌బోర్డ్</b><span class="te">అడ్మిన్ విద్యార్థులను ఎంచుకొని ప్రచారం ప్రారంభిస్తారు</span></div>
+    <div class="pb" style="background:#6D28D9;"><b class="te">బ్యాకెండ్ API</b><span class="te">.NET 9 · సమయం, DND, డూప్లికేట్ చెక్</span></div>
+    <div class="pb" style="background:#0EA5E9;"><b class="te">Vapi.ai</b><span class="te">అవుట్‌బౌండ్ ఫోన్ కాల్ చేస్తుంది</span></div>
+  </div>
+  <div class="pr">
+    <div class="arrowcol">↓</div><div class="arrowcol"></div><div class="arrowcol">↓</div>
+  </div>
+  <div class="pr">
+    <div class="pb" style="background:#7C3AED;"><b class="te">Deepgram</b><span class="te">తల్లిదండ్రి మాటను టెక్స్ట్‌గా మారుస్తుంది</span></div>
+    <div class="pb" style="background:#D97706;"><b class="te">తల్లిదండ్రి ఫోన్</b><span class="te">AI ఏజెంట్‌ను వింటారు, తెలుగు+ఇంగ్లీష్‌లో జవాబిస్తారు</span></div>
+    <div class="pb" style="background:#059669;"><b class="te">ElevenLabs</b><span class="te">తెలుగులో మాట్లాడుతుంది (తెలంగాణ/ఆంధ్ర)</span></div>
+  </div>
+  <div class="pr">
+    <div class="arrowcol">↓</div><div class="arrowcol"></div><div class="arrowcol"></div>
+  </div>
+  <div class="pr">
+    <div class="pb" style="background:#3B82F6;"><b class="te">Claude AI</b><span class="te">సంభాషణ చదివి సెంటిమెంట్, ఫీజు, ఫిర్యాదు గుర్తిస్తుంది</span></div>
+    <div class="pb" style="background:#0F172A;"><b class="te">డేటాబేస్</b><span class="te">కాల్, ట్రాన్‌స్క్రిప్ట్, రికార్డింగ్, ఫలితం సేవ్</span></div>
+    <div class="pb" style="background:#16A34A;"><b class="te">చర్యలు</b><span class="te">WhatsApp UPI లింక్, ఫిర్యాదు, మళ్ళీ ప్రయత్నం</span></div>
+  </div>
+  <div class="pr">
+    <div class="arrowcol"></div><div class="arrowcol">↓</div><div class="arrowcol"></div>
+  </div>
+  <div class="pr">
+    <div class="arrowcol"></div>
+    <div class="pb" style="background:#16A34A;"><b class="te">తల్లిదండ్రి WhatsApp</b><span class="te">చెల్లింపు లింక్ + కాల్ సారాంశం అందుతుంది</span></div>
+    <div class="arrowcol"></div>
+  </div>
+</div>
+
+<h2 class="te">లోపల ఉపయోగించిన టెక్నాలజీ</h2>
+<ul>
+  <li class="te"><b>బ్యాకెండ్:</b> .NET 9 · Clean Architecture · PostgreSQL డేటాబేస్</li>
+  <li class="te"><b>ఫ్రంటెండ్:</b> Angular 22 · Bootstrap 5 · ApexCharts గ్రాఫ్‌లు</li>
+  <li class="te"><b>వాయిస్ &amp; AI:</b> Vapi.ai · ElevenLabs (తెలుగు వాయిస్) · Deepgram · Claude</li>
+  <li class="te"><b>సందేశాలు:</b> Twilio (ఫోన్ + WhatsApp) · SendGrid (ఇమెయిల్) · n8n (ఆటోమేషన్)</li>
+</ul>
+
+</body>
+</html>
