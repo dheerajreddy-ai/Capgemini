@@ -1,0 +1,52 @@
+using EduVoice.Domain.Enums;
+
+namespace EduVoice.Domain.Entities;
+
+public class Student
+{
+    public Guid Id { get; set; }
+    public Guid SchoolId { get; set; }
+    public string StudentId { get; set; } = string.Empty;
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
+    public string? Class { get; set; }
+    public string? Section { get; set; }
+    public string ParentName { get; set; } = string.Empty;
+    public string ParentPhone { get; set; } = string.Empty;
+    public string? ParentPhone2 { get; set; }
+    public string? ParentEmail { get; set; }
+    public string? Address { get; set; }
+
+    // Academic marks
+    public decimal? MathMarks { get; set; }
+    public decimal? ScienceMarks { get; set; }
+    public decimal? EnglishMarks { get; set; }
+    public decimal? TeluguMarks { get; set; }
+    public decimal? SocialMarks { get; set; }
+    public decimal? TotalMarks { get; set; }
+    public decimal? MaxMarks { get; set; }
+    public decimal? Percentage { get; set; }
+    public string? Grade { get; set; }
+    public string? Remarks { get; set; }
+
+    // Attendance
+    public int? AttendancePresentDays { get; set; }
+    public int? AttendanceTotalDays { get; set; }
+    public decimal? AttendancePercentage { get; set; }
+
+    // Fees
+    public decimal TotalFees { get; set; }
+    public decimal PaidFees { get; set; }
+    public decimal PendingFees { get; set; }
+    public FeesStatus FeesStatus { get; set; }
+    public DateTime? FeesDueDate { get; set; }
+    public DateTime? LastPaymentDate { get; set; }
+
+    public bool IsDeleted { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
+
+    public School School { get; set; } = null!;
+    public ICollection<Call> Calls { get; set; } = new List<Call>();
+    public ICollection<Complaint> Complaints { get; set; } = new List<Complaint>();
+}
