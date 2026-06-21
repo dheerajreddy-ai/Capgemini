@@ -104,6 +104,41 @@ public class EmailService : IEmailService
         }
     }
 
+    public async Task SendSlaEscalationEmailAsync(string email, Complaint complaint)
+    {
+        try
+        {
+            var hoursBreached = complaint.SlaDeadline.HasValue
+                ? (int)(DateTime.UtcNow - complaint.SlaDeadline.Value).TotalHours
+                : 0;
+
+            var subject = $"⚠️ SLA Breach — {complaint.Category} Complaint (overdue by {hoursBreached}h)";
+            var htmlContent = $"""
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                    <h2 style="color: #DC2626;">SLA Breach — Action Required</h2>
+                    <p>A complaint has exceeded its SLA deadline and requires immediate attention.</p>
+                    <table style="width:100%; border-collapse: collapse;">
+                        <tr><td style="padding: 8px; border: 1px solid #ddd;"><strong>Category</strong></td><td style="padding: 8px; border: 1px solid #ddd;">{complaint.Category}</td></tr>
+                        <tr><td style="padding: 8px; border: 1px solid #ddd;"><strong>Priority</strong></td><td style="padding: 8px; border: 1px solid #ddd;">{complaint.Priority}</td></tr>
+                        <tr><td style="padding: 8px; border: 1px solid #ddd;"><strong>Summary</strong></td><td style="padding: 8px; border: 1px solid #ddd;">{complaint.Summary}</td></tr>
+                        <tr><td style="padding: 8px; border: 1px solid #ddd;"><strong>Parent</strong></td><td style="padding: 8px; border: 1px solid #ddd;">{complaint.ParentName} ({complaint.ParentPhone})</td></tr>
+                        <tr><td style="padding: 8px; border: 1px solid #ddd;"><strong>SLA Deadline</strong></td><td style="padding: 8px; border: 1px solid #ddd;">{complaint.SlaDeadline:dd MMM yyyy HH:mm} UTC</td></tr>
+                        <tr><td style="padding: 8px; border: 1px solid #ddd;"><strong>Overdue By</strong></td><td style="padding: 8px; border: 1px solid #ddd; color:#DC2626;"><strong>{hoursBreached} hours</strong></td></tr>
+                        <tr><td style="padding: 8px; border: 1px solid #ddd;"><strong>Received</strong></td><td style="padding: 8px; border: 1px solid #ddd;">{complaint.CreatedAt:dd MMM yyyy HH:mm} UTC</td></tr>
+                    </table>
+                    <p style="margin-top:16px;">Please log in to EduVoice and resolve this complaint immediately.</p>
+                    <p>The EduVoice Team</p>
+                </div>
+                """;
+
+            await SendEmailAsync(email, subject, htmlContent);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to send SLA escalation email to {Email}", email);
+        }
+    }
+
     private async Task SendEmailAsync(string toEmail, string subject, string htmlContent)
     {
         var apiKey = _configuration["SENDGRID_API_KEY"];

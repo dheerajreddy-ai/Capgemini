@@ -25,6 +25,7 @@ public class UnitOfWork : IUnitOfWork
     private IRepository<PtmSchedule>? _ptmSchedules;
     private IRepository<Attendance>? _attendances;
     private IRepository<TeacherMarks>? _teacherMarksList;
+    private IRepository<ComplaintSlaConfig>? _complaintSlaConfigs;
 
     public UnitOfWork(AppDbContext context)
     {
@@ -46,6 +47,7 @@ public class UnitOfWork : IUnitOfWork
     public IRepository<PtmSchedule> PtmSchedules => _ptmSchedules ??= new Repository<PtmSchedule>(_context);
     public IRepository<Attendance> Attendances => _attendances ??= new Repository<Attendance>(_context);
     public IRepository<TeacherMarks> TeacherMarksList => _teacherMarksList ??= new Repository<TeacherMarks>(_context);
+    public IRepository<ComplaintSlaConfig> ComplaintSlaConfigs => _complaintSlaConfigs ??= new Repository<ComplaintSlaConfig>(_context);
 
     public async Task<int> SaveChangesAsync()
     {

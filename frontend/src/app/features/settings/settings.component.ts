@@ -4,7 +4,7 @@ import { SettingsService } from '../../core/services/settings.service';
 import { AuthService } from '../../core/auth/auth.service';
 import { BrandingService } from '../../core/services/branding.service';
 import { ToastService } from '../../core/services/toast.service';
-import { School, User } from '../../core/models/models';
+import { School, User, ComplaintSlaConfig } from '../../core/models/models';
 import { StatusBadgeComponent } from '../../shared/components/status-badge/status-badge.component';
 import { InitialsPipe } from '../../shared/pipes/initials.pipe';
 
@@ -22,18 +22,21 @@ export class SettingsComponent implements OnInit {
   private readonly branding = inject(BrandingService);
   private readonly toast = inject(ToastService);
 
-  readonly tab = signal<'profile' | 'users' | 'voice' | 'notifications' | 'security'>('profile');
+  readonly tab = signal<'profile' | 'users' | 'voice' | 'notifications' | 'security' | 'complaint-sla'>('profile');
   readonly tabs = [
     { id: 'profile', label: 'School Profile', icon: 'bi-building' },
     { id: 'users', label: 'Users', icon: 'bi-people' },
     { id: 'voice', label: 'Voice', icon: 'bi-soundwave' },
     { id: 'notifications', label: 'Notifications', icon: 'bi-bell' },
     { id: 'security', label: 'Security', icon: 'bi-shield-lock' },
+    { id: 'complaint-sla', label: 'Complaint SLA', icon: 'bi-clock-history' },
   ] as const;
 
   readonly school = signal<School | null>(null);
   readonly users = signal<User[]>([]);
+  readonly slaConfigs = signal<ComplaintSlaConfig[]>([]);
   readonly saving = signal(false);
+  readonly slaSaving = signal(false);
 
   pwd = { current: '', next: '', confirm: '' };
   notif = { whatsapp: true, email: true, complaintAlert: true, dailySummary: '18:00' };
@@ -41,6 +44,7 @@ export class SettingsComponent implements OnInit {
   ngOnInit(): void {
     this.service.getSchool().subscribe((s) => this.school.set(s));
     this.service.listUsers().subscribe((u) => this.users.set(u));
+    this.service.getSlaConfigs().subscribe((configs) => this.slaConfigs.set(configs));
   }
 
   saveProfile(): void {
@@ -73,6 +77,18 @@ export class SettingsComponent implements OnInit {
   }
 
   saveNotifications(): void { this.toast.success('Preferences saved', 'Notification settings updated.'); }
+
+  saveSlaConfig(config: ComplaintSlaConfig): void {
+    this.slaSaving.set(true);
+    this.service.upsertSlaConfig(config.category, config.slaHours, config.escalationContactUserId).subscribe({
+      next: (updated) => {
+        this.slaConfigs.update((list) => list.map((c) => c.category === updated.category ? updated : c));
+        this.slaSaving.set(false);
+        this.toast.success('Saved', `SLA for ${config.category} updated.`);
+      },
+      error: () => this.slaSaving.set(false),
+    });
+  }
 
   fullName(u: User): string { return `${u.firstName} ${u.lastName}`.trim(); }
 }

@@ -8,4 +8,5 @@ public interface IEmailService
     Task SendPasswordResetEmailAsync(string email, string resetToken, string schoolName);
     Task SendDailySummaryAsync(string email, DashboardStatsDto stats);
     Task SendComplaintAlertAsync(string email, Complaint complaint);
+    Task SendSlaEscalationEmailAsync(string email, Complaint complaint);
 }

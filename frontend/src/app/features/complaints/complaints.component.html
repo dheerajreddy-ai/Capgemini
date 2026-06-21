@@ -47,7 +47,7 @@
   } @else {
     <div class="ev-table-wrap">
       <table class="ev-table">
-        <thead><tr><th>Date</th><th>Parent / Student</th><th>Complaint</th><th>Category</th><th>Priority</th><th>Status</th><th></th></tr></thead>
+        <thead><tr><th>Date</th><th>Parent / Student</th><th>Complaint</th><th>Category</th><th>Priority</th><th>Status</th><th>SLA</th><th></th></tr></thead>
         <tbody>
           @for (c of result()!.items; track c.id) {
             <tr class="cursor-pointer" (click)="selected.set(c)">
@@ -62,6 +62,17 @@
               <td><span class="ev-badge ev-badge--neutral">{{ c.category }}</span></td>
               <td><ev-status-badge [value]="c.priority" /></td>
               <td><ev-status-badge [value]="c.status" /></td>
+              <td>
+                @if (slaHoursLeft(c); as sla) {
+                  <span [class]="slaBadgeClass(sla.h)">
+                    @if (sla.h < 0) { SLA BREACH } @else { {{ sla.h }}h left }
+                  </span>
+                } @else if (c.slaDeadline && (c.status === 'Resolved' || c.status === 'Closed')) {
+                  <span class="ev-sla-badge ev-sla-badge--ok">✓</span>
+                } @else {
+                  <span class="ev-cell-sub">—</span>
+                }
+              </td>
               <td class="text-end"><i class="bi bi-chevron-right text-muted-ev"></i></td>
             </tr>
           }

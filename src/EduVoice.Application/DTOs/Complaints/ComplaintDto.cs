@@ -20,6 +20,11 @@ public class ComplaintDto
     public string? Resolution { get; set; }
     public Guid? AssignedToUserId { get; set; }
     public DateTime? ResolvedAt { get; set; }
+    public DateTime? SlaDeadline { get; set; }
+    public DateTime? EscalatedAt { get; set; }
+    public int EscalationLevel { get; set; }
+    public bool IsOverdue => SlaDeadline.HasValue && DateTime.UtcNow > SlaDeadline.Value
+        && Status != ComplaintStatus.Resolved && Status != ComplaintStatus.Closed;
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 }

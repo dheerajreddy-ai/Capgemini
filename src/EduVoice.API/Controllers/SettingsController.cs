@@ -1,3 +1,4 @@
+using EduVoice.Application.DTOs.ComplaintSla;
 using EduVoice.Application.DTOs.Settings;
 using EduVoice.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -14,10 +15,12 @@ namespace EduVoice.API.Controllers;
 public class SettingsController : ControllerBase
 {
     private readonly ISettingsService _settingsService;
+    private readonly IComplaintSlaService _slaService;
 
-    public SettingsController(ISettingsService settingsService)
+    public SettingsController(ISettingsService settingsService, IComplaintSlaService slaService)
     {
         _settingsService = settingsService;
+        _slaService = slaService;
     }
 
     [HttpGet]
@@ -45,6 +48,26 @@ public class SettingsController : ControllerBase
     {
         var userId = Guid.Parse(User.FindFirstValue("userId")!);
         var result = await _settingsService.ChangePasswordAsync(userId, request);
+        return result.Success ? Ok(result) : BadRequest(result);
+    }
+
+    [HttpGet("complaint-sla")]
+    public async Task<IActionResult> GetSlaConfigs()
+    {
+        var schoolId = GetSchoolId();
+        if (schoolId == null) return Unauthorized();
+
+        var result = await _slaService.GetConfigsAsync(schoolId.Value);
+        return result.Success ? Ok(result) : BadRequest(result);
+    }
+
+    [HttpPut("complaint-sla")]
+    public async Task<IActionResult> UpsertSlaConfig([FromBody] UpsertSlaConfigRequest request)
+    {
+        var schoolId = GetSchoolId();
+        if (schoolId == null) return Unauthorized();
+
+        var result = await _slaService.UpsertConfigAsync(schoolId.Value, request);
         return result.Success ? Ok(result) : BadRequest(result);
     }
 

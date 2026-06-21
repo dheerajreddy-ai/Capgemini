@@ -61,4 +61,16 @@ export class ComplaintsComponent implements OnInit {
   countBy(status: string): number {
     return this.result()?.items.filter((c) => c.status === status).length ?? 0;
   }
+
+  slaHoursLeft(c: Complaint): { h: number } | null {
+    if (!c.slaDeadline || c.status === 'Resolved' || c.status === 'Closed') return null;
+    return { h: Math.round((new Date(c.slaDeadline).getTime() - Date.now()) / 3_600_000) };
+  }
+
+  slaBadgeClass(h: number): string {
+    if (h < 0) return 'ev-sla-badge ev-sla-badge--breach';
+    if (h <= 4) return 'ev-sla-badge ev-sla-badge--critical';
+    if (h <= 12) return 'ev-sla-badge ev-sla-badge--warning';
+    return 'ev-sla-badge ev-sla-badge--ok';
+  }
 }

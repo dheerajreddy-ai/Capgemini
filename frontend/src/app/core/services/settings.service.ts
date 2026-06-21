@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
-import { School, User } from '../models/models';
+import { School, User, ComplaintSlaConfig, ComplaintCategory } from '../models/models';
 
 @Injectable({ providedIn: 'root' })
 export class SettingsService {
@@ -33,5 +33,13 @@ export class SettingsService {
 
   deactivateUser(id: string): Observable<void> {
     return this.api.delete<void>(`/users/${id}`);
+  }
+
+  getSlaConfigs(): Observable<ComplaintSlaConfig[]> {
+    return this.api.get<ComplaintSlaConfig[]>('/settings/complaint-sla');
+  }
+
+  upsertSlaConfig(category: ComplaintCategory, slaHours: number, escalationContactUserId?: string): Observable<ComplaintSlaConfig> {
+    return this.api.put<ComplaintSlaConfig>('/settings/complaint-sla', { category, slaHours, escalationContactUserId });
   }
 }

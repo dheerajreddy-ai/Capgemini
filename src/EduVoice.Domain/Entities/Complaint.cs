@@ -18,6 +18,9 @@ public class Complaint
     public string? Resolution { get; set; }
     public Guid? AssignedToUserId { get; set; }
     public DateTime? ResolvedAt { get; set; }
+    public DateTime? SlaDeadline { get; set; }
+    public DateTime? EscalatedAt { get; set; }
+    public int EscalationLevel { get; set; } = 0;
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 

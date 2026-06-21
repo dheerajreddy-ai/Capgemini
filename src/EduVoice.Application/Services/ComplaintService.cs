@@ -63,6 +63,9 @@ public class ComplaintService : IComplaintService
                 Resolution = c.Resolution,
                 AssignedToUserId = c.AssignedToUserId,
                 ResolvedAt = c.ResolvedAt,
+                SlaDeadline = c.SlaDeadline,
+                EscalatedAt = c.EscalatedAt,
+                EscalationLevel = c.EscalationLevel,
                 CreatedAt = c.CreatedAt,
                 UpdatedAt = c.UpdatedAt
             }).ToList();

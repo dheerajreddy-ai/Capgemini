@@ -19,6 +19,7 @@ public interface IUnitOfWork : IDisposable
     IRepository<PtmSchedule> PtmSchedules { get; }
     IRepository<Attendance> Attendances { get; }
     IRepository<TeacherMarks> TeacherMarksList { get; }
+    IRepository<ComplaintSlaConfig> ComplaintSlaConfigs { get; }
     Task<int> SaveChangesAsync();
     Task BeginTransactionAsync();
     Task CommitAsync();

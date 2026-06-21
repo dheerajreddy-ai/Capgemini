@@ -20,6 +20,7 @@ public class AppDbContext : DbContext
     public DbSet<PtmSchedule> PtmSchedules => Set<PtmSchedule>();
     public DbSet<Attendance> Attendances => Set<Attendance>();
     public DbSet<TeacherMarks> TeacherMarksList => Set<TeacherMarks>();
+    public DbSet<ComplaintSlaConfig> ComplaintSlaConfigs => Set<ComplaintSlaConfig>();
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 

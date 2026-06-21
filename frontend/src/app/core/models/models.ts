@@ -446,6 +446,10 @@ export interface Complaint {
   teacherNotes?: string;
   recordingUrl?: string;
   resolvedAt?: string;
+  slaDeadline?: string;
+  escalatedAt?: string;
+  escalationLevel?: number;
+  isOverdue?: boolean;
   createdAt: string;
 }
 
@@ -504,6 +508,20 @@ export interface AttendanceResult {
 }
 
 // --- End Teacher Portal ---
+
+// --- Complaint SLA ---
+
+export interface ComplaintSlaConfig {
+  id?: string;
+  category: ComplaintCategory;
+  slaHours: number;
+  escalationContactUserId?: string;
+  escalationContactName?: string;
+  escalationContactEmail?: string;
+  isCustomised: boolean;
+}
+
+// --- End Complaint SLA ---
 
 export interface DashboardStats {
   todaysCalls: number;

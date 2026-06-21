@@ -271,6 +271,25 @@ a { text-decoration: none; }
 .ev-badge--info    { background: var(--ev-info-soft);    color: #4338CA; }
 .ev-badge--primary { background: var(--ev-primary-soft); color: var(--ev-primary); }
 
+/* SLA badges (complaints table) */
+.ev-sla-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: .72rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.ev-sla-badge--ok       { background: #D1FAE5; color: #047857; }
+.ev-sla-badge--warning  { background: #FEF3C7; color: #B45309; }
+.ev-sla-badge--critical { background: #FEE2E2; color: #B91C1C; }
+.ev-sla-badge--breach   { background: #B91C1C; color: #fff; animation: ev-pulse 1.4s infinite; }
+
+@keyframes ev-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: .65; }
+}
+
 /* ============================================================
    Tables — premium
    ============================================================ */

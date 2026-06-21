@@ -19,7 +19,53 @@
 
   <!-- Tab content -->
   <div class="col-12 col-lg-9">
-    @if (school(); as s) {
+    @if (tab() === 'complaint-sla') {
+      <div class="ev-card">
+        <div class="ev-card-head">
+          <h5 class="mb-0">Complaint SLA Configuration</h5>
+          <span class="ev-badge ev-badge--neutral">Auto-escalates by email on breach</span>
+        </div>
+        <div class="ev-table-wrap">
+          <table class="ev-table">
+            <thead><tr><th>Category</th><th style="width:140px">SLA (hours)</th><th>Escalation contact</th><th style="width:110px"></th></tr></thead>
+            <tbody>
+              @for (cfg of slaConfigs(); track cfg.category) {
+                <tr>
+                  <td>
+                    <span class="ev-cell-strong">{{ cfg.category }}</span>
+                    @if (!cfg.isCustomised) { <span class="ev-badge ev-badge--neutral ms-2" style="font-size:10px">default</span> }
+                  </td>
+                  <td>
+                    <input type="number" class="form-control form-control-sm" style="width:90px"
+                      [(ngModel)]="cfg.slaHours" min="1" max="8760" />
+                  </td>
+                  <td>
+                    @if (cfg.escalationContactName) {
+                      <span class="ev-cell-sub">{{ cfg.escalationContactName }}<br />{{ cfg.escalationContactEmail }}</span>
+                    } @else {
+                      <select class="form-select form-select-sm" style="max-width:200px"
+                        [(ngModel)]="cfg.escalationContactUserId">
+                        <option [value]="undefined">— none —</option>
+                        @for (u of users(); track u.id) {
+                          <option [value]="u.id">{{ fullName(u) }}</option>
+                        }
+                      </select>
+                    }
+                  </td>
+                  <td class="text-end">
+                    <button class="btn btn-primary btn-sm" [disabled]="slaSaving()" (click)="saveSlaConfig(cfg)">Save</button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        <div class="ev-hint ev-card-pad pt-0">
+          <i class="bi bi-info-circle me-2"></i>
+          The background service checks every 30 min and emails the escalation contact when a complaint is past its deadline.
+        </div>
+      </div>
+    } @else if (school(); as s) {
       @switch (tab()) {
         @case ('profile') {
           <div class="ev-card ev-card-pad">
