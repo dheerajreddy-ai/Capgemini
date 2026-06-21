@@ -1,0 +1,10 @@
+:host { display: block; }
+
+apx-chart { display: block; }
+
+::ng-deep .apexcharts-tooltip {
+  border: 1px solid var(--ev-border) !important;
+  box-shadow: var(--ev-shadow-lg) !important;
+  border-radius: 12px !important;
+}
+::ng-deep .apexcharts-legend-text { color: var(--ev-text-secondary) !important; }
