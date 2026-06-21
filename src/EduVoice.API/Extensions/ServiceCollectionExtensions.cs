@@ -89,6 +89,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IStaffOperationsService, StaffOperationsService>();
         services.AddScoped<ITeacherService, TeacherService>();
         services.AddScoped<IComplaintSlaService, ComplaintSlaService>();
+        services.AddScoped<IDailySummaryService, DailySummaryService>();
     }
 
     private static void AddInfrastructureServices(this IServiceCollection services)
@@ -112,6 +113,7 @@ public static class ServiceCollectionExtensions
         services.AddHostedService<WeeklySummaryBackgroundService>();
         services.AddHostedService<PtmReminderBackgroundService>();
         services.AddHostedService<ComplaintSlaBackgroundService>();
+        services.AddHostedService<DailySummaryBackgroundService>();
     }
 
     private static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)

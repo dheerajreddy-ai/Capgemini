@@ -22,7 +22,7 @@ export class SettingsComponent implements OnInit {
   private readonly branding = inject(BrandingService);
   private readonly toast = inject(ToastService);
 
-  readonly tab = signal<'profile' | 'users' | 'voice' | 'notifications' | 'security' | 'complaint-sla'>('profile');
+  readonly tab = signal<'profile' | 'users' | 'voice' | 'notifications' | 'security' | 'complaint-sla' | 'daily-digest'>('profile');
   readonly tabs = [
     { id: 'profile', label: 'School Profile', icon: 'bi-building' },
     { id: 'users', label: 'Users', icon: 'bi-people' },
@@ -30,6 +30,7 @@ export class SettingsComponent implements OnInit {
     { id: 'notifications', label: 'Notifications', icon: 'bi-bell' },
     { id: 'security', label: 'Security', icon: 'bi-shield-lock' },
     { id: 'complaint-sla', label: 'Complaint SLA', icon: 'bi-clock-history' },
+    { id: 'daily-digest', label: 'Daily Digest', icon: 'bi-newspaper' },
   ] as const;
 
   readonly school = signal<School | null>(null);
@@ -77,6 +78,16 @@ export class SettingsComponent implements OnInit {
   }
 
   saveNotifications(): void { this.toast.success('Preferences saved', 'Notification settings updated.'); }
+
+  saveDigestSettings(): void {
+    const s = this.school();
+    if (!s) return;
+    this.saving.set(true);
+    this.service.updateSchool(s).subscribe({
+      next: (updated) => { this.school.set(updated); this.saving.set(false); this.toast.success('Saved', 'Daily digest settings updated.'); },
+      error: () => this.saving.set(false),
+    });
+  }
 
   saveSlaConfig(config: ComplaintSlaConfig): void {
     this.slaSaving.set(true);

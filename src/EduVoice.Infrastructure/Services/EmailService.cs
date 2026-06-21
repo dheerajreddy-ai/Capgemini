@@ -139,6 +139,73 @@ public class EmailService : IEmailService
         }
     }
 
+    public async Task SendPrincipalDailySummaryAsync(string email, string schoolName, PrincipalDailySummary summary)
+    {
+        try
+        {
+            var dateStr = summary.Date.ToString("dd MMM yyyy");
+            var subject = $"📊 {schoolName} — Daily Summary {dateStr}";
+            var htmlContent = $"""
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #1F2937;">
+                    <h2 style="color: #1E40AF;">Good morning! Here's your daily school summary</h2>
+                    <p style="color: #6B7280;">{schoolName} · {dateStr}</p>
+                    <table style="width:100%; border-collapse: collapse; margin: 16px 0;">
+                        <tr style="background:#F0F4FF;">
+                            <td colspan="2" style="padding:10px 12px; font-weight:700; color:#1E40AF;">📞 Calls</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px 12px; border-bottom:1px solid #E5E7EB;">Scheduled today</td>
+                            <td style="padding:8px 12px; border-bottom:1px solid #E5E7EB; font-weight:600;">{summary.CallsScheduledToday}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px 12px; border-bottom:1px solid #E5E7EB;">Completed</td>
+                            <td style="padding:8px 12px; border-bottom:1px solid #E5E7EB; font-weight:600;">{summary.CallsCompletedToday}</td>
+                        </tr>
+                        <tr style="background:#F0FFF4;">
+                            <td colspan="2" style="padding:10px 12px; font-weight:700; color:#047857;">💰 Fees</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px 12px; border-bottom:1px solid #E5E7EB;">Students with pending fees</td>
+                            <td style="padding:8px 12px; border-bottom:1px solid #E5E7EB; font-weight:600;">{summary.PendingFeesCount}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px 12px; border-bottom:1px solid #E5E7EB;">Total pending amount</td>
+                            <td style="padding:8px 12px; border-bottom:1px solid #E5E7EB; font-weight:600;">₹{summary.PendingFeesAmount:N0}</td>
+                        </tr>
+                        <tr style="background:#FFF7F0;">
+                            <td colspan="2" style="padding:10px 12px; font-weight:700; color:#B45309;">⚠️ Complaints</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px 12px; border-bottom:1px solid #E5E7EB;">Open complaints</td>
+                            <td style="padding:8px 12px; border-bottom:1px solid #E5E7EB; font-weight:600;">{summary.OpenComplaintsCount}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px 12px; border-bottom:1px solid #E5E7EB;">Urgent / unresolved</td>
+                            <td style="padding:8px 12px; border-bottom:1px solid #E5E7EB; font-weight:600; color:#B91C1C;">{summary.UrgentComplaintsCount}</td>
+                        </tr>
+                        <tr style="background:#F5F3FF;">
+                            <td colspan="2" style="padding:10px 12px; font-weight:700; color:#6D28D9;">📣 Campaigns</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px 12px;">Active campaigns running</td>
+                            <td style="padding:8px 12px; font-weight:600;">{summary.ActiveCampaignsCount}</td>
+                        </tr>
+                    </table>
+                    <p style="font-size:13px; color:#9CA3AF; margin-top:24px;">
+                        This digest is sent every morning at 8 AM IST. To stop receiving it, disable Daily Summary in EduVoice Settings.
+                    </p>
+                    <p>The EduVoice Team</p>
+                </div>
+                """;
+
+            await SendEmailAsync(email, subject, htmlContent);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to send principal daily summary to {Email}", email);
+        }
+    }
+
     private async Task SendEmailAsync(string toEmail, string subject, string htmlContent)
     {
         var apiKey = _configuration["SENDGRID_API_KEY"];

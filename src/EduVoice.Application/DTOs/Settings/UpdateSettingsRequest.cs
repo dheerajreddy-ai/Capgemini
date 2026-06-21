@@ -24,6 +24,10 @@ public class UpdateSettingsRequest
     public CallLanguage DefaultCallLanguage { get; set; }
     public decimal AttendanceAlertThreshold { get; set; } = 75;
     public bool DndScrubEnabled { get; set; } = true;
+    // Module 28
+    public string? PrincipalEmail { get; set; }
+    public string? PrincipalWhatsApp { get; set; }
+    public bool DailySummaryEnabled { get; set; } = false;
 }
 
 public class ChangePasswordRequest

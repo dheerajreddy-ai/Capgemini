@@ -28,4 +28,7 @@ public class SchoolSettingsDto
     public CarrierHealth CarrierHealth { get; set; }
     public bool IsActive { get; set; }
     public DateTime? TrialEndsAt { get; set; }
+    public string? PrincipalEmail { get; set; }
+    public string? PrincipalWhatsApp { get; set; }
+    public bool DailySummaryEnabled { get; set; }
 }

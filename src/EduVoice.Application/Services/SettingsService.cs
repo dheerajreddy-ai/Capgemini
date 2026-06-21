@@ -52,7 +52,10 @@ public class SettingsService : ISettingsService
                 DndScrubEnabled = school.DndScrubEnabled,
                 CarrierHealth = school.CarrierHealth,
                 IsActive = school.IsActive,
-                TrialEndsAt = school.TrialEndsAt
+                TrialEndsAt = school.TrialEndsAt,
+                PrincipalEmail = school.PrincipalEmail,
+                PrincipalWhatsApp = school.PrincipalWhatsApp,
+                DailySummaryEnabled = school.DailySummaryEnabled
             });
         }
         catch (Exception ex)
@@ -87,6 +90,9 @@ public class SettingsService : ISettingsService
             school.DefaultCallLanguage = request.DefaultCallLanguage;
             school.AttendanceAlertThreshold = request.AttendanceAlertThreshold;
             school.DndScrubEnabled = request.DndScrubEnabled;
+            school.PrincipalEmail = request.PrincipalEmail;
+            school.PrincipalWhatsApp = request.PrincipalWhatsApp;
+            school.DailySummaryEnabled = request.DailySummaryEnabled;
             school.UpdatedAt = DateTime.UtcNow;
 
             _unitOfWork.Schools.Update(school);

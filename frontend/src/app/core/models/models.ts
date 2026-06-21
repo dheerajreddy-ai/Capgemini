@@ -296,6 +296,9 @@ export interface School {
   carrierHealth?: CarrierHealth;
   isActive: boolean;
   trialEndsAt?: string;
+  principalEmail?: string;
+  principalWhatsApp?: string;
+  dailySummaryEnabled?: boolean;
 }
 
 export interface User {

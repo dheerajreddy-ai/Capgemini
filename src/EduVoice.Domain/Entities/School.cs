@@ -35,6 +35,10 @@ public class School
     public decimal AchievementThreshold { get; set; } = 80;
     public bool IsActive { get; set; } = true;
     public DateTime? TrialEndsAt { get; set; }
+    // Module 28 — daily digest to principal
+    public string? PrincipalEmail { get; set; }
+    public string? PrincipalWhatsApp { get; set; }
+    public bool DailySummaryEnabled { get; set; } = false;
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
     public ICollection<User> Users { get; set; } = new List<User>();
