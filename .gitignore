@@ -15,3 +15,17 @@ obj/
 *.csproj.user
 *.local.json.user
 capgemini/Properties/ServiceDependencies/
+
+# EduVoice additions
+.env
+*.env.local
+logs/
+postgres_data/
+TestResults/
+coverage/
+*.nupkg
+*.snupkg
+publish/
+.DS_Store
+Thumbs.db
+.idea/

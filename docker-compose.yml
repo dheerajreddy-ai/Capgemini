@@ -1,0 +1,48 @@
+version: '3.8'
+services:
+  api:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+      - DATABASE_URL=Host=postgres;Database=eduvoice;Username=postgres;Password=postgres
+      - JWT_SECRET=dev-secret-key-change-in-production-minimum-32
+      - JWT_ISSUER=EduVoice
+      - JWT_AUDIENCE=EduVoice
+      - FRONTEND_URL=http://localhost:4200
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - eduvoice-network
+    restart: unless-stopped
+    volumes:
+      - ./logs:/app/logs
+
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: eduvoice
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - eduvoice-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  eduvoice-network:
+    driver: bridge
