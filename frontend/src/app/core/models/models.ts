@@ -35,6 +35,7 @@ export type CallLanguage = 'Telugu' | 'Urdu' | 'English';
 export type CarrierHealth = 'Healthy' | 'Degraded' | 'Flagged';
 export type BroadcastStatus = 'Draft' | 'Sending' | 'Sent' | 'Failed';
 export type BroadcastMediaType = 'None' | 'Image' | 'Document' | 'Video';
+export type ExamType = 'UnitTest' | 'Midterm' | 'Final' | 'Quarterly' | 'HalfYearly' | 'Annual';
 
 export interface Broadcast {
   id: string;
@@ -49,6 +50,33 @@ export interface Broadcast {
   sentCount: number;
   failedCount: number;
   sentAt?: string;
+  createdAt: string;
+}
+
+export interface ExamSchedule {
+  id: string;
+  subjectName: string;
+  examType: ExamType;
+  examDate: string;
+  class?: string;
+  section?: string;
+  notes?: string;
+  reminder3DaySent: boolean;
+  reminder1DaySent: boolean;
+  isActive: boolean;
+  createdAt: string;
+}
+
+export interface Homework {
+  id: string;
+  subject: string;
+  description: string;
+  class?: string;
+  section?: string;
+  assignedDate: string;
+  dueDate?: string;
+  alertSent: boolean;
+  alertSentAt?: string;
   createdAt: string;
 }
 
@@ -74,6 +102,7 @@ export interface School {
   urduVoiceId?: string;
   defaultCallLanguage?: CallLanguage;
   attendanceAlertThreshold?: number;
+  lowMarksThreshold?: number;
   dndScrubEnabled?: boolean;
   carrierHealth?: CarrierHealth;
   isActive: boolean;

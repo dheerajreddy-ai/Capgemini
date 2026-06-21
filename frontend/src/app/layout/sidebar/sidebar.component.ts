@@ -94,5 +94,7 @@ export class SidebarComponent {
     { label: 'Complaints', icon: 'bi-chat-square-dots', route: '/complaints' },
     { label: 'Broadcasts', icon: 'bi-broadcast', route: '/broadcasts' },
     { label: 'Analytics', icon: 'bi-graph-up-arrow', route: '/analytics' },
+    { label: 'Exam Schedule', icon: 'bi-calendar-check', route: '/exam-schedule' },
+    { label: 'Homework', icon: 'bi-journal-text', route: '/homework' },
   ];
 }

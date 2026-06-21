@@ -79,6 +79,16 @@ export const routes: Routes = [
         title: 'Analytics · EduVoice',
       },
       {
+        path: 'exam-schedule',
+        loadComponent: () => import('./features/exam-schedule/exam-schedule.component').then((m) => m.ExamScheduleComponent),
+        title: 'Exam Schedule · EduVoice',
+      },
+      {
+        path: 'homework',
+        loadComponent: () => import('./features/homework/homework.component').then((m) => m.HomeworkComponent),
+        title: 'Homework · EduVoice',
+      },
+      {
         path: 'settings',
         loadComponent: () => import('./features/settings/settings.component').then((m) => m.SettingsComponent),
         title: 'Settings · EduVoice',

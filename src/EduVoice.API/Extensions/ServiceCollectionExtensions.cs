@@ -78,6 +78,9 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IWhatsAppBotService, WhatsAppBotService>();
         services.AddScoped<IBroadcastService, BroadcastService>();
         services.AddScoped<IFeeReceiptService, FeeReceiptService>();
+        services.AddScoped<IExamScheduleService, ExamScheduleService>();
+        services.AddScoped<IHomeworkService, HomeworkService>();
+        services.AddScoped<ILowMarksAlertService, LowMarksAlertService>();
     }
 
     private static void AddInfrastructureServices(this IServiceCollection services)
@@ -92,6 +95,8 @@ public static class ServiceCollectionExtensions
         services.AddHostedService<RetryBackgroundService>();
         services.AddHostedService<CarrierHealthBackgroundService>();
         services.AddHostedService<MissedCallBackgroundService>();
+        services.AddHostedService<ExamReminderBackgroundService>();
+        services.AddHostedService<HomeworkAlertBackgroundService>();
     }
 
     private static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)

@@ -31,6 +31,7 @@ public class School
     public string? UrduVoiceId { get; set; }
     public CallLanguage DefaultCallLanguage { get; set; } = CallLanguage.Telugu;
     public decimal AttendanceAlertThreshold { get; set; } = 75;
+    public decimal LowMarksThreshold { get; set; } = 40;
     public bool IsActive { get; set; } = true;
     public DateTime? TrialEndsAt { get; set; }
     public DateTime CreatedAt { get; set; }

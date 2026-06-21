@@ -51,7 +51,7 @@ public class MissedCallBackgroundService : BackgroundService
         var vapiService = scope.ServiceProvider.GetRequiredService<IVapiService>();
 
         var pendingStudents = (await uow.Students.FindAsync(
-            s => s.MissedCallCallbackPending && !s.IsDeleted && s.IsActive))
+            s => s.MissedCallCallbackPending && !s.IsDeleted))
             .ToList();
 
         if (pendingStudents.Count == 0) return;
@@ -75,7 +75,7 @@ public class MissedCallBackgroundService : BackgroundService
                 await uow.Students.UpdateAsync(student);
                 await uow.SaveChangesAsync();
 
-                _logger.LogInformation("Callback initiated for student {Id} ({Name})", student.Id, student.FullName);
+                _logger.LogInformation("Callback initiated for student {Id} ({Name})", student.Id, $"{student.FirstName} {student.LastName}");
             }
             catch (Exception ex)
             {

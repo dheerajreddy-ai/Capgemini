@@ -55,6 +55,9 @@ public class Student
     public string? FeeDisputeNote { get; set; }
     public DateTime? FeeDisputeRaisedAt { get; set; }
 
+    // Phase 10/11 — alerts
+    public DateTime? LowMarksAlertSentAt { get; set; }
+
     // Phase 5 — parent portal
     public string? PortalOtpHash { get; set; }
     public DateTime? PortalOtpExpiresAt { get; set; }

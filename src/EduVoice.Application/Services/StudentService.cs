@@ -15,12 +15,15 @@ public class StudentService : IStudentService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IAuditService _auditService;
+    private readonly ILowMarksAlertService _lowMarksAlertService;
     private readonly ILogger<StudentService> _logger;
 
-    public StudentService(IUnitOfWork unitOfWork, IAuditService auditService, ILogger<StudentService> logger)
+    public StudentService(IUnitOfWork unitOfWork, IAuditService auditService,
+        ILowMarksAlertService lowMarksAlertService, ILogger<StudentService> logger)
     {
         _unitOfWork = unitOfWork;
         _auditService = auditService;
+        _lowMarksAlertService = lowMarksAlertService;
         _logger = logger;
     }
 
@@ -200,6 +203,11 @@ public class StudentService : IStudentService
             await _unitOfWork.SaveChangesAsync();
 
             await _auditService.LogAsync(schoolId, null, "STUDENT_UPDATED", "Student", studentId.ToString());
+
+            // Fire-and-forget low marks alert (checks threshold internally)
+            var school = await _unitOfWork.Schools.GetByIdAsync(schoolId);
+            if (school is not null)
+                _ = Task.Run(() => _lowMarksAlertService.CheckAndAlertAsync(student, school));
 
             return ApiResponse<StudentDto>.Ok(MapToDto(student), "Student updated successfully");
         }

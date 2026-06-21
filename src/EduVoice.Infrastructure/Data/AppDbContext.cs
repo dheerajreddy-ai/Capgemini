@@ -13,6 +13,8 @@ public class AppDbContext : DbContext
     public DbSet<Complaint> Complaints => Set<Complaint>();
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
     public DbSet<Broadcast> Broadcasts => Set<Broadcast>();
+    public DbSet<ExamSchedule> ExamSchedules => Set<ExamSchedule>();
+    public DbSet<Homework> Homeworks => Set<Homework>();
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
