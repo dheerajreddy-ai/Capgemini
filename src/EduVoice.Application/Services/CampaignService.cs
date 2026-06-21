@@ -87,9 +87,9 @@ public class CampaignService : ICampaignService
             var studentsQuery = BuildStudentsQuery(schoolId, request.FilterClass, request.FilterSection,
                 request.FilterFeesStatus, request.Type, school?.AttendanceAlertThreshold ?? 75);
 
-            // Skip disputed students for fee reminders
+            // Skip disputed and scholarship students for fee reminders
             if (request.Type == CampaignType.FeeReminder)
-                studentsQuery = studentsQuery.Where(s => !s.HasFeeDispute);
+                studentsQuery = studentsQuery.Where(s => !s.HasFeeDispute && !s.IsScholarship);
 
             var studentCount = await studentsQuery.CountAsync();
             var status = request.ScheduledAt.HasValue ? CampaignStatus.Scheduled : CampaignStatus.Draft;
@@ -293,7 +293,7 @@ public class CampaignService : ICampaignService
                 campaign.FilterFeesStatus, campaign.Type, school.AttendanceAlertThreshold);
 
             if (campaign.Type == CampaignType.FeeReminder)
-                studentsQuery = studentsQuery.Where(s => !s.HasFeeDispute);
+                studentsQuery = studentsQuery.Where(s => !s.HasFeeDispute && !s.IsScholarship);
 
             var students = await studentsQuery.ToListAsync();
 

@@ -15,4 +15,7 @@ public interface IStudentService
     Task<ApiResponse> DeleteStudentAsync(Guid schoolId, Guid studentId);
     Task<ApiResponse<ImportStudentsResult>> ImportFromExcelAsync(Guid schoolId, IFormFile file);
     Task<byte[]> ExportToExcelAsync(Guid schoolId);
+    Task<ApiResponse<StudentDto>> SetScholarshipAsync(Guid schoolId, Guid studentId, SetScholarshipRequest request);
+    Task<ApiResponse<StudentDto>> RemoveScholarshipAsync(Guid schoolId, Guid studentId);
+    Task<ApiResponse> ClearPersonalFollowupAsync(Guid schoolId, Guid studentId);
 }

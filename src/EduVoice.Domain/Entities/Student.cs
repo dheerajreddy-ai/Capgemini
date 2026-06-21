@@ -55,6 +55,14 @@ public class Student
     public string? FeeDisputeNote { get; set; }
     public DateTime? FeeDisputeRaisedAt { get; set; }
 
+    // Phase 14 — fee intelligence
+    public bool IsScholarship { get; set; }
+    public string? ScholarshipNote { get; set; }
+    public decimal ScholarshipPercent { get; set; }
+    public DefaulterEscalationLevel DefaulterEscalationLevel { get; set; }
+    public DateTime? DefaulterEscalatedAt { get; set; }
+    public bool NeedsPersonalFollowup { get; set; }
+
     // Phase 10/11 — alerts
     public DateTime? LowMarksAlertSentAt { get; set; }
 

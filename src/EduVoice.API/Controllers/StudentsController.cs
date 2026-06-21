@@ -111,6 +111,33 @@ public class StudentsController : ControllerBase
         return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
     }
 
+    [HttpPost("{id:guid}/scholarship")]
+    public async Task<IActionResult> SetScholarship(Guid id, [FromBody] SetScholarshipRequest request)
+    {
+        var schoolId = GetSchoolId();
+        if (schoolId == null) return Unauthorized();
+        var result = await _studentService.SetScholarshipAsync(schoolId.Value, id, request);
+        return result.Success ? Ok(result) : BadRequest(result);
+    }
+
+    [HttpDelete("{id:guid}/scholarship")]
+    public async Task<IActionResult> RemoveScholarship(Guid id)
+    {
+        var schoolId = GetSchoolId();
+        if (schoolId == null) return Unauthorized();
+        var result = await _studentService.RemoveScholarshipAsync(schoolId.Value, id);
+        return result.Success ? Ok(result) : BadRequest(result);
+    }
+
+    [HttpPost("{id:guid}/personal-followup")]
+    public async Task<IActionResult> ClearPersonalFollowup(Guid id)
+    {
+        var schoolId = GetSchoolId();
+        if (schoolId == null) return Unauthorized();
+        var result = await _studentService.ClearPersonalFollowupAsync(schoolId.Value, id);
+        return result.Success ? Ok(result) : BadRequest(result);
+    }
+
     private Guid? GetSchoolId()
     {
         var schoolIdClaim = HttpContext.Items["SchoolId"]?.ToString()

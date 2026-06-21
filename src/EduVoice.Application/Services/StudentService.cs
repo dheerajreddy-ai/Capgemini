@@ -482,6 +482,49 @@ public class StudentService : IStudentService
             student.AttendancePercentage = Math.Round((decimal)student.AttendancePresentDays.Value / student.AttendanceTotalDays.Value * 100, 2);
     }
 
+    public async Task<ApiResponse<StudentDto>> SetScholarshipAsync(Guid schoolId, Guid studentId, SetScholarshipRequest request)
+    {
+        var student = await _unitOfWork.Students.Query()
+            .FirstOrDefaultAsync(s => s.SchoolId == schoolId && s.Id == studentId && !s.IsDeleted);
+        if (student is null) return ApiResponse<StudentDto>.Fail("Student not found", "NOT_FOUND");
+
+        student.IsScholarship = true;
+        student.ScholarshipNote = request.Note;
+        student.ScholarshipPercent = request.Percent;
+        student.UpdatedAt = DateTime.UtcNow;
+        await _unitOfWork.Students.UpdateAsync(student);
+        await _unitOfWork.SaveChangesAsync();
+        return ApiResponse<StudentDto>.Ok(MapToDto(student), "Scholarship applied. Student excluded from fee reminders.");
+    }
+
+    public async Task<ApiResponse<StudentDto>> RemoveScholarshipAsync(Guid schoolId, Guid studentId)
+    {
+        var student = await _unitOfWork.Students.Query()
+            .FirstOrDefaultAsync(s => s.SchoolId == schoolId && s.Id == studentId && !s.IsDeleted);
+        if (student is null) return ApiResponse<StudentDto>.Fail("Student not found", "NOT_FOUND");
+
+        student.IsScholarship = false;
+        student.ScholarshipNote = null;
+        student.ScholarshipPercent = 0;
+        student.UpdatedAt = DateTime.UtcNow;
+        await _unitOfWork.Students.UpdateAsync(student);
+        await _unitOfWork.SaveChangesAsync();
+        return ApiResponse<StudentDto>.Ok(MapToDto(student), "Scholarship removed. Student will receive fee reminders.");
+    }
+
+    public async Task<ApiResponse> ClearPersonalFollowupAsync(Guid schoolId, Guid studentId)
+    {
+        var student = await _unitOfWork.Students.Query()
+            .FirstOrDefaultAsync(s => s.SchoolId == schoolId && s.Id == studentId && !s.IsDeleted);
+        if (student is null) return ApiResponse.Fail("Student not found", "NOT_FOUND");
+
+        student.NeedsPersonalFollowup = false;
+        student.UpdatedAt = DateTime.UtcNow;
+        await _unitOfWork.Students.UpdateAsync(student);
+        await _unitOfWork.SaveChangesAsync();
+        return ApiResponse.Ok("Personal follow-up flag cleared.");
+    }
+
     private static StudentDto MapToDto(Student s) => new()
     {
         Id = s.Id,
@@ -514,6 +557,11 @@ public class StudentService : IStudentService
         FeesStatus = s.FeesStatus,
         FeesDueDate = s.FeesDueDate,
         LastPaymentDate = s.LastPaymentDate,
+        IsScholarship = s.IsScholarship,
+        ScholarshipNote = s.ScholarshipNote,
+        ScholarshipPercent = s.ScholarshipPercent,
+        DefaulterEscalationLevel = s.DefaulterEscalationLevel.ToString(),
+        NeedsPersonalFollowup = s.NeedsPersonalFollowup,
         CreatedAt = s.CreatedAt,
         UpdatedAt = s.UpdatedAt
     };

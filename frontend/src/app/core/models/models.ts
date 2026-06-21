@@ -37,6 +37,7 @@ export type BroadcastStatus = 'Draft' | 'Sending' | 'Sent' | 'Failed';
 export type BroadcastMediaType = 'None' | 'Image' | 'Document' | 'Video';
 export type ExamType = 'UnitTest' | 'Midterm' | 'Final' | 'Quarterly' | 'HalfYearly' | 'Annual';
 export type DropoutRiskLevel = 'Low' | 'Medium' | 'High' | 'Critical';
+export type DefaulterEscalationLevel = 'None' | 'Day30' | 'Day60' | 'Day90';
 
 export interface Broadcast {
   id: string;
@@ -52,6 +53,52 @@ export interface Broadcast {
   failedCount: number;
   sentAt?: string;
   createdAt: string;
+}
+
+export interface FeeCollectionDashboard {
+  totalFeesExpected: number;
+  totalFeesCollected: number;
+  totalFeesPending: number;
+  collectionRatePercent: number;
+  collectedThisMonth: number;
+  collectedLastMonth: number;
+  monthOnMonthChange: number;
+  totalStudents: number;
+  paidCount: number;
+  partialCount: number;
+  unpaidCount: number;
+  overdueCount: number;
+  byClass: ClassCollectionStat[];
+  topDefaulters: DefaulterStudent[];
+  dailyRevenue: DailyRevenue[];
+}
+
+export interface ClassCollectionStat {
+  class: string;
+  studentCount: number;
+  totalExpected: number;
+  totalCollected: number;
+  collectionRatePercent: number;
+}
+
+export interface DefaulterStudent {
+  studentId: string;
+  studentName: string;
+  class?: string;
+  section?: string;
+  parentPhone: string;
+  pendingFees: number;
+  feesStatus: FeesStatus;
+  feesDueDate?: string;
+  daysOverdue: number;
+  defaulterEscalationLevel: DefaulterEscalationLevel;
+  needsPersonalFollowup: boolean;
+}
+
+export interface DailyRevenue {
+  date: string;
+  amount: number;
+  label: string;
 }
 
 export interface DropoutRiskStudent {
@@ -190,6 +237,12 @@ export interface Student {
   hasFeeDispute?: boolean;
   feeDisputeNote?: string;
   feeDisputeRaisedAt?: string;
+  // Phase 14
+  isScholarship?: boolean;
+  scholarshipNote?: string;
+  scholarshipPercent?: number;
+  defaulterEscalationLevel?: DefaulterEscalationLevel;
+  needsPersonalFollowup?: boolean;
 }
 
 export interface CallingWindowStatus {

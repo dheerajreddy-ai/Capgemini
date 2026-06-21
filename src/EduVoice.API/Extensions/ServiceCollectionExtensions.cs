@@ -82,6 +82,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IHomeworkService, HomeworkService>();
         services.AddScoped<ILowMarksAlertService, LowMarksAlertService>();
         services.AddScoped<IDropoutRiskService, DropoutRiskService>();
+        services.AddScoped<IFeeCollectionService, FeeCollectionService>();
     }
 
     private static void AddInfrastructureServices(this IServiceCollection services)
@@ -99,6 +100,7 @@ public static class ServiceCollectionExtensions
         services.AddHostedService<ExamReminderBackgroundService>();
         services.AddHostedService<HomeworkAlertBackgroundService>();
         services.AddHostedService<DropoutRiskBackgroundService>();
+        services.AddHostedService<DefaulterEscalationBackgroundService>();
     }
 
     private static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)

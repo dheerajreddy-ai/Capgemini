@@ -35,6 +35,13 @@ public class StudentDto
     public FeesStatus FeesStatus { get; set; }
     public DateTime? FeesDueDate { get; set; }
     public DateTime? LastPaymentDate { get; set; }
+    public bool IsScholarship { get; set; }
+    public string? ScholarshipNote { get; set; }
+    public decimal ScholarshipPercent { get; set; }
+    public string DefaulterEscalationLevel { get; set; } = "None";
+    public bool NeedsPersonalFollowup { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 }
+
+public record SetScholarshipRequest(string? Note, decimal Percent);

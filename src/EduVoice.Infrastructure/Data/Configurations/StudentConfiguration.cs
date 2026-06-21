@@ -85,8 +85,13 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
         builder.Property(s => s.PortalOtpHash)
             .HasMaxLength(200);
 
-        builder.Property(s => s.DropoutRiskLevel)
-            .HasConversion<string>();
+        builder.Property(s => s.ScholarshipNote).HasMaxLength(500);
+        builder.Property(s => s.ScholarshipPercent).HasPrecision(5, 2);
+
+        builder.Property(s => s.DefaulterEscalationLevel).HasConversion<string>();
+        builder.HasIndex(s => new { s.SchoolId, s.NeedsPersonalFollowup });
+
+        builder.Property(s => s.DropoutRiskLevel).HasConversion<string>();
 
         builder.Property(s => s.DropoutRiskReasons)
             .HasMaxLength(500);

@@ -94,6 +94,11 @@ export const routes: Routes = [
         title: 'Dropout Risk · EduVoice',
       },
       {
+        path: 'fee-collection',
+        loadComponent: () => import('./features/fee-collection/fee-collection.component').then((m) => m.FeeCollectionComponent),
+        title: 'Fee Collection · EduVoice',
+      },
+      {
         path: 'settings',
         loadComponent: () => import('./features/settings/settings.component').then((m) => m.SettingsComponent),
         title: 'Settings · EduVoice',
