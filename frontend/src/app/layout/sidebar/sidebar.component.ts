@@ -100,5 +100,6 @@ export class SidebarComponent {
     { label: 'Fee Collection', icon: 'bi-cash-stack', route: '/fee-collection' },
     { label: 'Parent Engagement', icon: 'bi-heart', route: '/parent-engagement' },
     { label: 'Academic Reports', icon: 'bi-bar-chart-line', route: '/reports' },
+    { label: 'Staff Operations', icon: 'bi-person-badge', route: '/staff-operations' },
   ];
 }

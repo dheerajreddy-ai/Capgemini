@@ -39,6 +39,34 @@ export type ExamType = 'UnitTest' | 'Midterm' | 'Final' | 'Quarterly' | 'HalfYea
 export type DropoutRiskLevel = 'Low' | 'Medium' | 'High' | 'Critical';
 export type DefaulterEscalationLevel = 'None' | 'Day30' | 'Day60' | 'Day90';
 
+export interface StaffAbsence {
+  id: string;
+  teacherName: string;
+  teacherPhone?: string;
+  substituteTeacherName?: string;
+  substituteTeacherPhone?: string;
+  affectedClass?: string;
+  affectedSection?: string;
+  absenceDate: string;
+  notes?: string;
+  substituteAlertSent: boolean;
+  parentNotificationSent: boolean;
+  createdAt: string;
+}
+
+export interface PtmSchedule {
+  id: string;
+  title: string;
+  ptmDate: string;
+  class?: string;
+  section?: string;
+  notes?: string;
+  reminder3DaySent: boolean;
+  reminder1DaySent: boolean;
+  isActive: boolean;
+  createdAt: string;
+}
+
 export interface StudentReportCard {
   studentId: string;
   studentCode: string;

@@ -109,6 +109,11 @@ export const routes: Routes = [
         title: 'Academic Reports · EduVoice',
       },
       {
+        path: 'staff-operations',
+        loadComponent: () => import('./features/staff-operations/staff-operations.component').then((m) => m.StaffOperationsComponent),
+        title: 'Staff Operations · EduVoice',
+      },
+      {
         path: 'settings',
         loadComponent: () => import('./features/settings/settings.component').then((m) => m.SettingsComponent),
         title: 'Settings · EduVoice',

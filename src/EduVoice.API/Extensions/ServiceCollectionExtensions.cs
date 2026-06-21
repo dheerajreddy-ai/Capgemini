@@ -86,6 +86,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IInstalmentService, InstalmentService>();
         services.AddScoped<IParentEngagementService, ParentEngagementService>();
         services.AddScoped<IReportService, ReportService>();
+        services.AddScoped<IStaffOperationsService, StaffOperationsService>();
     }
 
     private static void AddInfrastructureServices(this IServiceCollection services)
@@ -107,6 +108,7 @@ public static class ServiceCollectionExtensions
         services.AddHostedService<InstalmentReminderBackgroundService>();
         services.AddHostedService<BirthdayWishBackgroundService>();
         services.AddHostedService<WeeklySummaryBackgroundService>();
+        services.AddHostedService<PtmReminderBackgroundService>();
     }
 
     private static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)

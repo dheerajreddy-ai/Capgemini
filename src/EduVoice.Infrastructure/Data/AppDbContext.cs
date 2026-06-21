@@ -16,6 +16,8 @@ public class AppDbContext : DbContext
     public DbSet<ExamSchedule> ExamSchedules => Set<ExamSchedule>();
     public DbSet<Homework> Homeworks => Set<Homework>();
     public DbSet<FeeInstalment> FeeInstalments => Set<FeeInstalment>();
+    public DbSet<StaffAbsence> StaffAbsences => Set<StaffAbsence>();
+    public DbSet<PtmSchedule> PtmSchedules => Set<PtmSchedule>();
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
