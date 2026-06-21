@@ -85,6 +85,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IFeeCollectionService, FeeCollectionService>();
         services.AddScoped<IInstalmentService, InstalmentService>();
         services.AddScoped<IParentEngagementService, ParentEngagementService>();
+        services.AddScoped<IReportService, ReportService>();
     }
 
     private static void AddInfrastructureServices(this IServiceCollection services)

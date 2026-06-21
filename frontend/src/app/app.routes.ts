@@ -104,6 +104,11 @@ export const routes: Routes = [
         title: 'Parent Engagement · EduVoice',
       },
       {
+        path: 'reports',
+        loadComponent: () => import('./features/reports/reports.component').then((m) => m.ReportsComponent),
+        title: 'Academic Reports · EduVoice',
+      },
+      {
         path: 'settings',
         loadComponent: () => import('./features/settings/settings.component').then((m) => m.SettingsComponent),
         title: 'Settings · EduVoice',

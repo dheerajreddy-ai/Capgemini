@@ -15,6 +15,7 @@ import { RelativeTimePipe } from '../../shared/pipes/relative-time.pipe';
 import { StudentFormComponent } from './student-form.component';
 import { ImportStudentsComponent } from './import-students.component';
 import { InstalmentPlanComponent } from '../instalments/instalment-plan.component';
+import { ReportCardComponent } from '../reports/report-card.component';
 
 @Component({
   selector: 'ev-students',
@@ -22,7 +23,7 @@ import { InstalmentPlanComponent } from '../instalments/instalment-plan.componen
   imports: [
     RouterLink, FormsModule, StatusBadgeComponent, PaginationComponent, EmptyStateComponent,
     SkeletonComponent, InitialsPipe, RelativeTimePipe, StudentFormComponent, ImportStudentsComponent,
-    InstalmentPlanComponent,
+    InstalmentPlanComponent, ReportCardComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './students.component.html',
@@ -41,6 +42,7 @@ export class StudentsComponent implements OnInit {
   readonly showForm = signal(false);
   readonly showImport = signal(false);
   readonly instalmentStudent = signal<Student | null>(null);
+  readonly reportStudent = signal<Student | null>(null);
 
   readonly feesOptions = ['', 'Paid', 'Partial', 'Unpaid', 'Overdue'];
 
@@ -75,6 +77,7 @@ export class StudentsComponent implements OnInit {
   openCreate(): void { this.editing.set(null); this.showForm.set(true); }
   openEdit(s: Student): void { this.editing.set(s); this.showForm.set(true); }
   openInstalments(s: Student): void { this.instalmentStudent.set(s); }
+  openReportCard(s: Student): void { this.reportStudent.set(s); }
 
   onSaved(): void { this.showForm.set(false); this.toast.success('Saved', 'Student details updated.'); this.load(); }
   onImported(): void { this.showImport.set(false); this.load(); }

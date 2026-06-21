@@ -39,6 +39,71 @@ export type ExamType = 'UnitTest' | 'Midterm' | 'Final' | 'Quarterly' | 'HalfYea
 export type DropoutRiskLevel = 'Low' | 'Medium' | 'High' | 'Critical';
 export type DefaulterEscalationLevel = 'None' | 'Day30' | 'Day60' | 'Day90';
 
+export interface StudentReportCard {
+  studentId: string;
+  studentCode: string;
+  studentName: string;
+  class?: string;
+  section?: string;
+  parentName: string;
+  parentPhone: string;
+  dateOfBirth?: string;
+  mathMarks?: number;
+  scienceMarks?: number;
+  englishMarks?: number;
+  teluguMarks?: number;
+  socialMarks?: number;
+  totalMarks?: number;
+  maxMarks?: number;
+  percentage?: number;
+  grade?: string;
+  remarks?: string;
+  attendancePresentDays?: number;
+  attendanceTotalDays?: number;
+  attendancePercentage?: number;
+  totalFees: number;
+  paidFees: number;
+  pendingFees: number;
+  feesStatus: string;
+  schoolName: string;
+  schoolLogoUrl?: string;
+  schoolAddress?: string;
+  generatedAt: string;
+}
+
+export interface SubjectStat {
+  subject: string;
+  averageMarks?: number;
+  highestMarks?: number;
+  lowestMarks?: number;
+  studentCount: number;
+}
+
+export interface ClassPerformance {
+  class: string;
+  totalStudents: number;
+  averagePercentage?: number;
+  highestPercentage?: number;
+  lowestPercentage?: number;
+  passCount: number;
+  passPercent: number;
+  subjectStats: SubjectStat[];
+}
+
+export interface TopPerformer {
+  studentId: string;
+  studentName: string;
+  class?: string;
+  section?: string;
+  percentage?: number;
+  grade?: string;
+}
+
+export interface AcademicReport {
+  byClass: ClassPerformance[];
+  topPerformers: TopPerformer[];
+}
+
 export interface FeeInstalment {
   id: string;
   instalmentNumber: number;

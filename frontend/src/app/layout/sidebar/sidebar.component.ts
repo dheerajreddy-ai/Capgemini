@@ -99,5 +99,6 @@ export class SidebarComponent {
     { label: 'Dropout Risk', icon: 'bi-exclamation-triangle', route: '/dropout-risk' },
     { label: 'Fee Collection', icon: 'bi-cash-stack', route: '/fee-collection' },
     { label: 'Parent Engagement', icon: 'bi-heart', route: '/parent-engagement' },
+    { label: 'Academic Reports', icon: 'bi-bar-chart-line', route: '/reports' },
   ];
 }
