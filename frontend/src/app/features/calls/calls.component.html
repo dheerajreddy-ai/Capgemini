@@ -64,7 +64,7 @@
               <td class="ev-cell-sub">{{ c.parentPhone }}</td>
               <td class="ev-cell-sub">{{ c.campaignName ?? '—' }}</td>
               <td class="ev-cell-sub">{{ c.durationSeconds | evDuration }}</td>
-              <td><ev-status-badge [value]="c.callType" /></td>
+              <td><ev-status-badge [value]="c.type" /></td>
               <td><ev-sentiment-badge [value]="c.sentiment" /></td>
               <td>
                 <ev-status-badge [value]="c.status" />

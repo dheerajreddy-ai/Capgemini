@@ -144,23 +144,17 @@ export class CampaignWizardComponent {
 
   private buildRequest(): CreateCampaignRequest {
     return {
-      campaignName: this.model.campaignName,
-      campaignType: this.model.campaignType,
-      filters: {
-        classes: this.audience() === 'classes' ? this.classesRaw.split(',').map((c) => c.trim()).filter(Boolean) : [],
-        feesStatus: this.audience() === 'overdue' ? 'Overdue' : 'All',
-        belowMarksThreshold: this.audience() === 'weak' ? 60 : undefined,
-        specificStudentIds: [],
-      },
+      name: this.model.campaignName,
+      type: this.model.campaignType,
+      filterClass: this.audience() === 'classes' && this.classesRaw.trim() ? this.classesRaw.trim() : undefined,
+      filterFeesStatus: this.audience() === 'overdue' ? 'Overdue' : undefined,
       scheduledAt: this.scheduled() && this.scheduleAt ? new Date(this.scheduleAt).toISOString() : null,
     };
   }
 
   private fetchPreview(): void {
-    this.service.preview(this.buildRequest()).subscribe({
-      next: (r) => this.previewCount.set(r.count),
-      error: () => this.previewCount.set(null),
-    });
+    // No backend audience-count endpoint yet — count shows "—" until one exists.
+    this.previewCount.set(null);
   }
 
   submit(): void {

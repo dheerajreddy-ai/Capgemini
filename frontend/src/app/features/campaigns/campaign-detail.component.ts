@@ -29,11 +29,11 @@ import { InitialsPipe } from '../../shared/pipes/initials.pipe';
         <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
           <div>
             <div class="d-flex align-items-center gap-2 mb-1">
-              <h1 class="ev-page-title mb-0">{{ c.campaignName }}</h1>
+              <h1 class="ev-page-title mb-0">{{ c.name }}</h1>
               <ev-status-badge [value]="c.status" />
               @if (c.status === 'Running') { <span class="ev-dot ev-dot--live ms-1"></span> }
             </div>
-            <p class="ev-page-sub mb-0">{{ c.campaignType }} · created {{ c.createdAt | evRelativeTime }}</p>
+            <p class="ev-page-sub mb-0">{{ c.type }} · created {{ c.createdAt | evRelativeTime }}</p>
           </div>
           <div class="d-flex gap-2">
             @if (c.status === 'Running') { <button class="btn btn-soft" (click)="pause()"><i class="bi bi-pause-fill me-1"></i>Pause</button> }

@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy, inject, signal, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { DatePipe } from '@angular/common';
 import { ExamScheduleService, CreateExamScheduleRequest } from '../../core/services/exam-schedule.service';
 import { ExamSchedule, ExamType } from '../../core/models/models';
 import { RelativeTimePipe } from '../../shared/pipes/relative-time.pipe';
@@ -9,7 +10,7 @@ import { EmptyStateComponent } from '../../shared/components/empty-state/empty-s
 @Component({
   selector: 'ev-exam-schedule',
   standalone: true,
-  imports: [FormsModule, RelativeTimePipe, SkeletonComponent, EmptyStateComponent],
+  imports: [FormsModule, DatePipe, RelativeTimePipe, SkeletonComponent, EmptyStateComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="ev-page-head">

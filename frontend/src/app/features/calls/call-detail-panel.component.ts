@@ -28,7 +28,7 @@ import { InitialsPipe } from '../../shared/pipes/initials.pipe';
           <div class="ev-call-meta">
             <div><span>Date</span><b>{{ c.createdAt | date:'medium' }}</b></div>
             <div><span>Duration</span><b>{{ c.durationSeconds | evDuration }}</b></div>
-            <div><span>Type</span><b>{{ c.callType }}</b></div>
+            <div><span>Type</span><b>{{ c.type }}</b></div>
             <div><span>Campaign</span><b>{{ c.campaignName ?? '—' }}</b></div>
           </div>
         </div>
@@ -49,9 +49,9 @@ import { InitialsPipe } from '../../shared/pipes/initials.pipe';
         }
 
         <!-- AI Summary -->
-        @if (c.summary) {
+        @if (c.aiSummary) {
           <div class="ev-section-label">AI Summary</div>
-          <div class="ev-summary"><i class="bi bi-stars me-2"></i>{{ c.summary }}</div>
+          <div class="ev-summary"><i class="bi bi-stars me-2"></i>{{ c.aiSummary }}</div>
         }
 
         <!-- Transcript -->

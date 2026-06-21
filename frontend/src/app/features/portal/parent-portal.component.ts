@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy, signal, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { DecimalPipe } from '@angular/common';
 import { ApiService } from '../../core/services/api.service';
 
 interface PortalData {
@@ -28,7 +29,7 @@ type Step = 'phone' | 'otp' | 'data';
 @Component({
   selector: 'ev-parent-portal',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, DecimalPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="portal-bg">

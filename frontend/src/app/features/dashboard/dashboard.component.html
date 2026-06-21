@@ -111,7 +111,7 @@
                 <div class="ev-cell-strong">{{ call.parentName }}</div>
                 <div class="ev-cell-sub">{{ call.parentPhone }}</div>
               </td>
-              <td><ev-status-badge [value]="call.callType" /></td>
+              <td><ev-status-badge [value]="call.type" /></td>
               <td class="ev-cell-sub">{{ call.durationSeconds | evDuration }}</td>
               <td><ev-sentiment-badge [value]="call.sentiment" /></td>
               <td><ev-status-badge [value]="call.status" /></td>

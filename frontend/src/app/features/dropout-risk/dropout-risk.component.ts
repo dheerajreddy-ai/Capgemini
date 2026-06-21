@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy, inject, signal, OnInit, computed } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { DecimalPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { DropoutRiskService } from '../../core/services/dropout-risk.service';
 import { DropoutRiskSummary, DropoutRiskStudent, DropoutRiskLevel } from '../../core/models/models';
@@ -9,7 +10,7 @@ import { EmptyStateComponent } from '../../shared/components/empty-state/empty-s
 @Component({
   selector: 'ev-dropout-risk',
   standalone: true,
-  imports: [FormsModule, RouterLink, SkeletonComponent, EmptyStateComponent],
+  imports: [FormsModule, DecimalPipe, RouterLink, SkeletonComponent, EmptyStateComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="ev-page-head">

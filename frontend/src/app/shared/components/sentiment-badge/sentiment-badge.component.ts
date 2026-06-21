@@ -5,26 +5,26 @@ import { Sentiment } from '../../../core/models/models';
   selector: 'ev-sentiment-badge',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `<span class="ev-badge ev-badge--{{ variant() }}"><i class="bi {{ icon() }}"></i>{{ value() }}</span>`,
+  template: `@if (value(); as v) { <span class="ev-badge ev-badge--{{ variant(v) }}"><i class="bi {{ icon(v) }}"></i>{{ v }}</span> }`,
 })
 export class SentimentBadgeComponent {
-  readonly value = input.required<Sentiment>();
+  readonly value = input<Sentiment | null | undefined>();
 
-  variant(): string {
+  variant(v: Sentiment): string {
     return {
       Positive: 'success',
       Neutral: 'neutral',
       Negative: 'danger',
       Angry: 'danger',
-    }[this.value()];
+    }[v];
   }
 
-  icon(): string {
+  icon(v: Sentiment): string {
     return {
       Positive: 'bi-emoji-smile',
       Neutral: 'bi-emoji-neutral',
       Negative: 'bi-emoji-frown',
       Angry: 'bi-emoji-angry',
-    }[this.value()];
+    }[v];
   }
 }

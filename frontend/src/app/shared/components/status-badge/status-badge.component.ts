@@ -20,10 +20,10 @@ const MAP: Record<string, Variant> = {
   selector: 'ev-status-badge',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `<span class="ev-badge ev-badge--{{ variant() }}">{{ label() }}</span>`,
+  template: `@if (value()) { <span class="ev-badge ev-badge--{{ variant() }}">{{ label() }}</span> }`,
 })
 export class StatusBadgeComponent {
-  readonly value = input.required<string>();
-  readonly variant = computed<Variant>(() => MAP[this.value()] ?? 'neutral');
-  readonly label = computed(() => this.value().replace(/([A-Z])/g, ' $1').trim());
+  readonly value = input<string | null | undefined>();
+  readonly variant = computed<Variant>(() => MAP[this.value() ?? ''] ?? 'neutral');
+  readonly label = computed(() => (this.value() ?? '').replace(/([A-Z])/g, ' $1').trim());
 }
