@@ -342,6 +342,8 @@ a { text-decoration: none; }
 .text-muted-ev { color: var(--ev-text-muted) !important; }
 .cursor-pointer { cursor: pointer; }
 
+.ev-truncate { max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
 .ev-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
 .ev-dot--live { background: var(--ev-success); box-shadow: 0 0 0 rgba(16,185,129,.6); animation: evPulse 2s infinite; }
 @keyframes evPulse {
