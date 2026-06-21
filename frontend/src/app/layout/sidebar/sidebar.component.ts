@@ -2,7 +2,6 @@ import { Component, ChangeDetectionStrategy, inject, input, output, computed } f
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
 import { InitialsPipe } from '../../shared/pipes/initials.pipe';
-import { NgIf } from '@angular/common';
 
 interface NavItem {
   label: string;
@@ -14,7 +13,7 @@ interface NavItem {
 @Component({
   selector: 'ev-sidebar',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, InitialsPipe, NgIf],
+  imports: [RouterLink, RouterLinkActive, InitialsPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <aside class="ev-sidebar" [class.is-open]="open()">
