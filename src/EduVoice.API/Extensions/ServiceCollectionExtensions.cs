@@ -91,6 +91,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ClaudeAIService>();
         services.AddHostedService<RetryBackgroundService>();
         services.AddHostedService<CarrierHealthBackgroundService>();
+        services.AddHostedService<MissedCallBackgroundService>();
     }
 
     private static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
