@@ -1,4 +1,4 @@
-using EduVoice.Application.Interfaces;
+﻿using EduVoice.Application.Interfaces;
 using EduVoice.Domain.Enums;
 using EduVoice.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -10,9 +10,9 @@ namespace EduVoice.Infrastructure.BackgroundServices;
 
 /// <summary>
 /// Daily 7AM IST: checks overdue students and escalates call cadence.
-/// 30d overdue → Day30 (flag for extra attention)
-/// 60d overdue → Day60 (3x/week call cadence marker)
-/// 90d overdue → Day90 + NeedsPersonalFollowup + WhatsApp alert to principal
+/// 30d overdue â†’ Day30 (flag for extra attention)
+/// 60d overdue â†’ Day60 (3x/week call cadence marker)
+/// 90d overdue â†’ Day90 + NeedsPersonalFollowup + WhatsApp alert to principal
 /// </summary>
 public class DefaulterEscalationBackgroundService : BackgroundService
 {
@@ -63,7 +63,7 @@ public class DefaulterEscalationBackgroundService : BackgroundService
             .ToListAsync();
 
         int escalated = 0;
-        var newFollowups = new Dictionary<Guid, List<string>>();  // schoolId → student names
+        var newFollowups = new Dictionary<Guid, List<string>>();  // schoolId â†’ student names
 
         foreach (var student in overdueStudents)
         {
@@ -91,11 +91,11 @@ public class DefaulterEscalationBackgroundService : BackgroundService
                 if (!newFollowups.ContainsKey(student.SchoolId))
                     newFollowups[student.SchoolId] = [];
                 newFollowups[student.SchoolId].Add(
-                    $"• {student.FirstName} {student.LastName} (Class {student.Class}) — ₹{student.PendingFees:N0} pending {daysOverdue} days");
+                    $"â€¢ {student.FirstName} {student.LastName} (Class {student.Class}) â€” â‚¹{student.PendingFees:N0} pending {daysOverdue} days");
             }
 
             student.UpdatedAt = DateTime.UtcNow;
-            await uow.Students.UpdateAsync(student);
+            uow.Students.Update(student);
             escalated++;
         }
 
@@ -109,7 +109,7 @@ public class DefaulterEscalationBackgroundService : BackgroundService
             if (school is null || string.IsNullOrWhiteSpace(school.ContactPhone)) continue;
 
             var msg = $"""
-                🚨 *EduVoice Fee Alert — {school.Name}*
+                ðŸš¨ *EduVoice Fee Alert â€” {school.Name}*
 
                 The following students have crossed *90 days overdue* and need personal follow-up:
 

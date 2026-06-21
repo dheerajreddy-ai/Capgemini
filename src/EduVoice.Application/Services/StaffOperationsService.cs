@@ -1,4 +1,4 @@
-using EduVoice.Application.Common;
+﻿using EduVoice.Application.Common;
 using EduVoice.Application.DTOs.StaffOperations;
 using EduVoice.Application.Interfaces;
 using EduVoice.Domain.Entities;
@@ -48,7 +48,7 @@ public class StaffOperationsService : IStaffOperationsService
         {
             var classInfo = FormatClass(req.AffectedClass, req.AffectedSection);
             var subMsg = $"""
-                🔔 *Substitute Assignment — {school.Name}*
+                ðŸ”” *Substitute Assignment â€” {school.Name}*
 
                 Dear {req.SubstituteTeacherName},
 
@@ -59,7 +59,7 @@ public class StaffOperationsService : IStaffOperationsService
 
                 Please report to the school office for the timetable.
 
-                — {school.Name}
+                â€” {school.Name}
                 """;
             try
             {
@@ -89,7 +89,7 @@ public class StaffOperationsService : IStaffOperationsService
                 if (string.IsNullOrWhiteSpace(phone)) continue;
 
                 var parentMsg = $"""
-                    📢 *Class Notice — {school.Name}*
+                    ðŸ“¢ *Class Notice â€” {school.Name}*
 
                     Dear {student.ParentName},
 
@@ -98,7 +98,7 @@ public class StaffOperationsService : IStaffOperationsService
                     Your child's studies will not be affected.
                     {(string.IsNullOrWhiteSpace(req.Notes) ? "" : $"\nNote: {req.Notes}")}
 
-                    — {school.Name}
+                    â€” {school.Name}
                     """;
                 try
                 {
@@ -174,7 +174,7 @@ public class StaffOperationsService : IStaffOperationsService
         if (ptm is null) return ApiResponse.Fail("PTM not found", "NOT_FOUND");
 
         ptm.IsActive = false;
-        await _uow.PtmSchedules.UpdateAsync(ptm);
+        _uow.PtmSchedules.Update(ptm);
         await _uow.SaveChangesAsync();
         return ApiResponse.Ok("PTM cancelled");
     }
@@ -218,16 +218,16 @@ public class StaffOperationsService : IStaffOperationsService
                 if (string.IsNullOrWhiteSpace(phone)) continue;
 
                 var msg = $"""
-                    📅 *PTM Reminder — {ptm.School.Name}*
+                    ðŸ“… *PTM Reminder â€” {ptm.School.Name}*
 
                     Dear {student.ParentName},
 
-                    This is a reminder that the *Parent-Teacher Meeting* — *{ptm.Title}*{(classInfo != "" ? $" for Class {classInfo}" : "")} — is scheduled *{daysLabel} from today* on *{ptm.PtmDate:dd MMM yyyy}* at school.
+                    This is a reminder that the *Parent-Teacher Meeting* â€” *{ptm.Title}*{(classInfo != "" ? $" for Class {classInfo}" : "")} â€” is scheduled *{daysLabel} from today* on *{ptm.PtmDate:dd MMM yyyy}* at school.
 
                     Please make it a point to attend.
                     {(string.IsNullOrWhiteSpace(ptm.Notes) ? "" : $"\nNote: {ptm.Notes}")}
 
-                    — {ptm.School.Name}
+                    â€” {ptm.School.Name}
                     """;
                 try
                 {
@@ -242,7 +242,7 @@ public class StaffOperationsService : IStaffOperationsService
 
             if (is3Day) ptm.Reminder3DaySent = true;
             if (is1Day) ptm.Reminder1DaySent = true;
-            await _uow.PtmSchedules.UpdateAsync(ptm);
+            _uow.PtmSchedules.Update(ptm);
         }
 
         if (upcoming.Count > 0)
@@ -252,7 +252,7 @@ public class StaffOperationsService : IStaffOperationsService
     }
 
     private static string FormatClass(string? cls, string? section) =>
-        cls == null ? "" : section == null ? cls : $"{cls} – {section}";
+        cls == null ? "" : section == null ? cls : $"{cls} â€“ {section}";
 
     private static StaffAbsenceDto MapAbsenceDto(StaffAbsence a) => new()
     {

@@ -206,6 +206,9 @@ public class EmailService : IEmailService
         }
     }
 
+    public Task SendGenericEmailAsync(string email, string subject, string htmlBody)
+        => SendEmailAsync(email, subject, htmlBody);
+
     private async Task SendEmailAsync(string toEmail, string subject, string htmlContent)
     {
         var apiKey = _configuration["SENDGRID_API_KEY"];

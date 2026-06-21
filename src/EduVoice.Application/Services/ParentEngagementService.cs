@@ -1,4 +1,4 @@
-using EduVoice.Application.Common;
+﻿using EduVoice.Application.Common;
 using EduVoice.Application.Interfaces;
 using EduVoice.Domain.Entities;
 using EduVoice.Domain.Interfaces;
@@ -40,11 +40,11 @@ public class ParentEngagementService : IParentEngagementService
             if (string.IsNullOrWhiteSpace(phone)) continue;
 
             var msg = $"""
-                🎂 *Happy Birthday — {student.School.Name}*
+                ðŸŽ‚ *Happy Birthday â€” {student.School.Name}*
 
                 Dear {student.ParentName},
 
-                Wishing *{student.FirstName} {student.LastName}* a very Happy Birthday! 🎉🌟
+                Wishing *{student.FirstName} {student.LastName}* a very Happy Birthday! ðŸŽ‰ðŸŒŸ
 
                 May this special day bring joy, laughter, and continued success in studies.
 
@@ -83,31 +83,31 @@ public class ParentEngagementService : IParentEngagementService
             if (string.IsNullOrWhiteSpace(phone)) continue;
 
             var attendanceLine = student.AttendancePercentage.HasValue
-                ? $"📅 *Attendance:* {student.AttendancePercentage:F0}%"
+                ? $"ðŸ“… *Attendance:* {student.AttendancePercentage:F0}%"
                     + (student.AttendancePresentDays.HasValue && student.AttendanceTotalDays.HasValue
                         ? $" ({student.AttendancePresentDays}/{student.AttendanceTotalDays} days)"
                         : "")
-                : "📅 *Attendance:* Not recorded";
+                : "ðŸ“… *Attendance:* Not recorded";
 
             var academicLine = student.Percentage.HasValue
-                ? $"📚 *Academic Score:* {student.Percentage:F0}%"
-                : "📚 *Academic Score:* Not recorded";
+                ? $"ðŸ“š *Academic Score:* {student.Percentage:F0}%"
+                : "ðŸ“š *Academic Score:* Not recorded";
 
             var feesLine = student.FeesStatus switch
             {
-                Domain.Enums.FeesStatus.Paid => "💰 *Fees:* ✅ Fully paid",
-                Domain.Enums.FeesStatus.Partial => $"💰 *Fees:* Partial — ₹{student.PendingFees:N0} pending",
-                Domain.Enums.FeesStatus.Unpaid => $"💰 *Fees:* ₹{student.PendingFees:N0} unpaid",
-                Domain.Enums.FeesStatus.Overdue => $"💰 *Fees:* ⚠️ ₹{student.PendingFees:N0} OVERDUE",
+                Domain.Enums.FeesStatus.Paid => "ðŸ’° *Fees:* âœ… Fully paid",
+                Domain.Enums.FeesStatus.Partial => $"ðŸ’° *Fees:* Partial â€” â‚¹{student.PendingFees:N0} pending",
+                Domain.Enums.FeesStatus.Unpaid => $"ðŸ’° *Fees:* â‚¹{student.PendingFees:N0} unpaid",
+                Domain.Enums.FeesStatus.Overdue => $"ðŸ’° *Fees:* âš ï¸ â‚¹{student.PendingFees:N0} OVERDUE",
                 _ => ""
             };
 
             var msg = $"""
-                📊 *Weekly Progress Update — {student.School.Name}*
+                ðŸ“Š *Weekly Progress Update â€” {student.School.Name}*
 
                 Hello {student.ParentName},
 
-                Here is *{student.FirstName} {student.LastName}*'s weekly update (Class {student.Class ?? "—"}):
+                Here is *{student.FirstName} {student.LastName}*'s weekly update (Class {student.Class ?? "â€”"}):
 
                 {attendanceLine}
                 {academicLine}
@@ -115,13 +115,13 @@ public class ParentEngagementService : IParentEngagementService
 
                 For any queries, please contact the school.
 
-                — EduVoice, {student.School.Name}
+                â€” EduVoice, {student.School.Name}
                 """;
             try
             {
                 await _twilio.SendWhatsAppAsync(phone, msg);
                 student.WeeklySummarySentAt = DateTime.UtcNow;
-                await _uow.Students.UpdateAsync(student);
+                _uow.Students.Update(student);
                 sent++;
                 await Task.Delay(1100); // 1.1s throttle for Twilio
             }
@@ -152,22 +152,22 @@ public class ParentEngagementService : IParentEngagementService
         if (string.IsNullOrWhiteSpace(phone)) return;
 
         var msg = $"""
-            🌟 *Achievement Alert — {school.Name}*
+            ðŸŒŸ *Achievement Alert â€” {school.Name}*
 
             Congratulations, {student.ParentName}!
 
-            Your child *{student.FirstName} {student.LastName}* (Class {student.Class ?? "—"}) has achieved an excellent score of *{student.Percentage:F0}%* in their recent exam! 🏆
+            Your child *{student.FirstName} {student.LastName}* (Class {student.Class ?? "â€”"}) has achieved an excellent score of *{student.Percentage:F0}%* in their recent exam! ðŸ†
 
-            Keep up the great work — we're proud of this achievement!
+            Keep up the great work â€” we're proud of this achievement!
 
-            — EduVoice, {school.Name}
+            â€” EduVoice, {school.Name}
             """;
 
         try
         {
             await _twilio.SendWhatsAppAsync(phone, msg);
             student.AchievementAlertSentAt = DateTime.UtcNow;
-            await _uow.Students.UpdateAsync(student);
+            _uow.Students.Update(student);
             await _uow.SaveChangesAsync();
         }
         catch (Exception ex)

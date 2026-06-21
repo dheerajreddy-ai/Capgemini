@@ -74,16 +74,17 @@ public class TwilioService : ITwilioService
     {
         try
         {
-            var availableNumbers = await Twilio.Rest.Api.V2010.Account.AvailablePhoneNumber.Local.ListAsync(
+            var availableNumbers = await Twilio.Rest.Api.V2010.Account.AvailablePhoneNumberCountry.LocalResource.ReadAsync(
                 pathCountryCode: "IN",
                 areaCode: int.TryParse(areaCode, out var ac) ? ac : null
             );
 
-            if (!availableNumbers.Any())
+            var list = availableNumbers.ToList();
+            if (!list.Any())
                 throw new Exception("No phone numbers available for the specified area code");
 
             var purchased = await Twilio.Rest.Api.V2010.Account.IncomingPhoneNumberResource.CreateAsync(
-                phoneNumber: new PhoneNumber(availableNumbers.First().PhoneNumber)
+                phoneNumber: list.First().PhoneNumber?.ToString()
             );
 
             return purchased.PhoneNumber.ToString();

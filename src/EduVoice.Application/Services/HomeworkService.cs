@@ -1,4 +1,4 @@
-using EduVoice.Application.Common;
+﻿using EduVoice.Application.Common;
 using EduVoice.Application.DTOs.Homework;
 using EduVoice.Application.Interfaces;
 using EduVoice.Domain.Entities;
@@ -82,7 +82,7 @@ public class HomeworkService : IHomeworkService
         var item = await _uow.Homeworks.Query()
             .FirstOrDefaultAsync(h => h.SchoolId == schoolId && h.Id == id);
         if (item is null) return ApiResponse<bool>.Fail("Not found", "NOT_FOUND");
-        await _uow.Homeworks.DeleteAsync(item);
+        _uow.Homeworks.Remove(item);
         await _uow.SaveChangesAsync();
         return ApiResponse<bool>.Ok(true);
     }
@@ -123,15 +123,15 @@ public class HomeworkService : IHomeworkService
 
                 // Build the message listing all subjects
                 var hwLines = classGroup.Select(h =>
-                    $"📚 *{h.Subject}*: {h.Description}" +
+                    $"ðŸ“š *{h.Subject}*: {h.Description}" +
                     (h.DueDate.HasValue ? $" (Due: {h.DueDate:dd MMM})" : ""));
                 var message = $"""
-                    🏫 *{school.Name}* — Today's Homework ({today:dd MMM yyyy})
+                    ðŸ« *{school.Name}* â€” Today's Homework ({today:dd MMM yyyy})
                     {(classGroup.Key.Class is not null ? $"Class: {classGroup.Key.Class}{classGroup.Key.Section}" : "")}
 
                     {string.Join("\n", hwLines)}
 
-                    ✅ Please ensure your child completes all assignments.
+                    âœ… Please ensure your child completes all assignments.
                     """;
 
                 foreach (var student in students)
@@ -156,7 +156,7 @@ public class HomeworkService : IHomeworkService
                 hw.AlertSent = true;
                 hw.AlertSentAt = DateTime.UtcNow;
                 hw.UpdatedAt = DateTime.UtcNow;
-                await _uow.Homeworks.UpdateAsync(hw);
+                _uow.Homeworks.Update(hw);
             }
             await _uow.SaveChangesAsync();
         }

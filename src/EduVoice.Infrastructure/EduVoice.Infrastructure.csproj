@@ -16,6 +16,8 @@
     <PackageReference Include="Twilio" Version="7.14.9" />
     <PackageReference Include="AWSSDK.S3" Version="3.7.511.8" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.0" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.19.1" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.19.1" />
     <ProjectReference Include="..\EduVoice.Domain\EduVoice.Domain.csproj" />

@@ -1,4 +1,4 @@
-using EduVoice.Application.Common;
+﻿using EduVoice.Application.Common;
 using EduVoice.Application.Interfaces;
 using EduVoice.Domain.Enums;
 using EduVoice.Domain.Interfaces;
@@ -11,7 +11,7 @@ namespace EduVoice.Infrastructure.BackgroundServices;
 /// <summary>
 /// Processes students with MissedCallCallbackPending = true.
 /// Fires a callback voice call via Vapi, then clears the pending flag.
-/// Runs every 10 minutes, only within the 11AM–6PM IST calling window.
+/// Runs every 10 minutes, only within the 11AMâ€“6PM IST calling window.
 /// </summary>
 public class MissedCallBackgroundService : BackgroundService
 {
@@ -72,7 +72,7 @@ public class MissedCallBackgroundService : BackgroundService
                 student.MissedCallCallbackPending = false;
                 student.MissedCallReceivedAt = null;
                 student.UpdatedAt = DateTime.UtcNow;
-                await uow.Students.UpdateAsync(student);
+                uow.Students.Update(student);
                 await uow.SaveChangesAsync();
 
                 _logger.LogInformation("Callback initiated for student {Id} ({Name})", student.Id, $"{student.FirstName} {student.LastName}");

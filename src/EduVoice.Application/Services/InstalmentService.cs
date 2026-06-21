@@ -1,4 +1,4 @@
-using EduVoice.Application.Common;
+﻿using EduVoice.Application.Common;
 using EduVoice.Application.DTOs.Instalments;
 using EduVoice.Application.Interfaces;
 using EduVoice.Domain.Entities;
@@ -41,7 +41,7 @@ public class InstalmentService : IInstalmentService
             .Where(f => f.StudentId == studentId && !f.IsPaid)
             .ToListAsync();
         foreach (var e in existing)
-            await _uow.FeeInstalments.DeleteAsync(e);
+            _uow.FeeInstalments.Remove(e);
 
         var perInstalment = Math.Round(student.PendingFees / request.InstalmentCount, 2);
         var remainder = student.PendingFees - perInstalment * (request.InstalmentCount - 1);
@@ -91,7 +91,7 @@ public class InstalmentService : IInstalmentService
 
         instalment.IsPaid = true;
         instalment.PaidAt = DateTime.UtcNow;
-        await _uow.FeeInstalments.UpdateAsync(instalment);
+        _uow.FeeInstalments.Update(instalment);
 
         // Update student fee balances
         var student = instalment.Student;
@@ -104,7 +104,7 @@ public class InstalmentService : IInstalmentService
             .CountAsync(f => f.StudentId == student.Id && !f.IsPaid);
         student.FeesStatus = remaining == 0 ? FeesStatus.Paid : FeesStatus.Partial;
 
-        await _uow.Students.UpdateAsync(student);
+        _uow.Students.Update(student);
         await _uow.SaveChangesAsync();
 
         return ApiResponse<FeeInstalmentDto>.Ok(MapToDto(instalment));
@@ -118,7 +118,7 @@ public class InstalmentService : IInstalmentService
         if (unpaid.Count == 0) return ApiResponse.Fail("No active instalment plan found", "NOT_FOUND");
 
         foreach (var f in unpaid)
-            await _uow.FeeInstalments.DeleteAsync(f);
+            _uow.FeeInstalments.Remove(f);
         await _uow.SaveChangesAsync();
 
         return ApiResponse.Ok("Instalment plan removed");
@@ -145,21 +145,21 @@ public class InstalmentService : IInstalmentService
 
             var daysOverdue = (today - inst.DueDate.Date).Days;
             var msg = $"""
-                📅 *Fee Instalment Due — {school.Name}*
+                ðŸ“… *Fee Instalment Due â€” {school.Name}*
 
                 Dear Parent of *{student.FirstName} {student.LastName}* (Class {student.Class}),
 
-                Instalment #{inst.InstalmentNumber} of ₹{inst.Amount:N0} was due on {inst.DueDate:dd MMM yyyy} and is now *{daysOverdue} day(s) overdue*.
+                Instalment #{inst.InstalmentNumber} of â‚¹{inst.Amount:N0} was due on {inst.DueDate:dd MMM yyyy} and is now *{daysOverdue} day(s) overdue*.
 
                 Please make the payment at the earliest to avoid any inconvenience.
 
-                — EduVoice
+                â€” EduVoice
                 """;
             try
             {
                 await _twilio.SendWhatsAppAsync(phone, msg);
                 inst.OverdueReminderSentAt = DateTime.UtcNow;
-                await _uow.FeeInstalments.UpdateAsync(inst);
+                _uow.FeeInstalments.Update(inst);
             }
             catch (Exception ex)
             {

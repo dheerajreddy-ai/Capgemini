@@ -60,7 +60,7 @@ public class DailySummaryService : IDailySummaryService
               && c.Status == CallStatus.Completed);
 
         var pendingStudents = await _unitOfWork.Students.FindAsync(
-            s => s.SchoolId == schoolId && s.IsActive
+            s => s.SchoolId == schoolId && !s.IsDeleted
               && (s.FeesStatus == FeesStatus.Unpaid || s.FeesStatus == FeesStatus.Overdue || s.FeesStatus == FeesStatus.Partial));
 
         var pendingFeesCount = pendingStudents.Count();

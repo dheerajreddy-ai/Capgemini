@@ -1,4 +1,4 @@
-using EduVoice.Application.Common;
+﻿using EduVoice.Application.Common;
 using EduVoice.Application.DTOs.ExamSchedules;
 using EduVoice.Application.Interfaces;
 using EduVoice.Domain.Entities;
@@ -83,7 +83,7 @@ public class ExamScheduleService : IExamScheduleService
         if (item is null) return ApiResponse<bool>.Fail("Not found", "NOT_FOUND");
         item.IsActive = false;
         item.UpdatedAt = DateTime.UtcNow;
-        await _uow.ExamSchedules.UpdateAsync(item);
+        _uow.ExamSchedules.Update(item);
         await _uow.SaveChangesAsync();
         return ApiResponse<bool>.Ok(true);
     }
@@ -119,7 +119,7 @@ public class ExamScheduleService : IExamScheduleService
             var school = await _uow.Schools.GetByIdAsync(exam.SchoolId);
             if (school is null) continue;
 
-            var daysLabel = is1Day ? "రేపు (Tomorrow)" : "3 రోజుల్లో (in 3 days)";
+            var daysLabel = is1Day ? "à°°à±‡à°ªà± (Tomorrow)" : "3 à°°à±‹à°œà±à°²à±à°²à±‹ (in 3 days)";
             _logger.LogInformation("Sending {Wave}-day exam reminder for {Subject} to {Count} students",
                 is1Day ? 1 : 3, exam.SubjectName, students.Count);
 
@@ -139,7 +139,7 @@ public class ExamScheduleService : IExamScheduleService
             if (is3Day) exam.Reminder3DaySent = true;
             if (is1Day) exam.Reminder1DaySent = true;
             exam.UpdatedAt = DateTime.UtcNow;
-            await _uow.ExamSchedules.UpdateAsync(exam);
+            _uow.ExamSchedules.Update(exam);
             await _uow.SaveChangesAsync();
         }
     }

@@ -53,7 +53,7 @@ public class CarrierHealthBackgroundService : BackgroundService
                     {
                         var rate = (double)completed / calls.Count;
                         var msg = CarrierHealthHelper.AlertMessage(school.Name, school.TwilioPhoneNumber ?? "N/A", newHealth, rate);
-                        try { await emailService.SendEmailAsync(school.ContactEmail, "EduVoice Carrier Health Alert", msg); }
+                        try { await emailService.SendGenericEmailAsync(school.ContactEmail, "EduVoice Carrier Health Alert", msg); }
                         catch { /* best effort */ }
                         _logger.LogWarning("Carrier health changed to {Health} for school {SchoolId}", newHealth, school.Id);
                     }

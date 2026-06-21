@@ -1,3 +1,4 @@
+using System.Net.Http.Json;
 using System.Text.Json;
 using EduVoice.Application.Interfaces;
 using EduVoice.Domain.Enums;
@@ -30,22 +31,22 @@ public class ClaudeAIService
             _httpClient.DefaultRequestHeaders.Add("x-api-key", apiKey);
             _httpClient.DefaultRequestHeaders.Add("anthropic-version", "2023-06-01");
 
-            var prompt = $"""
+            var prompt = $$"""
                 Analyze this Telugu school phone call transcript and extract key information.
-                Call type: {callType}
+                Call type: {{callType}}
 
                 Transcript:
-                {transcript}
+                {{transcript}}
 
                 Return only a valid JSON object with exactly these fields:
-                {{
+                {
                     "sentiment": "Positive|Neutral|Negative|Angry",
                     "feesConfirmed": true or false,
                     "hasComplaint": true or false,
                     "complaintSummary": "brief complaint description or null",
                     "callbackRequested": true or false,
                     "summary": "2-3 sentence summary in English"
-                }}
+                }
                 """;
 
             var requestBody = new

@@ -1,4 +1,4 @@
-using EduVoice.Application.Interfaces;
+﻿using EduVoice.Application.Interfaces;
 using EduVoice.Domain.Entities;
 using EduVoice.Domain.Enums;
 using EduVoice.Domain.Interfaces;
@@ -55,7 +55,7 @@ public class LowMarksAlertService : ILowMarksAlertService
 
             student.LowMarksAlertSentAt = DateTime.UtcNow;
             student.UpdatedAt = DateTime.UtcNow;
-            await _uow.Students.UpdateAsync(student);
+            _uow.Students.Update(student);
             await _uow.SaveChangesAsync();
         }
         catch (Exception ex)

@@ -9,6 +9,7 @@ public interface IEmailService
     Task SendDailySummaryAsync(string email, DashboardStatsDto stats);
     Task SendComplaintAlertAsync(string email, Complaint complaint);
     Task SendSlaEscalationEmailAsync(string email, Complaint complaint);
+    Task SendGenericEmailAsync(string email, string subject, string htmlBody);
     Task SendPrincipalDailySummaryAsync(string email, string schoolName, PrincipalDailySummary summary);
 }
 

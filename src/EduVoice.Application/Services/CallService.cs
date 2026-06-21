@@ -1,3 +1,4 @@
+using System.Net.Http.Json;
 using System.Text.Json;
 using EduVoice.Application.Common;
 using EduVoice.Application.DTOs.Calls;
@@ -414,13 +415,13 @@ public class CallService : ICallService
             httpClient.DefaultRequestHeaders.Add("x-api-key", apiKey);
             httpClient.DefaultRequestHeaders.Add("anthropic-version", "2023-06-01");
 
-            var prompt = $"""
+            var prompt = $$"""
                 Analyze this Telugu school call transcript (may contain Telugu+English code-switching) and return JSON.
-                Call type: {callType}
-                Transcript: {transcript}
+                Call type: {{callType}}
+                Transcript: {{transcript}}
 
                 Return ONLY valid JSON:
-                {{
+                {
                     "sentiment": "Positive|Neutral|Negative|Angry",
                     "feesConfirmed": true|false,
                     "feeExtensionRequested": true|false,
@@ -430,7 +431,7 @@ public class CallService : ICallService
                     "callbackRequested": true|false,
                     "optedOut": true|false,
                     "summary": "2-3 sentence summary"
-                }}
+                }
                 """;
 
             var requestBody = new { model = "claude-sonnet-4-6", max_tokens = 1024, messages = new[] { new { role = "user", content = prompt } } };

@@ -1,4 +1,4 @@
-using EduVoice.Application.Common;
+﻿using EduVoice.Application.Common;
 using EduVoice.Application.DTOs.DropoutRisk;
 using EduVoice.Application.Interfaces;
 using EduVoice.Domain.Enums;
@@ -143,10 +143,10 @@ public class DropoutRiskService : IDropoutRiskService
                     student.DropoutRiskReasons = reasons.Count > 0 ? string.Join("|", reasons) : null;
                     student.DropoutRiskCalculatedAt = DateTime.UtcNow;
                     student.UpdatedAt = DateTime.UtcNow;
-                    await _uow.Students.UpdateAsync(student);
+                    _uow.Students.Update(student);
 
                     if (student.DropoutRiskLevel == DropoutRiskLevel.Critical)
-                        criticalStudents.Add($"• {student.FirstName} {student.LastName} (Class {student.Class}) — Score {student.DropoutRiskScore}/100");
+                        criticalStudents.Add($"â€¢ {student.FirstName} {student.LastName} (Class {student.Class}) â€” Score {student.DropoutRiskScore}/100");
                 }
 
                 await _uow.SaveChangesAsync();
@@ -155,7 +155,7 @@ public class DropoutRiskService : IDropoutRiskService
                 if (criticalStudents.Count > 0 && !string.IsNullOrWhiteSpace(school.ContactPhone))
                 {
                     var alert = $"""
-                        🚨 *EduVoice Dropout Risk Alert — {school.Name}*
+                        ðŸš¨ *EduVoice Dropout Risk Alert â€” {school.Name}*
 
                         The following students are at *Critical* dropout risk today:
 

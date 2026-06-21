@@ -1,4 +1,4 @@
-using EduVoice.Application.Common;
+﻿using EduVoice.Application.Common;
 using EduVoice.Application.DTOs.Students;
 using EduVoice.Application.Interfaces;
 using EduVoice.Domain.Entities;
@@ -498,7 +498,7 @@ public class StudentService : IStudentService
         student.ScholarshipNote = request.Note;
         student.ScholarshipPercent = request.Percent;
         student.UpdatedAt = DateTime.UtcNow;
-        await _unitOfWork.Students.UpdateAsync(student);
+        _unitOfWork.Students.Update(student);
         await _unitOfWork.SaveChangesAsync();
         return ApiResponse<StudentDto>.Ok(MapToDto(student), "Scholarship applied. Student excluded from fee reminders.");
     }
@@ -513,7 +513,7 @@ public class StudentService : IStudentService
         student.ScholarshipNote = null;
         student.ScholarshipPercent = 0;
         student.UpdatedAt = DateTime.UtcNow;
-        await _unitOfWork.Students.UpdateAsync(student);
+        _unitOfWork.Students.Update(student);
         await _unitOfWork.SaveChangesAsync();
         return ApiResponse<StudentDto>.Ok(MapToDto(student), "Scholarship removed. Student will receive fee reminders.");
     }
@@ -526,7 +526,7 @@ public class StudentService : IStudentService
 
         student.NeedsPersonalFollowup = false;
         student.UpdatedAt = DateTime.UtcNow;
-        await _unitOfWork.Students.UpdateAsync(student);
+        _unitOfWork.Students.Update(student);
         await _unitOfWork.SaveChangesAsync();
         return ApiResponse.Ok("Personal follow-up flag cleared.");
     }
