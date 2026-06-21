@@ -1,0 +1,386 @@
+/* ============================================================
+   EduVoice — Premium Design System
+   Bootstrap 5 base + custom premium theme layer
+   ============================================================ */
+
+// 1. Bootstrap functions first (so we can manipulate colors)
+@import "bootstrap/scss/functions";
+
+/* ---------- Brand tokens (overridable per-tenant at runtime) ---------- */
+:root {
+  /* Brand */
+  --ev-primary: #1E40AF;
+  --ev-primary-rgb: 30, 64, 175;
+  --ev-primary-600: #1d4ed8;
+  --ev-primary-700: #1e3a8a;
+  --ev-primary-light: #DBEAFE;
+  --ev-primary-soft: #EFF4FF;
+
+  /* Accents */
+  --ev-success: #10B981;
+  --ev-success-soft: #D1FAE5;
+  --ev-warning: #F59E0B;
+  --ev-warning-soft: #FEF3C7;
+  --ev-danger: #EF4444;
+  --ev-danger-soft: #FEE2E2;
+  --ev-info: #6366F1;
+  --ev-info-soft: #E0E7FF;
+
+  /* Neutrals */
+  --ev-bg: #F4F6FB;
+  --ev-surface: #FFFFFF;
+  --ev-surface-2: #FAFBFE;
+  --ev-border: #E8ECF4;
+  --ev-border-strong: #DCE2EE;
+  --ev-text: #0F172A;
+  --ev-text-secondary: #64748B;
+  --ev-text-muted: #94A3B8;
+
+  /* Premium gradients */
+  --ev-grad-primary: linear-gradient(135deg, #2563EB 0%, #1E40AF 55%, #1E3A8A 100%);
+  --ev-grad-success: linear-gradient(135deg, #34D399 0%, #10B981 100%);
+  --ev-grad-warning: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%);
+  --ev-grad-danger:  linear-gradient(135deg, #F87171 0%, #EF4444 100%);
+  --ev-grad-info:    linear-gradient(135deg, #818CF8 0%, #6366F1 100%);
+  --ev-grad-sidebar: linear-gradient(180deg, #16234B 0%, #111A38 60%, #0C1430 100%);
+  --ev-grad-aurora:  radial-gradient(1200px 500px at 10% -10%, rgba(37,99,235,.18), transparent 60%),
+                     radial-gradient(900px 500px at 100% 0%, rgba(99,102,241,.14), transparent 55%);
+
+  /* Elevation — soft, layered, premium */
+  --ev-shadow-xs: 0 1px 2px rgba(16, 24, 40, 0.05);
+  --ev-shadow-sm: 0 2px 8px rgba(16, 24, 40, 0.06);
+  --ev-shadow-md: 0 6px 20px rgba(16, 24, 40, 0.08);
+  --ev-shadow-lg: 0 16px 40px rgba(16, 24, 40, 0.10);
+  --ev-shadow-xl: 0 28px 70px rgba(16, 24, 40, 0.16);
+  --ev-shadow-primary: 0 12px 28px rgba(30, 64, 175, 0.28);
+
+  /* Radii */
+  --ev-radius-sm: 10px;
+  --ev-radius: 16px;
+  --ev-radius-lg: 22px;
+  --ev-radius-pill: 999px;
+
+  --ev-sidebar-w: 264px;
+  --ev-header-h: 72px;
+}
+
+/* ---------- Map brand tokens into Bootstrap before its core import ---------- */
+$primary:   #1E40AF;
+$success:   #10B981;
+$warning:   #F59E0B;
+$danger:    #EF4444;
+$info:      #6366F1;
+$body-bg:   #F4F6FB;
+$body-color:#0F172A;
+$border-color: #E8ECF4;
+$font-family-sans-serif: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+$headings-font-family: "Sora", "Inter", sans-serif;
+$border-radius:    .9rem;
+$border-radius-sm: .65rem;
+$border-radius-lg: 1.2rem;
+$enable-negative-margins: true;
+
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/variables-dark";
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/utilities";
+
+// Bootstrap layout + components we actually use
+@import "bootstrap/scss/root";
+@import "bootstrap/scss/reboot";
+@import "bootstrap/scss/type";
+@import "bootstrap/scss/images";
+@import "bootstrap/scss/containers";
+@import "bootstrap/scss/grid";
+@import "bootstrap/scss/tables";
+@import "bootstrap/scss/forms";
+@import "bootstrap/scss/buttons";
+@import "bootstrap/scss/transitions";
+@import "bootstrap/scss/dropdown";
+@import "bootstrap/scss/nav";
+@import "bootstrap/scss/card";
+@import "bootstrap/scss/badge";
+@import "bootstrap/scss/alert";
+@import "bootstrap/scss/progress";
+@import "bootstrap/scss/spinners";
+@import "bootstrap/scss/offcanvas";
+@import "bootstrap/scss/modal";
+@import "bootstrap/scss/close";
+@import "bootstrap/scss/tooltip";
+@import "bootstrap/scss/helpers";
+@import "bootstrap/scss/utilities/api";
+
+/* ============================================================
+   Global base
+   ============================================================ */
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  font-family: "Inter", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background: var(--ev-bg);
+  color: var(--ev-text);
+  letter-spacing: -0.011em;
+}
+
+h1, h2, h3, h4, h5, h6, .ev-display {
+  font-family: "Sora", "Inter", sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ev-text);
+}
+
+a { text-decoration: none; }
+
+::selection { background: rgba(var(--ev-primary-rgb), .18); }
+
+/* Premium scrollbars */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover { background: #94A3B8; background-clip: content-box; }
+
+/* ============================================================
+   Premium surface / cards
+   ============================================================ */
+.ev-card {
+  background: var(--ev-surface);
+  border: 1px solid var(--ev-border);
+  border-radius: var(--ev-radius);
+  box-shadow: var(--ev-shadow-sm);
+  transition: transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s ease, border-color .25s ease;
+}
+.ev-card--hover:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--ev-shadow-lg);
+  border-color: var(--ev-border-strong);
+}
+.ev-card-pad { padding: 1.4rem 1.5rem; }
+.ev-card-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.15rem 1.5rem;
+  border-bottom: 1px solid var(--ev-border);
+}
+.ev-card-title { font-size: 1.02rem; font-weight: 700; margin: 0; }
+
+.ev-glass {
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: saturate(180%) blur(18px);
+  -webkit-backdrop-filter: saturate(180%) blur(18px);
+  border: 1px solid rgba(255,255,255,0.55);
+}
+
+/* ============================================================
+   Stat cards — premium gradient icon tiles
+   ============================================================ */
+.ev-stat {
+  position: relative;
+  overflow: hidden;
+  padding: 1.4rem 1.5rem;
+}
+.ev-stat::after {
+  content: "";
+  position: absolute;
+  right: -40px; top: -40px;
+  width: 150px; height: 150px;
+  background: radial-gradient(circle, rgba(var(--ev-primary-rgb), .06), transparent 70%);
+  border-radius: 50%;
+}
+.ev-stat__icon {
+  width: 56px; height: 56px;
+  border-radius: 16px;
+  display: grid; place-items: center;
+  font-size: 1.5rem; color: #fff;
+  box-shadow: var(--ev-shadow-md);
+}
+.ev-stat__icon--primary { background: var(--ev-grad-primary); box-shadow: var(--ev-shadow-primary); }
+.ev-stat__icon--success { background: var(--ev-grad-success); }
+.ev-stat__icon--warning { background: var(--ev-grad-warning); }
+.ev-stat__icon--danger  { background: var(--ev-grad-danger); }
+.ev-stat__icon--info    { background: var(--ev-grad-info); }
+.ev-stat__value {
+  font-family: "Sora", sans-serif;
+  font-size: 2rem; font-weight: 800; line-height: 1;
+  margin-top: .9rem; letter-spacing: -0.03em;
+}
+.ev-stat__label { color: var(--ev-text-secondary); font-size: .85rem; font-weight: 500; margin-top: .35rem; }
+.ev-stat__trend { font-size: .8rem; font-weight: 600; display: inline-flex; align-items: center; gap: .2rem; }
+.ev-trend-up   { color: var(--ev-success); }
+.ev-trend-down { color: var(--ev-danger); }
+
+/* ============================================================
+   Buttons — premium
+   ============================================================ */
+.btn { font-weight: 600; border-radius: var(--ev-radius-sm); padding: .55rem 1.1rem; letter-spacing: -.01em; transition: all .2s ease; }
+.btn:focus { box-shadow: none; }
+
+.btn-primary {
+  --bs-btn-bg: transparent;
+  background: var(--ev-grad-primary);
+  border: none;
+  box-shadow: var(--ev-shadow-primary);
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 16px 34px rgba(30,64,175,.36); filter: brightness(1.04); }
+.btn-primary:active { transform: translateY(0); }
+
+.btn-light-primary {
+  background: var(--ev-primary-soft);
+  color: var(--ev-primary);
+  border: 1px solid transparent;
+}
+.btn-light-primary:hover { background: var(--ev-primary-light); color: var(--ev-primary-700); }
+
+.btn-soft {
+  background: #fff;
+  border: 1px solid var(--ev-border-strong);
+  color: var(--ev-text);
+  box-shadow: var(--ev-shadow-xs);
+}
+.btn-soft:hover { background: var(--ev-surface-2); border-color: #C7D0E0; transform: translateY(-1px); }
+
+.btn-ghost { background: transparent; color: var(--ev-text-secondary); }
+.btn-ghost:hover { background: var(--ev-primary-soft); color: var(--ev-primary); }
+
+.btn-icon { width: 40px; height: 40px; padding: 0; display: inline-grid; place-items: center; }
+
+/* ============================================================
+   Badges — premium soft pills
+   ============================================================ */
+.ev-badge {
+  display: inline-flex; align-items: center; gap: .35rem;
+  padding: .3rem .65rem; border-radius: var(--ev-radius-pill);
+  font-size: .76rem; font-weight: 600; line-height: 1; white-space: nowrap;
+}
+.ev-badge i { font-size: .85rem; }
+.ev-badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: .9; }
+.ev-badge--success { background: var(--ev-success-soft); color: #047857; }
+.ev-badge--neutral { background: #F1F5F9; color: #475569; }
+.ev-badge--warning { background: var(--ev-warning-soft); color: #B45309; }
+.ev-badge--danger  { background: var(--ev-danger-soft);  color: #B91C1C; }
+.ev-badge--info    { background: var(--ev-info-soft);    color: #4338CA; }
+.ev-badge--primary { background: var(--ev-primary-soft); color: var(--ev-primary); }
+
+/* ============================================================
+   Tables — premium
+   ============================================================ */
+.ev-table-wrap { overflow-x: auto; border-radius: var(--ev-radius); }
+.ev-table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 0; }
+.ev-table thead th {
+  background: var(--ev-surface-2);
+  color: var(--ev-text-secondary);
+  font-size: .73rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
+  padding: .85rem 1.1rem; border-bottom: 1px solid var(--ev-border); white-space: nowrap;
+}
+.ev-table tbody td { padding: .95rem 1.1rem; border-bottom: 1px solid var(--ev-border); font-size: .9rem; vertical-align: middle; }
+.ev-table tbody tr { transition: background .15s ease; cursor: default; }
+.ev-table tbody tr:hover { background: var(--ev-primary-soft); }
+.ev-table tbody tr:last-child td { border-bottom: none; }
+.ev-table .ev-cell-strong { font-weight: 600; color: var(--ev-text); }
+.ev-table .ev-cell-sub { font-size: .8rem; color: var(--ev-text-muted); }
+
+/* ============================================================
+   Avatar
+   ============================================================ */
+.ev-avatar {
+  width: 38px; height: 38px; border-radius: 12px;
+  display: grid; place-items: center; font-weight: 700; font-size: .85rem; color: #fff;
+  background: var(--ev-grad-primary); flex-shrink: 0;
+}
+.ev-avatar--sm { width: 30px; height: 30px; font-size: .72rem; border-radius: 9px; }
+.ev-avatar--lg { width: 52px; height: 52px; font-size: 1.05rem; border-radius: 16px; }
+
+/* ============================================================
+   Forms — premium
+   ============================================================ */
+.form-control, .form-select {
+  border-radius: var(--ev-radius-sm);
+  border: 1px solid var(--ev-border-strong);
+  padding: .62rem .85rem;
+  font-size: .92rem;
+  background: var(--ev-surface);
+  transition: border-color .18s ease, box-shadow .18s ease;
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--ev-primary);
+  box-shadow: 0 0 0 4px rgba(var(--ev-primary-rgb), .12);
+}
+.form-control::placeholder { color: var(--ev-text-muted); }
+.form-label { font-weight: 600; font-size: .85rem; color: var(--ev-text); margin-bottom: .4rem; }
+
+.ev-search {
+  position: relative;
+}
+.ev-search i {
+  position: absolute; left: .9rem; top: 50%; transform: translateY(-50%);
+  color: var(--ev-text-muted); font-size: 1rem;
+}
+.ev-search input { padding-left: 2.5rem; }
+
+/* ============================================================
+   Section header
+   ============================================================ */
+.ev-page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+.ev-page-title { font-size: 1.6rem; font-weight: 800; margin: 0; }
+.ev-page-sub { color: var(--ev-text-secondary); font-size: .92rem; margin: .25rem 0 0; }
+
+/* ============================================================
+   Misc helpers
+   ============================================================ */
+.ev-soft-divider { height: 1px; background: var(--ev-border); border: 0; margin: 1rem 0; }
+.text-secondary-ev { color: var(--ev-text-secondary) !important; }
+.text-muted-ev { color: var(--ev-text-muted) !important; }
+.cursor-pointer { cursor: pointer; }
+
+.ev-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.ev-dot--live { background: var(--ev-success); box-shadow: 0 0 0 rgba(16,185,129,.6); animation: evPulse 2s infinite; }
+@keyframes evPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(16,185,129,.5); }
+  70%  { box-shadow: 0 0 0 8px rgba(16,185,129,0); }
+  100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+}
+
+/* Skeleton shimmer */
+.ev-skeleton {
+  background: linear-gradient(90deg, #EEF2F8 25%, #F6F8FC 37%, #EEF2F8 63%);
+  background-size: 400% 100%;
+  animation: evShimmer 1.4s ease infinite;
+  border-radius: 8px;
+}
+@keyframes evShimmer { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
+
+/* Entrance animation */
+.ev-fade-up { animation: evFadeUp .5s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes evFadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Toasts container */
+.ev-toast-host {
+  position: fixed; top: 1.2rem; right: 1.2rem; z-index: 1090;
+  display: flex; flex-direction: column; gap: .6rem; max-width: 380px;
+}
+
+/* Empty state */
+.ev-empty { text-align: center; padding: 3.5rem 1rem; color: var(--ev-text-secondary); }
+.ev-empty__icon {
+  width: 84px; height: 84px; margin: 0 auto 1rem; border-radius: 24px;
+  display: grid; place-items: center; font-size: 2.2rem;
+  background: var(--ev-primary-soft); color: var(--ev-primary);
+}
+
+/* Progress premium */
+.ev-progress { height: 8px; border-radius: 999px; background: #EEF2F8; overflow: hidden; }
+.ev-progress__bar { height: 100%; border-radius: 999px; background: var(--ev-grad-primary); transition: width .6s ease; }
+
+@media (max-width: 991.98px) {
+  :root { --ev-sidebar-w: 0px; }
+}
