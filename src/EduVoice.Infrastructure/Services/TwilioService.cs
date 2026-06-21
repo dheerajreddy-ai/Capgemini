@@ -48,6 +48,28 @@ public class TwilioService : ITwilioService
         }
     }
 
+    public async Task SendWhatsAppWithMediaAsync(string toPhone, string message, string mediaUrl)
+    {
+        try
+        {
+            var from = _configuration["TWILIO_WHATSAPP_FROM"] ?? "+14155238886";
+            var normalizedPhone = ValidateIndianPhoneNumber(toPhone);
+
+            var msg = await MessageResource.CreateAsync(
+                body: message,
+                mediaUrl: [new Uri(mediaUrl)],
+                from: new PhoneNumber($"whatsapp:{from}"),
+                to: new PhoneNumber($"whatsapp:{normalizedPhone}")
+            );
+            _logger.LogInformation("WhatsApp media sent to {Phone}, SID: {Sid}", normalizedPhone, msg.Sid);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to send WhatsApp media to {Phone}", toPhone);
+            throw;
+        }
+    }
+
     public async Task<string> BuyPhoneNumberAsync(string areaCode)
     {
         try

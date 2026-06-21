@@ -69,6 +69,11 @@ export const routes: Routes = [
         title: 'Complaints · EduVoice',
       },
       {
+        path: 'broadcasts',
+        loadComponent: () => import('./features/broadcasts/broadcasts.component').then((m) => m.BroadcastsComponent),
+        title: 'Broadcasts · EduVoice',
+      },
+      {
         path: 'analytics',
         loadComponent: () => import('./features/analytics/analytics.component').then((m) => m.AnalyticsComponent),
         title: 'Analytics · EduVoice',

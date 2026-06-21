@@ -92,6 +92,7 @@ export class SidebarComponent {
     { label: 'Campaigns', icon: 'bi-megaphone', route: '/campaigns' },
     { label: 'Call Logs', icon: 'bi-telephone', route: '/calls' },
     { label: 'Complaints', icon: 'bi-chat-square-dots', route: '/complaints' },
+    { label: 'Broadcasts', icon: 'bi-broadcast', route: '/broadcasts' },
     { label: 'Analytics', icon: 'bi-graph-up-arrow', route: '/analytics' },
   ];
 }

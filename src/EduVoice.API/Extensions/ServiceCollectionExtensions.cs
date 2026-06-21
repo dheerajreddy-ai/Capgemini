@@ -75,6 +75,9 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IAuditService, AuditService>();
         services.AddScoped<IPaymentService, PaymentService>();
         services.AddScoped<IInboundService, InboundService>();
+        services.AddScoped<IWhatsAppBotService, WhatsAppBotService>();
+        services.AddScoped<IBroadcastService, BroadcastService>();
+        services.AddScoped<IFeeReceiptService, FeeReceiptService>();
     }
 
     private static void AddInfrastructureServices(this IServiceCollection services)

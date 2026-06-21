@@ -17,6 +17,7 @@ public class UnitOfWork : IUnitOfWork
     private IRepository<Call>? _calls;
     private IRepository<Complaint>? _complaints;
     private IRepository<AuditLog>? _auditLogs;
+    private IRepository<Broadcast>? _broadcasts;
 
     public UnitOfWork(AppDbContext context)
     {
@@ -30,6 +31,7 @@ public class UnitOfWork : IUnitOfWork
     public IRepository<Call> Calls => _calls ??= new Repository<Call>(_context);
     public IRepository<Complaint> Complaints => _complaints ??= new Repository<Complaint>(_context);
     public IRepository<AuditLog> AuditLogs => _auditLogs ??= new Repository<AuditLog>(_context);
+    public IRepository<Broadcast> Broadcasts => _broadcasts ??= new Repository<Broadcast>(_context);
 
     public async Task<int> SaveChangesAsync()
     {

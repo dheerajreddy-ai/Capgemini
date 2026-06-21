@@ -11,6 +11,7 @@ public interface IUnitOfWork : IDisposable
     IRepository<Call> Calls { get; }
     IRepository<Complaint> Complaints { get; }
     IRepository<AuditLog> AuditLogs { get; }
+    IRepository<Broadcast> Broadcasts { get; }
     Task<int> SaveChangesAsync();
     Task BeginTransactionAsync();
     Task CommitAsync();

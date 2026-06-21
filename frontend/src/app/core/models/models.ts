@@ -33,6 +33,24 @@ export type ComplaintStatus = 'New' | 'Read' | 'InProgress' | 'Resolved' | 'Clos
 export type TeluguDialect = 'Telangana' | 'Andhra';
 export type CallLanguage = 'Telugu' | 'Urdu' | 'English';
 export type CarrierHealth = 'Healthy' | 'Degraded' | 'Flagged';
+export type BroadcastStatus = 'Draft' | 'Sending' | 'Sent' | 'Failed';
+export type BroadcastMediaType = 'None' | 'Image' | 'Document' | 'Video';
+
+export interface Broadcast {
+  id: string;
+  title: string;
+  message: string;
+  mediaUrl?: string;
+  mediaType: BroadcastMediaType;
+  targetClass?: string;
+  targetSection?: string;
+  status: BroadcastStatus;
+  totalRecipients: number;
+  sentCount: number;
+  failedCount: number;
+  sentAt?: string;
+  createdAt: string;
+}
 
 export interface School {
   id: string;

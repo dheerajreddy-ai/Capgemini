@@ -15,3 +15,5 @@ public enum ComplaintStatus { New, Read, InProgress, Resolved, Closed }
 public enum TeluguDialect { Telangana, Andhra }
 public enum CallLanguage { Telugu, Urdu, English }
 public enum CarrierHealth { Healthy, Degraded, Flagged }
+public enum BroadcastStatus { Draft, Sending, Sent, Failed }
+public enum BroadcastMediaType { None, Image, Document, Video }

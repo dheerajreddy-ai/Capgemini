@@ -11,12 +11,15 @@ public class PaymentService : IPaymentService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ITwilioService _twilioService;
+    private readonly IFeeReceiptService _receiptService;
     private readonly ILogger<PaymentService> _logger;
 
-    public PaymentService(IUnitOfWork unitOfWork, ITwilioService twilioService, ILogger<PaymentService> logger)
+    public PaymentService(IUnitOfWork unitOfWork, ITwilioService twilioService,
+        IFeeReceiptService receiptService, ILogger<PaymentService> logger)
     {
         _unitOfWork = unitOfWork;
         _twilioService = twilioService;
+        _receiptService = receiptService;
         _logger = logger;
     }
 
@@ -83,9 +86,10 @@ public class PaymentService : IPaymentService
 
             if (school != null)
             {
-                var msg = PaymentLinkHelper.PaymentConfirmedWhatsApp(student.ParentName,
-                    $"{student.FirstName} {student.LastName}", school.Name, amountPaid);
-                _ = Task.Run(() => _twilioService.SendWhatsAppAsync(student.ParentPhone, msg));
+                var receiptNumber = FeeReceiptService.GenerateReceiptNumber(schoolId, DateTime.UtcNow);
+                // Re-read updated student for accurate balances in receipt
+                var updatedStudent = await _unitOfWork.Students.GetByIdAsync(student.Id) ?? student;
+                _ = Task.Run(() => _receiptService.SendReceiptAsync(updatedStudent, school, amountPaid, receiptNumber));
             }
 
             return ApiResponse.Ok("Payment confirmed");
