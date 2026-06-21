@@ -37,7 +37,7 @@ export function areaChart(week: DashboardStats['callsThisWeek']): ApexOptions {
       axisTicks: { show: false },
     },
     yaxis: { labels: { style: { colors: '#94A3B8', fontSize: '12px' } } },
-    legend: { position: 'top', horizontalAlign: 'right', markers: { size: 6 }, fontWeight: 600 },
+    legend: { position: 'top', horizontalAlign: 'right', fontWeight: 600 },
     tooltip: { theme: 'light' },
   };
 }
@@ -51,7 +51,7 @@ export function donutChart(outcome?: DashboardStats['outcomeBreakdown']): ApexOp
     colors: ['#10B981', '#EF4444', '#94A3B8', '#6366F1'],
     stroke: { width: 0 },
     dataLabels: { enabled: false },
-    legend: { position: 'bottom', fontWeight: 600, markers: { size: 6 }, itemMargin: { horizontal: 8, vertical: 4 } },
+    legend: { position: 'bottom', fontWeight: 600, itemMargin: { horizontal: 8, vertical: 4 } },
     plotOptions: {
       pie: {
         donut: {
