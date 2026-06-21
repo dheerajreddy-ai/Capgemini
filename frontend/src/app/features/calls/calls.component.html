@@ -1,0 +1,85 @@
+<div class="ev-page-head">
+  <div>
+    <h1 class="ev-page-title">Call Logs</h1>
+    <p class="ev-page-sub">{{ result()?.totalCount ?? 0 }} calls recorded</p>
+  </div>
+</div>
+
+<!-- Filters -->
+<div class="ev-card ev-card-pad mb-3">
+  <div class="row g-2">
+    <div class="col-12 col-lg-4">
+      <div class="ev-search">
+        <i class="bi bi-search"></i>
+        <input class="form-control" type="search" placeholder="Search student or phone…" (input)="onSearch($any($event.target).value)" />
+      </div>
+    </div>
+    <div class="col-6 col-lg-2">
+      <select class="form-select" (change)="setFilter('callType', $any($event.target).value)">
+        <option value="">All types</option><option value="FeeReminder">Fee Reminder</option>
+        <option value="ProgressUpdate">Progress Update</option><option value="Complaint">Complaint</option>
+      </select>
+    </div>
+    <div class="col-6 col-lg-2">
+      <select class="form-select" (change)="setFilter('sentiment', $any($event.target).value)">
+        <option value="">All sentiment</option><option value="Positive">Positive</option>
+        <option value="Neutral">Neutral</option><option value="Negative">Negative</option><option value="Angry">Angry</option>
+      </select>
+    </div>
+    <div class="col-6 col-lg-2">
+      <select class="form-select" (change)="setFilter('status', $any($event.target).value)">
+        <option value="">All status</option><option value="Completed">Completed</option>
+        <option value="NoAnswer">No Answer</option><option value="Failed">Failed</option>
+      </select>
+    </div>
+    <div class="col-6 col-lg-2 d-flex align-items-center">
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="hasComplaint" (change)="setFilter('hasComplaint', $any($event.target).checked)" />
+        <label class="form-check-label small" for="hasComplaint">Has complaint</label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Table -->
+<div class="ev-card">
+  @if (loading()) {
+    <div class="ev-card-pad"><ev-skeleton [rows]="8" [height]="26" /></div>
+  } @else if ((result()?.items?.length ?? 0) === 0) {
+    <ev-empty-state icon="bi-telephone-x" title="No calls found" message="Adjust filters or run a campaign to start calling." />
+  } @else {
+    <div class="ev-table-wrap">
+      <table class="ev-table">
+        <thead><tr><th>Time</th><th>Student</th><th>Parent</th><th>Campaign</th><th>Duration</th><th>Type</th><th>Sentiment</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          @for (c of result()!.items; track c.id) {
+            <tr class="cursor-pointer" (click)="open(c)">
+              <td class="ev-cell-sub">{{ c.createdAt | evRelativeTime }}</td>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <div class="ev-avatar ev-avatar--sm">{{ c.studentName | evInitials }}</div>
+                  <div><div class="ev-cell-strong">{{ c.studentName }}</div><div class="ev-cell-sub">{{ c.studentClass }}</div></div>
+                </div>
+              </td>
+              <td class="ev-cell-sub">{{ c.parentPhone }}</td>
+              <td class="ev-cell-sub">{{ c.campaignName ?? '—' }}</td>
+              <td class="ev-cell-sub">{{ c.durationSeconds | evDuration }}</td>
+              <td><ev-status-badge [value]="c.callType" /></td>
+              <td><ev-sentiment-badge [value]="c.sentiment" /></td>
+              <td>
+                <ev-status-badge [value]="c.status" />
+                @if (c.hasComplaint) { <i class="bi bi-exclamation-triangle-fill text-danger ms-1" title="Complaint filed"></i> }
+              </td>
+              <td class="text-end"><i class="bi bi-chevron-right text-muted-ev"></i></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <div class="ev-card-pad pt-0">
+      <ev-pagination [page]="query().page!" [pageSize]="query().pageSize!" [total]="result()!.totalCount" (pageChange)="setPage($event)" />
+    </div>
+  }
+</div>
+
+<ev-call-detail-panel [call]="selected()" (close)="selected.set(null)" />
