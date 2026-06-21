@@ -42,6 +42,9 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
         builder.Property(s => s.ParentPhone2)
             .HasMaxLength(20);
 
+        builder.Property(s => s.ParentWhatsApp)
+            .HasMaxLength(20);
+
         builder.Property(s => s.ParentEmail)
             .HasMaxLength(200);
 

@@ -99,6 +99,11 @@ export const routes: Routes = [
         title: 'Fee Collection · EduVoice',
       },
       {
+        path: 'parent-engagement',
+        loadComponent: () => import('./features/parent-engagement/parent-engagement.component').then((m) => m.ParentEngagementComponent),
+        title: 'Parent Engagement · EduVoice',
+      },
+      {
         path: 'settings',
         loadComponent: () => import('./features/settings/settings.component').then((m) => m.SettingsComponent),
         title: 'Settings · EduVoice',

@@ -16,14 +16,17 @@ public class StudentService : IStudentService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IAuditService _auditService;
     private readonly ILowMarksAlertService _lowMarksAlertService;
+    private readonly IParentEngagementService _parentEngagement;
     private readonly ILogger<StudentService> _logger;
 
     public StudentService(IUnitOfWork unitOfWork, IAuditService auditService,
-        ILowMarksAlertService lowMarksAlertService, ILogger<StudentService> logger)
+        ILowMarksAlertService lowMarksAlertService, IParentEngagementService parentEngagement,
+        ILogger<StudentService> logger)
     {
         _unitOfWork = unitOfWork;
         _auditService = auditService;
         _lowMarksAlertService = lowMarksAlertService;
+        _parentEngagement = parentEngagement;
         _logger = logger;
     }
 
@@ -204,10 +207,13 @@ public class StudentService : IStudentService
 
             await _auditService.LogAsync(schoolId, null, "STUDENT_UPDATED", "Student", studentId.ToString());
 
-            // Fire-and-forget low marks alert (checks threshold internally)
+            // Fire-and-forget alert checks after marks update
             var school = await _unitOfWork.Schools.GetByIdAsync(schoolId);
             if (school is not null)
+            {
                 _ = Task.Run(() => _lowMarksAlertService.CheckAndAlertAsync(student, school));
+                _ = Task.Run(() => _parentEngagement.CheckAchievementAlertAsync(student, school));
+            }
 
             return ApiResponse<StudentDto>.Ok(MapToDto(student), "Student updated successfully");
         }

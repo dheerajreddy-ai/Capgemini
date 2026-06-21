@@ -198,6 +198,7 @@ export interface School {
   defaultCallLanguage?: CallLanguage;
   attendanceAlertThreshold?: number;
   lowMarksThreshold?: number;
+  achievementThreshold?: number;
   dndScrubEnabled?: boolean;
   carrierHealth?: CarrierHealth;
   isActive: boolean;
@@ -233,6 +234,7 @@ export interface Student {
   parentPhone: string;
   parentPhone2?: string;
   parentWhatsApp?: string;
+  dateOfBirth?: string;
   feesDue: number;
   feesDueDate?: string;
   feesStatus: FeesStatus;

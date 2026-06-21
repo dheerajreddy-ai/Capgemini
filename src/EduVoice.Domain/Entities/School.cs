@@ -32,6 +32,7 @@ public class School
     public CallLanguage DefaultCallLanguage { get; set; } = CallLanguage.Telugu;
     public decimal AttendanceAlertThreshold { get; set; } = 75;
     public decimal LowMarksThreshold { get; set; } = 40;
+    public decimal AchievementThreshold { get; set; } = 80;
     public bool IsActive { get; set; } = true;
     public DateTime? TrialEndsAt { get; set; }
     public DateTime CreatedAt { get; set; }

@@ -84,6 +84,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IDropoutRiskService, DropoutRiskService>();
         services.AddScoped<IFeeCollectionService, FeeCollectionService>();
         services.AddScoped<IInstalmentService, InstalmentService>();
+        services.AddScoped<IParentEngagementService, ParentEngagementService>();
     }
 
     private static void AddInfrastructureServices(this IServiceCollection services)
@@ -103,6 +104,8 @@ public static class ServiceCollectionExtensions
         services.AddHostedService<DropoutRiskBackgroundService>();
         services.AddHostedService<DefaulterEscalationBackgroundService>();
         services.AddHostedService<InstalmentReminderBackgroundService>();
+        services.AddHostedService<BirthdayWishBackgroundService>();
+        services.AddHostedService<WeeklySummaryBackgroundService>();
     }
 
     private static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)

@@ -14,8 +14,10 @@ public class Student
     public string ParentName { get; set; } = string.Empty;
     public string ParentPhone { get; set; } = string.Empty;
     public string? ParentPhone2 { get; set; }
+    public string? ParentWhatsApp { get; set; }
     public string? ParentEmail { get; set; }
     public string? Address { get; set; }
+    public DateTime? DateOfBirth { get; set; }
 
     // Academic marks
     public decimal? MathMarks { get; set; }
@@ -65,6 +67,10 @@ public class Student
 
     // Phase 10/11 — alerts
     public DateTime? LowMarksAlertSentAt { get; set; }
+
+    // Phase 16 — parent engagement
+    public DateTime? WeeklySummarySentAt { get; set; }
+    public DateTime? AchievementAlertSentAt { get; set; }
 
     // Phase 13 — dropout risk
     public int DropoutRiskScore { get; set; }
