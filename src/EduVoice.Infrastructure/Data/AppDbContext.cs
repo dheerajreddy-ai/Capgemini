@@ -18,6 +18,8 @@ public class AppDbContext : DbContext
     public DbSet<FeeInstalment> FeeInstalments => Set<FeeInstalment>();
     public DbSet<StaffAbsence> StaffAbsences => Set<StaffAbsence>();
     public DbSet<PtmSchedule> PtmSchedules => Set<PtmSchedule>();
+    public DbSet<Attendance> Attendances => Set<Attendance>();
+    public DbSet<TeacherMarks> TeacherMarksList => Set<TeacherMarks>();
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 

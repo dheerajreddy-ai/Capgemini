@@ -118,6 +118,27 @@ export const routes: Routes = [
         loadComponent: () => import('./features/settings/settings.component').then((m) => m.SettingsComponent),
         title: 'Settings · EduVoice',
       },
+      // Teacher portal
+      {
+        path: 'teacher/dashboard',
+        loadComponent: () => import('./features/teacher/teacher-dashboard.component').then((m) => m.TeacherDashboardComponent),
+        title: 'Teacher Portal · EduVoice',
+      },
+      {
+        path: 'teacher/attendance',
+        loadComponent: () => import('./features/teacher/attendance/attendance.component').then((m) => m.AttendanceComponent),
+        title: 'Mark Attendance · EduVoice',
+      },
+      {
+        path: 'teacher/marks',
+        loadComponent: () => import('./features/teacher/marks/marks-upload.component').then((m) => m.MarksUploadComponent),
+        title: 'Upload Marks · EduVoice',
+      },
+      {
+        path: 'teacher/homework',
+        loadComponent: () => import('./features/teacher/homework/teacher-homework.component').then((m) => m.TeacherHomeworkComponent),
+        title: 'Assign Homework · EduVoice',
+      },
       {
         path: 'admin/schools',
         loadComponent: () => import('./features/admin/admin-schools.component').then((m) => m.AdminSchoolsComponent),

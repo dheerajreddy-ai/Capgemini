@@ -23,6 +23,8 @@ public class UnitOfWork : IUnitOfWork
     private IRepository<FeeInstalment>? _feeInstalments;
     private IRepository<StaffAbsence>? _staffAbsences;
     private IRepository<PtmSchedule>? _ptmSchedules;
+    private IRepository<Attendance>? _attendances;
+    private IRepository<TeacherMarks>? _teacherMarksList;
 
     public UnitOfWork(AppDbContext context)
     {
@@ -42,6 +44,8 @@ public class UnitOfWork : IUnitOfWork
     public IRepository<FeeInstalment> FeeInstalments => _feeInstalments ??= new Repository<FeeInstalment>(_context);
     public IRepository<StaffAbsence> StaffAbsences => _staffAbsences ??= new Repository<StaffAbsence>(_context);
     public IRepository<PtmSchedule> PtmSchedules => _ptmSchedules ??= new Repository<PtmSchedule>(_context);
+    public IRepository<Attendance> Attendances => _attendances ??= new Repository<Attendance>(_context);
+    public IRepository<TeacherMarks> TeacherMarksList => _teacherMarksList ??= new Repository<TeacherMarks>(_context);
 
     public async Task<int> SaveChangesAsync()
     {

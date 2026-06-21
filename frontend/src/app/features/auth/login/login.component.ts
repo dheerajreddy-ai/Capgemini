@@ -95,7 +95,8 @@ export class LoginComponent {
     this.auth.login(email, password).subscribe({
       next: () => {
         this.toast.success('Signed in', 'Welcome back to EduVoice.');
-        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') ?? '/dashboard';
+        const defaultUrl = this.auth.role() === 'Teacher' ? '/teacher/dashboard' : '/dashboard';
+        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') ?? defaultUrl;
         this.router.navigateByUrl(returnUrl);
       },
       error: (err) => {

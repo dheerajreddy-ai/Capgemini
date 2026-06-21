@@ -115,6 +115,39 @@ Capgemini/
 
 ---
 
+## 5b. ✅ COMPLETED — Teacher Portal (Module 12)
+
+Branch `claude/new-session-tkaua0`. All work is in this session.
+
+**New entities (Domain):**
+- `Attendance` — one row per student per date, tracks IsPresent + Remarks, MarkedByUserId
+- `TeacherMarks` — per-exam marks history (Math/Science/English/Telugu/Social + MaxMarks)
+
+**New wiring (all layers):**
+- `IUnitOfWork` + `UnitOfWork` + `AppDbContext` extended with `Attendances` and `TeacherMarksList`
+- `ITeacherService` / `TeacherService` (Application layer) — dashboard stats, class sections,
+  students by class+section, get/mark attendance (upsert + recompute Student aggregate stats),
+  upload marks (updates Student entity + inserts TeacherMarks history), assign homework
+- `TeacherController` at `GET|POST /api/teacher/*` — `[Authorize(Roles = "Teacher,SchoolAdmin,SuperAdmin")]`
+- `ITeacherService` registered in `ServiceCollectionExtensions`
+
+**Frontend:**
+- New types in `models.ts`: `ClassSection`, `TeacherStudent`, `TeacherDashboard`, `AttendanceEntry`, `AttendanceResult`
+- `TeacherService` (`features/teacher/teacher.service.ts`) — all API calls
+- 4 standalone components:
+  - `TeacherDashboardComponent` (`/teacher/dashboard`) — stats, attendance banner, quick actions, class grid
+  - `AttendanceComponent` (`/teacher/attendance`) — date+class+section picker, student checklist, bulk Present/Absent, save
+  - `MarksUploadComponent` (`/teacher/marks`) — class+exam+date filters, score table, preview %, save
+  - `TeacherHomeworkComponent` (`/teacher/homework`) — subject+class+description+due-date form, assign
+- `app.routes.ts` — 4 new lazy routes under `/teacher/*` inside `main-layout` (auth guard applies)
+- Login: Teacher role redirects to `/teacher/dashboard` (others still go to `/dashboard`)
+- Sidebar: Teacher role sees teacher-only nav (Dashboard, Attendance, Marks, Homework)
+
+**Not yet done (needs first compile):** EF migrations — run `dotnet ef migrations add AddTeacherPortal`
+after the initial `InitialCreate` migration is in place (or include in InitialCreate if running for first time).
+
+---
+
 ## 5. ⏳ PENDING / NEXT STEPS (priority order)
 
 1. **Make repo PRIVATE** — owner to toggle in GitHub Settings → Danger Zone.

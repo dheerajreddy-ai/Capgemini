@@ -2,6 +2,7 @@ import { Component, ChangeDetectionStrategy, inject, input, output, computed } f
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
 import { InitialsPipe } from '../../shared/pipes/initials.pipe';
+import { NgIf } from '@angular/common';
 
 interface NavItem {
   label: string;
@@ -13,7 +14,7 @@ interface NavItem {
 @Component({
   selector: 'ev-sidebar',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, InitialsPipe],
+  imports: [RouterLink, RouterLinkActive, InitialsPipe, NgIf],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <aside class="ev-sidebar" [class.is-open]="open()">
@@ -39,22 +40,34 @@ interface NavItem {
 
       <!-- Nav -->
       <nav class="ev-sidebar__nav">
-        <div class="ev-sidebar__section">Overview</div>
-        @for (item of mainNav; track item.route) {
-          <a class="ev-nav-link" [routerLink]="item.route" routerLinkActive="is-active" (click)="close.emit()">
-            <i class="bi {{ item.icon }}"></i>
-            <span>{{ item.label }}</span>
-            @if (item.badge && item.badge()) {
-              <span class="ev-nav-badge">{{ item.badge() }}</span>
-            }
-          </a>
-        }
+        @if (isTeacher()) {
+          <!-- Teacher-only nav -->
+          <div class="ev-sidebar__section">Teacher Portal</div>
+          @for (item of teacherNav; track item.route) {
+            <a class="ev-nav-link" [routerLink]="item.route" routerLinkActive="is-active" (click)="close.emit()">
+              <i class="bi {{ item.icon }}"></i>
+              <span>{{ item.label }}</span>
+            </a>
+          }
+        } @else {
+          <!-- Admin / Viewer nav -->
+          <div class="ev-sidebar__section">Overview</div>
+          @for (item of mainNav; track item.route) {
+            <a class="ev-nav-link" [routerLink]="item.route" routerLinkActive="is-active" (click)="close.emit()">
+              <i class="bi {{ item.icon }}"></i>
+              <span>{{ item.label }}</span>
+              @if (item.badge && item.badge()) {
+                <span class="ev-nav-badge">{{ item.badge() }}</span>
+              }
+            </a>
+          }
 
-        @if (isSuperAdmin()) {
-          <div class="ev-sidebar__section mt-3">Platform Admin</div>
-          <a class="ev-nav-link" routerLink="/admin/schools" routerLinkActive="is-active" (click)="close.emit()">
-            <i class="bi bi-buildings"></i><span>Schools</span>
-          </a>
+          @if (isSuperAdmin()) {
+            <div class="ev-sidebar__section mt-3">Platform Admin</div>
+            <a class="ev-nav-link" routerLink="/admin/schools" routerLinkActive="is-active" (click)="close.emit()">
+              <i class="bi bi-buildings"></i><span>Schools</span>
+            </a>
+          }
         }
 
         <div class="ev-sidebar__section mt-3">Account</div>
@@ -85,6 +98,14 @@ export class SidebarComponent {
 
   readonly school = this.auth.school;
   readonly isSuperAdmin = this.auth.isSuperAdmin;
+  readonly isTeacher = computed(() => this.auth.role() === 'Teacher');
+
+  readonly teacherNav: NavItem[] = [
+    { label: 'Dashboard', icon: 'bi-grid-1x2', route: '/teacher/dashboard' },
+    { label: 'Mark Attendance', icon: 'bi-calendar-check', route: '/teacher/attendance' },
+    { label: 'Upload Marks', icon: 'bi-pencil-square', route: '/teacher/marks' },
+    { label: 'Assign Homework', icon: 'bi-journal-plus', route: '/teacher/homework' },
+  ];
 
   readonly mainNav: NavItem[] = [
     { label: 'Dashboard', icon: 'bi-grid-1x2', route: '/dashboard' },

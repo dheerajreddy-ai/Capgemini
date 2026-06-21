@@ -449,6 +449,62 @@ export interface Complaint {
   createdAt: string;
 }
 
+// --- Teacher Portal ---
+
+export interface ClassSection {
+  class: string;
+  section?: string;
+  studentCount: number;
+}
+
+export interface TeacherStudent {
+  id: string;
+  studentCode: string;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  class?: string;
+  section?: string;
+  attendancePercentage?: number;
+  mathMarks?: number;
+  scienceMarks?: number;
+  englishMarks?: number;
+  teluguMarks?: number;
+  socialMarks?: number;
+  percentage?: number;
+  grade?: string;
+}
+
+export interface TeacherDashboard {
+  totalStudents: number;
+  todayPresent: number;
+  todayAbsent: number;
+  attendanceMarkedToday: boolean;
+  activeHomeworkCount: number;
+  classSectionCount: number;
+  classSections: ClassSection[];
+}
+
+export interface AttendanceEntry {
+  studentId: string;
+  studentName: string;
+  isPresent: boolean;
+  remarks?: string;
+}
+
+export interface AttendanceResult {
+  date: string;
+  class: string;
+  section?: string;
+  totalStudents: number;
+  presentCount: number;
+  absentCount: number;
+  alreadySaved: boolean;
+  entries: AttendanceEntry[];
+}
+
+// --- End Teacher Portal ---
+
 export interface DashboardStats {
   todaysCalls: number;
   todaysCallsTrend: number;

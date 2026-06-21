@@ -17,6 +17,8 @@ public interface IUnitOfWork : IDisposable
     IRepository<FeeInstalment> FeeInstalments { get; }
     IRepository<StaffAbsence> StaffAbsences { get; }
     IRepository<PtmSchedule> PtmSchedules { get; }
+    IRepository<Attendance> Attendances { get; }
+    IRepository<TeacherMarks> TeacherMarksList { get; }
     Task<int> SaveChangesAsync();
     Task BeginTransactionAsync();
     Task CommitAsync();
