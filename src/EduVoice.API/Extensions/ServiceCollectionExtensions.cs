@@ -4,6 +4,7 @@ using EduVoice.Application.Interfaces;
 using EduVoice.Application.Services;
 using EduVoice.Application.Validators;
 using EduVoice.Domain.Interfaces;
+using EduVoice.Infrastructure.BackgroundServices;
 using EduVoice.Infrastructure.Data;
 using EduVoice.Infrastructure.Repositories;
 using EduVoice.Infrastructure.Services;
@@ -72,6 +73,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ISettingsService, SettingsService>();
         services.AddScoped<IAdminService, AdminService>();
         services.AddScoped<IAuditService, AuditService>();
+        services.AddScoped<IPaymentService, PaymentService>();
     }
 
     private static void AddInfrastructureServices(this IServiceCollection services)
@@ -83,6 +85,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IFileStorageService, FileStorageService>();
         services.AddScoped<ClaudeAIService>();
+        services.AddHostedService<RetryBackgroundService>();
+        services.AddHostedService<CarrierHealthBackgroundService>();
     }
 
     private static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)

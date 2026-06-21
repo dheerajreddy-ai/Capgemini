@@ -43,6 +43,14 @@ public class SettingsService : ISettingsService
                 TwilioPhoneNumber = school.TwilioPhoneNumber,
                 VapiAssistantId = school.VapiAssistantId,
                 ElevenLabsVoiceId = school.ElevenLabsVoiceId,
+                TeluguDialect = school.TeluguDialect,
+                ElevenLabsVoiceIdAndhra = school.ElevenLabsVoiceIdAndhra,
+                UpiId = school.UpiId,
+                UrduVoiceId = school.UrduVoiceId,
+                DefaultCallLanguage = school.DefaultCallLanguage,
+                AttendanceAlertThreshold = school.AttendanceAlertThreshold,
+                DndScrubEnabled = school.DndScrubEnabled,
+                CarrierHealth = school.CarrierHealth,
                 IsActive = school.IsActive,
                 TrialEndsAt = school.TrialEndsAt
             });
@@ -72,6 +80,13 @@ public class SettingsService : ISettingsService
             school.State = request.State;
             school.VapiAssistantId = request.VapiAssistantId;
             school.ElevenLabsVoiceId = request.ElevenLabsVoiceId;
+            school.TeluguDialect = request.TeluguDialect;
+            school.ElevenLabsVoiceIdAndhra = request.ElevenLabsVoiceIdAndhra;
+            school.UpiId = request.UpiId;
+            school.UrduVoiceId = request.UrduVoiceId;
+            school.DefaultCallLanguage = request.DefaultCallLanguage;
+            school.AttendanceAlertThreshold = request.AttendanceAlertThreshold;
+            school.DndScrubEnabled = request.DndScrubEnabled;
             school.UpdatedAt = DateTime.UtcNow;
 
             _unitOfWork.Schools.Update(school);

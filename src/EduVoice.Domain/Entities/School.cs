@@ -19,6 +19,18 @@ public class School
     public string? TwilioPhoneNumber { get; set; }
     public string? VapiAssistantId { get; set; }
     public string? ElevenLabsVoiceId { get; set; }
+    // Phase 3 — dialect
+    public TeluguDialect TeluguDialect { get; set; } = TeluguDialect.Telangana;
+    public string? ElevenLabsVoiceIdAndhra { get; set; }
+    // Phase 4 — payment
+    public string? UpiId { get; set; }
+    // Phase 6 — ops
+    public CarrierHealth CarrierHealth { get; set; } = CarrierHealth.Healthy;
+    public DateTime? CarrierHealthCheckedAt { get; set; }
+    public bool DndScrubEnabled { get; set; } = true;
+    public string? UrduVoiceId { get; set; }
+    public CallLanguage DefaultCallLanguage { get; set; } = CallLanguage.Telugu;
+    public decimal AttendanceAlertThreshold { get; set; } = 75;
     public bool IsActive { get; set; } = true;
     public DateTime? TrialEndsAt { get; set; }
     public DateTime CreatedAt { get; set; }

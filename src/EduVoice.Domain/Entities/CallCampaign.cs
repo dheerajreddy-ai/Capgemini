@@ -22,6 +22,11 @@ public class CallCampaign
     public DateTime? ScheduledAt { get; set; }
     public DateTime? StartedAt { get; set; }
     public DateTime? CompletedAt { get; set; }
+    // Phase 2 — wave dialing
+    public int WaveSize { get; set; } = 30;
+    public int WaveGapMinutes { get; set; } = 10;
+    public int CurrentWave { get; set; }
+    public int CallsVoicemail { get; set; }
     public Guid CreatedByUserId { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }

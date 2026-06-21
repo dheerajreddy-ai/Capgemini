@@ -15,6 +15,12 @@ public class CallListDto
     public int? DurationSeconds { get; set; }
     public SentimentType? Sentiment { get; set; }
     public bool HasComplaint { get; set; }
+    public bool IsVoicemail { get; set; }
+    public bool IsPartialTranscript { get; set; }
+    public int RetryCount { get; set; }
+    public DateTime? RetryScheduledAt { get; set; }
+    public bool EscalationRequired { get; set; }
+    public string? NetworkQuality { get; set; }
     public DateTime? StartedAt { get; set; }
     public DateTime CreatedAt { get; set; }
 }

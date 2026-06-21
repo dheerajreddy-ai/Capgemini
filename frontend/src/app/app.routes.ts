@@ -86,5 +86,10 @@ export const routes: Routes = [
       },
     ],
   },
+  {
+    path: 'portal',
+    loadComponent: () => import('./features/portal/parent-portal.component').then((m) => m.ParentPortalComponent),
+    title: 'Parent Portal · EduVoice',
+  },
   { path: '**', redirectTo: 'dashboard' },
 ];

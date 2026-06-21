@@ -85,6 +85,34 @@ public class CampaignsController : ControllerBase
         return result.Success ? Ok(result) : BadRequest(result);
     }
 
+    [HttpPost("{id:guid}/start")]
+    public async Task<IActionResult> StartCampaign(Guid id)
+    {
+        var schoolId = GetSchoolId();
+        if (schoolId == null) return Unauthorized();
+
+        var result = await _campaignService.StartCampaignAsync(schoolId.Value, id);
+        return result.Success ? Ok(result) : BadRequest(result);
+    }
+
+    [HttpPost("do-not-call/{studentId:guid}")]
+    public async Task<IActionResult> SetDoNotCall(Guid studentId)
+    {
+        var schoolId = GetSchoolId();
+        if (schoolId == null) return Unauthorized();
+
+        var result = await _campaignService.SetDoNotCallAsync(schoolId.Value, studentId);
+        return result.Success ? Ok(result) : BadRequest(result);
+    }
+
+    [HttpGet("calling-window")]
+    [AllowAnonymous]
+    public IActionResult GetCallingWindow()
+    {
+        var result = _campaignService.GetCallingWindowStatus();
+        return Ok(result);
+    }
+
     private Guid? GetSchoolId()
     {
         var schoolIdClaim = HttpContext.Items["SchoolId"]?.ToString()

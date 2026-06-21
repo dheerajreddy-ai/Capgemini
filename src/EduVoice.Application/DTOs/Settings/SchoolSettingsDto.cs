@@ -18,6 +18,14 @@ public class SchoolSettingsDto
     public string? TwilioPhoneNumber { get; set; }
     public string? VapiAssistantId { get; set; }
     public string? ElevenLabsVoiceId { get; set; }
+    public TeluguDialect TeluguDialect { get; set; }
+    public string? ElevenLabsVoiceIdAndhra { get; set; }
+    public string? UpiId { get; set; }
+    public string? UrduVoiceId { get; set; }
+    public CallLanguage DefaultCallLanguage { get; set; }
+    public decimal AttendanceAlertThreshold { get; set; }
+    public bool DndScrubEnabled { get; set; }
+    public CarrierHealth CarrierHealth { get; set; }
     public bool IsActive { get; set; }
     public DateTime? TrialEndsAt { get; set; }
 }

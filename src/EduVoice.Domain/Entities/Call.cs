@@ -28,6 +28,19 @@ public class Call
     public string? AiSummary { get; set; }
     public string? ErrorMessage { get; set; }
     public int RetryCount { get; set; }
+    // Phase 2 — reliability
+    public bool IsVoicemail { get; set; }
+    public DateTime? RetryScheduledAt { get; set; }
+    public Guid? OriginalCallId { get; set; }
+    public bool IsPartialTranscript { get; set; }
+    // Phase 3 — language quality
+    public bool EscalationRequired { get; set; }
+    public string? EscalationReason { get; set; }
+    public bool LowConfidenceTranscript { get; set; }
+    public string? DialectUsed { get; set; }
+    // Phase 6 — ops
+    public CallLanguage Language { get; set; } = CallLanguage.Telugu;
+    public string? NetworkQuality { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 

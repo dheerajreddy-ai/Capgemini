@@ -32,5 +32,13 @@ public class CallDetailDto
     public string? AiSummary { get; set; }
     public string? ErrorMessage { get; set; }
     public int RetryCount { get; set; }
+    public bool IsVoicemail { get; set; }
+    public bool IsPartialTranscript { get; set; }
+    public DateTime? RetryScheduledAt { get; set; }
+    public bool EscalationRequired { get; set; }
+    public string? EscalationReason { get; set; }
+    public bool LowConfidenceTranscript { get; set; }
+    public string? DialectUsed { get; set; }
+    public string? NetworkQuality { get; set; }
     public DateTime CreatedAt { get; set; }
 }

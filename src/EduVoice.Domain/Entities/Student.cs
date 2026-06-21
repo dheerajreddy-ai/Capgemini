@@ -42,6 +42,26 @@ public class Student
     public DateTime? FeesDueDate { get; set; }
     public DateTime? LastPaymentDate { get; set; }
 
+    // Phase 1 — compliance
+    public bool DoNotCall { get; set; }
+    public DateTime? DoNotCallSetAt { get; set; }
+    public bool HasFeeExtension { get; set; }
+    public DateTime? FeeExtensionUntil { get; set; }
+
+    // Phase 4 — payment
+    public string? PaymentLink { get; set; }
+    public DateTime? PaymentLinkGeneratedAt { get; set; }
+    public bool HasFeeDispute { get; set; }
+    public string? FeeDisputeNote { get; set; }
+    public DateTime? FeeDisputeRaisedAt { get; set; }
+
+    // Phase 5 — parent portal
+    public string? PortalOtpHash { get; set; }
+    public DateTime? PortalOtpExpiresAt { get; set; }
+    public DateTime? LastPortalAccessAt { get; set; }
+    public bool MissedCallCallbackPending { get; set; }
+    public DateTime? MissedCallReceivedAt { get; set; }
+
     public bool IsDeleted { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }

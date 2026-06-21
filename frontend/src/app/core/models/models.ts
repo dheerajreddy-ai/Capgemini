@@ -22,14 +22,17 @@ export interface PagedResult<T> {
 export type PlanType = 'Starter' | 'Growth' | 'Pro';
 export type UserRole = 'SuperAdmin' | 'SchoolAdmin' | 'Teacher' | 'Viewer';
 export type FeesStatus = 'Paid' | 'Partial' | 'Unpaid' | 'Overdue';
-export type CampaignType = 'FeeReminder' | 'ProgressUpdate' | 'Custom';
-export type CampaignStatus = 'Draft' | 'Running' | 'Paused' | 'Completed' | 'Failed';
-export type CallType = 'FeeReminder' | 'ProgressUpdate' | 'Complaint' | 'Inbound';
+export type CampaignType = 'FeeReminder' | 'ProgressUpdate' | 'Custom' | 'AttendanceAlert';
+export type CampaignStatus = 'Draft' | 'Scheduled' | 'Running' | 'Paused' | 'Completed' | 'Failed';
+export type CallType = 'FeeReminder' | 'ProgressUpdate' | 'Complaint' | 'Inbound' | 'AttendanceAlert';
 export type CallStatus = 'Initiated' | 'Ringing' | 'InProgress' | 'Completed' | 'Failed' | 'NoAnswer' | 'Busy';
 export type Sentiment = 'Positive' | 'Neutral' | 'Negative' | 'Angry';
 export type ComplaintCategory = 'Teacher' | 'Fees' | 'Facility' | 'Academic' | 'Behaviour' | 'Other';
 export type ComplaintPriority = 'Low' | 'Medium' | 'High' | 'Urgent';
 export type ComplaintStatus = 'New' | 'Read' | 'InProgress' | 'Resolved' | 'Closed';
+export type TeluguDialect = 'Telangana' | 'Andhra';
+export type CallLanguage = 'Telugu' | 'Urdu' | 'English';
+export type CarrierHealth = 'Healthy' | 'Degraded' | 'Flagged';
 
 export interface School {
   id: string;
@@ -47,6 +50,14 @@ export interface School {
   twilioPhoneNumber?: string;
   vapiAssistantId?: string;
   elevenLabsVoiceId?: string;
+  teluguDialect?: TeluguDialect;
+  elevenLabsVoiceIdAndhra?: string;
+  upiId?: string;
+  urduVoiceId?: string;
+  defaultCallLanguage?: CallLanguage;
+  attendanceAlertThreshold?: number;
+  dndScrubEnabled?: boolean;
+  carrierHealth?: CarrierHealth;
   isActive: boolean;
   trialEndsAt?: string;
 }
@@ -94,18 +105,37 @@ export interface Student {
   lastCalledAt?: string;
   notes?: string;
   isActive: boolean;
+  // Phase 1
+  doNotCall?: boolean;
+  doNotCallSetAt?: string;
+  hasFeeExtension?: boolean;
+  feeExtensionUntil?: string;
+  // Phase 4
+  paymentLink?: string;
+  paymentLinkGeneratedAt?: string;
+  hasFeeDispute?: boolean;
+  feeDisputeNote?: string;
+  feeDisputeRaisedAt?: string;
+}
+
+export interface CallingWindowStatus {
+  isOpen: boolean;
+  window: string;
+  nextOpenUtc?: string;
 }
 
 export interface Campaign {
   id: string;
-  campaignName: string;
-  campaignType: CampaignType;
+  name: string;
+  type: CampaignType;
   status: CampaignStatus;
+  description?: string;
   totalStudents: number;
   callsInitiated: number;
   callsCompleted: number;
   callsFailed: number;
   callsNoAnswer: number;
+  progressPercent: number;
   scheduledAt?: string;
   startedAt?: string;
   completedAt?: string;
@@ -122,23 +152,34 @@ export interface Call {
   id: string;
   studentId: string;
   studentName: string;
-  studentClass: string;
-  parentName: string;
-  parentPhone: string;
+  studentClass?: string;
+  section?: string;
+  parentName?: string;
+  parentPhone?: string;
   campaignId?: string;
   campaignName?: string;
-  callType: CallType;
+  type: CallType;
+  direction: 'Outbound' | 'Inbound';
   status: CallStatus;
-  durationSeconds: number;
+  toPhone: string;
+  durationSeconds?: number;
   transcript?: string;
   transcriptJson?: TranscriptMessage[];
   recordingUrl?: string;
-  summary?: string;
-  sentiment: Sentiment;
-  sentimentScore?: number;
+  aiSummary?: string;
+  sentiment?: Sentiment;
   hasComplaint: boolean;
   feesConfirmed: boolean;
   callbackRequested: boolean;
+  retryCount: number;
+  isVoicemail?: boolean;
+  isPartialTranscript?: boolean;
+  retryScheduledAt?: string;
+  escalationRequired?: boolean;
+  escalationReason?: string;
+  lowConfidenceTranscript?: boolean;
+  dialectUsed?: string;
+  networkQuality?: string;
   startedAt?: string;
   endedAt?: string;
   createdAt: string;

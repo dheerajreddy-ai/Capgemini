@@ -1,3 +1,5 @@
+using EduVoice.Domain.Enums;
+
 namespace EduVoice.Application.DTOs.Settings;
 
 public class UpdateSettingsRequest
@@ -12,6 +14,16 @@ public class UpdateSettingsRequest
     public string? State { get; set; }
     public string? VapiAssistantId { get; set; }
     public string? ElevenLabsVoiceId { get; set; }
+    // Phase 3
+    public TeluguDialect TeluguDialect { get; set; }
+    public string? ElevenLabsVoiceIdAndhra { get; set; }
+    // Phase 4
+    public string? UpiId { get; set; }
+    // Phase 6
+    public string? UrduVoiceId { get; set; }
+    public CallLanguage DefaultCallLanguage { get; set; }
+    public decimal AttendanceAlertThreshold { get; set; } = 75;
+    public bool DndScrubEnabled { get; set; } = true;
 }
 
 public class ChangePasswordRequest

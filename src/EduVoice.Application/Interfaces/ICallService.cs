@@ -11,6 +11,7 @@ public interface ICallService
     Task<ApiResponse<CallDetailDto>> GetCallByIdAsync(Guid schoolId, Guid callId);
     Task ProcessVapiWebhookAsync(VapiWebhookPayload payload);
     Task<ApiResponse<CallDto>> RetryCallAsync(Guid schoolId, Guid callId);
+    Task ProcessScheduledRetriesAsync();
 }
 
 public class VapiWebhookPayload
@@ -29,6 +30,7 @@ public class VapiCallData
     public string Id { get; set; } = string.Empty;
     public string? PhoneNumber { get; set; }
     public string? Status { get; set; }
+    public string? EndedReason { get; set; }
     public DateTime? StartedAt { get; set; }
     public DateTime? EndedAt { get; set; }
     public Dictionary<string, string>? Metadata { get; set; }
